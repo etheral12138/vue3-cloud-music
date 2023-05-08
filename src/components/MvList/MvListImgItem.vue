@@ -2,6 +2,7 @@
 import { formateNumber } from '@/utils/index';
 import { Play } from '@vicons/carbon';
 import { useRouter } from 'vue-router';
+
 const props = withDefaults(defineProps<{
   item:any;
   height?:string;

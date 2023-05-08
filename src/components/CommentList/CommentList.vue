@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { userCheckLogin } from '@/hook/useCheckLogin';
-import { likeComment, sendComment } from '@/service';
+import { likeComment } from '@/service';
 import { ThumbsUp, ThumbsUpFilled } from '@vicons/carbon';
 import { CommentOutlined } from '@vicons/material';
 import { computed, ref } from 'vue';
+
 export interface CommentListProps{
   list:any[],
   title:string;

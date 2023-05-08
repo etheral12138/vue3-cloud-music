@@ -2,11 +2,11 @@
 import { useThemeVars } from 'naive-ui';
 import obverser from '@/utils/obverser';
 import { PlayArrowSharp } from '@vicons/material';
-import { computed, nextTick, onMounted, toRaw, watch, type CSSProperties } from 'vue';
+import { computed, type CSSProperties, nextTick, onMounted, ref, toRaw, watch } from 'vue';
 import { useMainStore } from '@/stores/main';
-import { ref } from 'vue';
-import { parseLyric, parseRangeLyric, type LineItem, type RangeLyricItem } from '@/utils/lyric';
+import { type LineItem, parseLyric, parseRangeLyric, type RangeLyricItem } from '@/utils/lyric';
 import { useElementHover } from '@vueuse/core';
+
 let timeId:any;// 回退滚动位置延时器
 let clearTriggerScrollTimer:any;// 设置滚动是否触发延时器
 let triggerScroll = true;

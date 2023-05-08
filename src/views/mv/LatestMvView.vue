@@ -2,10 +2,8 @@
 import { useMemorizeRequest } from '@/hook/useMemorizeRequest';
 import { getMvList } from '@/service';
 import { useThemeVars } from 'naive-ui';
-import {
-  nextTick,
-  reactive, ref, toRaw, watch 
-} from 'vue';
+import { nextTick, reactive, ref, toRaw, watch } from 'vue';
+
 const areaList = [
   '全部', '内地', '港台', '欧美', '日本', '韩国'
 ];

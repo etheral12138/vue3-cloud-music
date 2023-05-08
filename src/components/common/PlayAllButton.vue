@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useMainStore } from '@/stores/main';
-import { Play, AddOutline } from '@vicons/ionicons5';
+import { AddOutline, Play } from '@vicons/ionicons5';
+
 const mainStore = useMainStore();
 const props = withDefaults(defineProps<{
   songList?:any[]|undefined;

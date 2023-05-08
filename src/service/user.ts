@@ -1,5 +1,6 @@
 import service from './request';
 import qs from 'qs';
+
 // 获取账号信息
 export function getUserInfo() {
   return service.get('/user/account');

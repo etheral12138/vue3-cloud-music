@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { getPlaylistAllDetail, getPlaylistComment, getPlaylistDetail, sendComment, updatePlayListSubscribe, updatePlaylistTags } from '@/service';
+import {
+  getPlaylistAllDetail,
+  getPlaylistComment,
+  getPlaylistDetail,
+  sendComment,
+  updatePlayListSubscribe,
+  updatePlaylistTags
+} from '@/service';
 import type { AnyObject } from 'env';
 import { formateNumber, getArrLast } from '@/utils';
 import { computed, reactive, ref, toRaw, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import LoadImg from '@/components/Base/LoadImg.vue';
-import { StarOutline, Star, ShareSocialOutline, Search } from '@vicons/ionicons5';
+import { Search, ShareSocialOutline, Star, StarOutline } from '@vicons/ionicons5';
 import { Edit } from '@vicons/carbon';
 import { useMainStore } from '@/stores/main';
 import type { SelectSongListTagModalExpose } from '@/components/SongsList/SelectSongListTagModal.vue';

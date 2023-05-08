@@ -68,6 +68,7 @@ import { onUnmounted, ref, watch } from 'vue';
 import { CloseOutline } from '@vicons/ionicons5';
 import { getQrCode, getQrCodeImg, getQrCodeStatus } from '@/service';
 import { useMainStore } from '@/stores/main';
+
 export interface LoginModalExpose{
   show:() => void;
   close:() => void;

@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 import { checkMusic, getLyric, getMusicUrl } from '@/service';
-import { formateSongsAuthor, getNextIndex, getPrevIndex, getRandomIntInclusive } from '@/utils';
+import { formateSongsAuthor, getNextIndex, getPrevIndex } from '@/utils';
 import type { AnyObject } from 'env';
 import { cloneDeep, shuffle } from 'lodash';
 import { darkTheme } from 'naive-ui';

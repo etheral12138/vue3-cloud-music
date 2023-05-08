@@ -4,7 +4,7 @@ import { PlayCircleOutlined } from '@vicons/antd';
 import { useMainStore } from '@/stores/main';
 import { useAsyncState } from '@vueuse/core';
 import { formateNumber } from '@/utils';
-import { watch, reactive, ref, type CSSProperties, nextTick } from 'vue';
+import { type CSSProperties, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useThemeStyle from '@/hook/useThemeStyle';
 import { useNanoid } from '@/hook/useNanoid';

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useMainStore } from '@/stores/main';
 import { Moon, SunnySharp } from '@vicons/ionicons5';
-import { ArrowForwardIosRound } from '@vicons/material';
+import { ArrowForwardIosRound, ExitToAppRound } from '@vicons/material';
 import { UserProfile } from '@vicons/carbon';
-import { ExitToAppRound } from '@vicons/material';
 import { ref, watch } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import { getLoginStatus, getUserDetail, getUserInfo, logout, signIn } from '@/service';
@@ -94,9 +93,6 @@ const handleSignInClick = () => {
 const handleThemeSwitchUpdateChange = () => {
   mainStore.toggleTheme();
 };
-const BackToDiscovery=()=>{
-    router.push('/discovery');
-}
 if (mainStore.isLogin) {
   getUserProfile();
   checkLoginStatus();
@@ -104,8 +100,9 @@ if (mainStore.isLogin) {
 </script>
 <template>
   <n-layout-header bordered class="flex justify-between items-center px-4 h-14 sm:px-3">
-    <div class="flex">
-      <span class=" truncate cursor-pointer" @click="BackToDiscovery">奇妙音乐屋！</span>
+    <div class="flex leading-7">
+      <img src='https://etheral.oss-cn-shanghai.aliyuncs.com/images/mao.png' alt='' class='h-7 w-7'>
+      <span class="truncate italic ml-2 text-xl">NTR音乐</span>
       <layout-header-search />
     </div>
     <div class="flex items-center">

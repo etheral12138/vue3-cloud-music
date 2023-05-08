@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { likeMusic } from '@/service';
 import { useMainStore } from '@/stores/main';
-import { HeartOutline, Heart } from '@vicons/ionicons5';
-import { useThemeVars } from 'naive-ui';
-import { NIcon } from 'naive-ui';
+import { Heart, HeartOutline } from '@vicons/ionicons5';
+import { NIcon, useThemeVars } from 'naive-ui';
+
 export interface HeartIconExpose{
   triggerLike:() => any;
 }

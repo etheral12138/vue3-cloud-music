@@ -1,6 +1,6 @@
 import { getPixelColor } from '@/utils/getPixelColor';
 import obverser from '@/utils/obverser';
-import { nextTick, type CSSProperties } from 'vue';
+import { type CSSProperties, nextTick } from 'vue';
 
 export function useBlurLineGradient() {
   let lyricFooterMaskELement:HTMLElement;

@@ -7,8 +7,8 @@ import './assets/css/common.css';
 import './assets/css/transition.css';
 import './index.css';
 import router from './router';
-const app = createApp(App);
 
+const app = createApp(App);
 app.use(createPinia());
 app.use(VueVirtualScroller);
 app.use(router);

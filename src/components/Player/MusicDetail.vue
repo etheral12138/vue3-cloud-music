@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref, watch, reactive, nextTick, type CSSProperties } from 'vue';
+import { type CSSProperties, nextTick, reactive, type Ref, ref, watch } from 'vue';
 import analyze from 'rgbaster';
 import { BackToTop, Edit } from '@vicons/carbon';
 import { formateSongsAuthor, getArrLast } from '@/utils';

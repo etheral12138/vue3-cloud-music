@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { getDefaultSearchKeyword, getHotSearchList, getSuggestSearchList, getAlbumDetail } from '@/service';
+import { getAlbumDetail, getDefaultSearchKeyword, getHotSearchList, getSuggestSearchList } from '@/service';
 import { useMainStore } from '@/stores/main';
-import { Search, List } from '@vicons/ionicons5';
+import { List, Search } from '@vicons/ionicons5';
 import { Delete, Music } from '@vicons/carbon';
 import { ArrowBackIosSharp, ArrowForwardIosRound } from '@vicons/material';
 import { useAsyncState, useElementHover } from '@vueuse/core';
 import { throttle } from 'lodash';
 import { isEmptyObject } from '@/utils';
 import { useThemeVars } from 'naive-ui';
-import { computed, nextTick, onMounted, onUnmounted, ref, watch, type CSSProperties } from 'vue';
+import { computed, type CSSProperties, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { userHistory } from '../hook/useHistoryRoutePath';
 import { mapSongs } from '@/utils/arr-map';

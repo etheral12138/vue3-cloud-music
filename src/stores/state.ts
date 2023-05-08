@@ -1,4 +1,5 @@
 import type { AnyObject } from './../../env.d';
+
 export interface StoreState{
   theme: 'dark' | 'light',
   backTopLeft: string;

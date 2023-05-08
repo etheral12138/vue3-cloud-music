@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { getMvDetail, getSimiMv, getSingerSong, getVideoUrl, getMvComment, sendComment } from '@/service';
-import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
-import { formateSongsAuthor, formateNumber, getArrLast } from '@/utils';
+import { getMvComment, getMvDetail, getSimiMv, getSingerSong, getVideoUrl, sendComment } from '@/service';
+import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+import { formateNumber, formateSongsAuthor, getArrLast } from '@/utils';
 import { useRoute, useRouter } from 'vue-router';
 import VideoPlayer, { type VideoPlayerExpose } from '@/components/Base/VideoPlayer.vue';
 import type { AnyObject } from 'env';

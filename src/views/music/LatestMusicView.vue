@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formateSongsAuthor } from '@/utils';
-import { computed, ref, type CSSProperties } from 'vue';
+import { computed, type CSSProperties, ref } from 'vue';
 import { getTopSong } from '../../service';
 import LoadImg from '@/components/Base/LoadImg.vue';
 import PlayIcon from '@/components/Base/PlayIcon.vue';
@@ -11,6 +11,7 @@ import { useDbClickPlay } from '@/hook/useDbClickPlay';
 import { mapSongs } from '@/utils/arr-map';
 import { useMainStore } from '@/stores/main';
 import { useNanoid } from '@/hook/useNanoid';
+
 const typeList = [
   {
     value: '0',
@@ -149,7 +150,7 @@ fetchData();
               />
             </div>
           </div>
-          <p class="ml-6 w-xs text-sm truncate flex-30">
+          <p class="ml-6 w-xs text-sm truncate flex-30 cursor-pointer">
             {{ item.name }}
             <n-tag
               v-if="item.mvid !== 0" size="small" :color="tagColor"

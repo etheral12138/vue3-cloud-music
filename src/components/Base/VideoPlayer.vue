@@ -3,8 +3,9 @@
 </template>
 <script setup lang="ts">
 import { useThemeVars } from 'naive-ui';
-import { computed, ref, watch, onUnmounted } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import Player from 'xgplayer';
+
 export interface VideoPlayProps{
   url?:string;
   poster?:string;

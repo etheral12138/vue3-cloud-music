@@ -1,4 +1,5 @@
 import service from './request';
+
 // 全部mv 列表
 export function getMvList({
   limit = 50, 
@@ -21,7 +22,7 @@ export function getVideoUrl(id: number) {
 }
 // 推荐 mv
 export function getRecommendMv() {
-  return service.get('/personalized/mv?limit=3');
+  return service.get('/personalized/mv?limit=6');
 }
 // mv评论
 export function getMvComment({ id='', limit = 20, offset = 0, before='' }) {

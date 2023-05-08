@@ -2,13 +2,14 @@
 import { getTopPlayListTags } from '@/service';
 import { useThemeVars } from 'naive-ui';
 import { computed, ref, toRaw } from 'vue';
+
 export interface SelectSongListTagModalExpose{
   show:() => void;
   close:() => void;
   selectTagList:any[]
 }
 const props = withDefaults(defineProps<{
-  btnLoading?:boolean;
+  btnLoading:boolean;
   handleCompleteClick:(selectTagList:any[]) => void;
 }>(), { btnLoading: false });
 

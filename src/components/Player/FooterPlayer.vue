@@ -6,10 +6,14 @@ import SingleLoop from '@/components/Icon/SingleLoop.vue';
 import { formateSongsAuthor } from '@/utils';
 import { List } from '@vicons/ionicons5';
 import {
-  SkipPreviousSharp, SkipNextSharp,
-  PlayArrowSharp, VolumeUpRound,
+  AddBoxOutlined,
   KeyboardArrowDownOutlined,
-  VolumeOffRound, KeyboardArrowUpOutlined, AddBoxOutlined
+  KeyboardArrowUpOutlined,
+  PlayArrowSharp,
+  SkipNextSharp,
+  SkipPreviousSharp,
+  VolumeOffRound,
+  VolumeUpRound
 } from '@vicons/material';
 import { useThemeVars } from 'naive-ui';
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';

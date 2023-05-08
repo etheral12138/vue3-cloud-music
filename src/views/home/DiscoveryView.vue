@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { useMemoryScrollTop } from '@/hook/useMemoryScrollTop';
-import {
-  getBanner,
-  getNewSong,
-  getPersonalized,
-  getRecommendMv
-} from '@/service';
+import { getBanner, getNewSong, getPersonalized, getRecommendMv } from '@/service';
 import { formateSongsAuthor } from '@/utils';
 import { useAsyncState, useElementHover } from '@vueuse/core';
 import { computed, ref } from 'vue';
@@ -14,6 +9,7 @@ import { useDbClickPlay } from '@/hook/useDbClickPlay';
 import { nanoid } from 'nanoid';
 import { mapSongs } from '@/utils/arr-map';
 import { useMainStore } from '@/stores/main';
+
 const hoverRef = ref();
 const currentIndex = ref(0);
 const {

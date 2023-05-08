@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import LayOut from '@/components/Layout/Layout.vue';
-import { zhCN, useDialog } from 'naive-ui';
+import { zhCN } from 'naive-ui';
 import { onMounted } from 'vue';
 import { useMainStore } from './stores/main';
+
 const mainStore = useMainStore();
 
 onMounted(() => {
@@ -30,7 +31,9 @@ onMounted(() => {
 </template>
 
 <style>
-@import "@/assets/base.css";
+:root {
+    --theme-color: #ffffff;
+}
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;

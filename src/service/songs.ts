@@ -1,5 +1,6 @@
 import qs from 'qs';
 import service from './request';
+
 // 推荐新音乐
 export function getNewSong() {
   return service.get('/personalized/newsong?limit=20');

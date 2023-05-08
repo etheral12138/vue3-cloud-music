@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MvListImgItem from './MvListImgItem.vue';
+
 defineProps<{
   list?: any[]
   cols?: number;

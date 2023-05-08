@@ -1,5 +1,6 @@
 import qs from 'qs';
 import service from './request';
+
 // 获取精品歌单
 export function getTopPlayList({ cat = '全部', limit = 10, before = '' }) {
   return service.get(`/top/playlist/highquality?cat=${cat}&limit=${limit}&before=${before}`);

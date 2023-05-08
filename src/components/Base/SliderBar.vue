@@ -2,6 +2,7 @@
 import { useElementHover } from '@vueuse/core';
 import { useThemeVars } from 'naive-ui';
 import { onMounted, onUnmounted, ref } from 'vue';
+
 const props = withDefaults(defineProps<{
   modelValue:number;  
   loadValue?:number;

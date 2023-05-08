@@ -3,11 +3,9 @@
 import { useDbClickPlay } from '@/hook/useDbClickPlay';
 import { useMainStore } from '@/stores/main';
 import { formateSongsAuthor } from '@/utils';
-import { HeartOutline, Heart, DownloadOutline } from '@vicons/ionicons5';
 import { VolumeMuteFilled, VolumeUpFilled } from '@vicons/material';
-import { useThemeVars, type DataTableColumns } from 'naive-ui';
-import { NIcon, NTime, NTag } from 'naive-ui';
-import { computed, defineComponent, ref } from 'vue';
+import { type DataTableColumns, NIcon, NTag, NTime, useThemeVars } from 'naive-ui';
+import { computed, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
 type RowData= {
@@ -83,8 +81,8 @@ export default defineComponent({
         render(row) {
           return <div>
             {row.nameRichText
-              ? <span v-html={row.nameRichText}></span>
-              : row.name}
+              ? <span class='cursor-pointer'>{row.nameRichText}</span>
+              : <span class='cursor-pointer'>{row.name}</span> }
             {row.mv !== 0
               ? <NTag onClick={() => router.push(`/mv/${row.mv}`)} size="small" color={tagColor.value} class="ml-2">MV</NTag>
               : null}
@@ -190,4 +188,5 @@ export default defineComponent({
 :deep(.n-data-table.n-data-table--bordered .n-data-table-wrapper){
   border:none;
 }
+
 </style>
