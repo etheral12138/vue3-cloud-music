@@ -93,6 +93,9 @@ const handleSignInClick = () => {
 const handleThemeSwitchUpdateChange = () => {
   mainStore.toggleTheme();
 };
+const BackToDiscovery = () => {
+  router.push('/discovery');
+};
 if (mainStore.isLogin) {
   getUserProfile();
   checkLoginStatus();
@@ -100,9 +103,9 @@ if (mainStore.isLogin) {
 </script>
 <template>
   <n-layout-header bordered class="flex justify-between items-center px-4 h-14 sm:px-3">
-    <div class="flex leading-7">
-      <img src='https://etheral.oss-cn-shanghai.aliyuncs.com/images/mao.png' alt='' class='h-7 w-7'>
-      <span class="truncate italic ml-2 text-xl">NTR音乐</span>
+    <div class='flex leading-7'>
+      <img alt='' class='w-7 h-7' src='https://etheral.oss-cn-shanghai.aliyuncs.com/images/mao.png'>
+      <span class='ml-2 text-xl italic truncate cursor-pointer' @click='BackToDiscovery'>NTR音乐</span>
       <layout-header-search />
     </div>
     <div class="flex items-center">

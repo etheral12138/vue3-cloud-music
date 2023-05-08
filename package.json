@@ -30,6 +30,7 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
     "@types/jsdom": "^16.2.14",
+    "@types/lodash": "^4.14.194",
     "@types/node": "^16.11.25",
     "@types/qs": "^6.9.7",
     "@vicons/antd": "^0.12.0",

@@ -249,25 +249,26 @@ onUnmounted(() => {
               </n-space>
             </div>
           </div>
-          <!-- 热搜榜 -->
+<!--           热搜榜 -->
           <div v-show="!mainStore.searchKeyword.length">
             <p class="pl-4 mt-4 opacity-70">
               热搜榜
             </p>
-            <n-spin :show="hotSearchLoading">
-              <div v-show="hotSearchLoading" class="h-60" />
-              <div 
-                v-for="(item,index) in hotSearch" 
-                :key="item.searchWord" class="flex items-center p-5 hover:bg-gray-100 dark:hover:bg-gray-100/20 cursor-pointer"
-                @click="toSearchResult(item.searchWord)"
+            <n-spin :show='hotSearchLoading'>
+              <div v-show='hotSearchLoading' class='h-60' />
+              <div
+                v-for='(item,index) in hotSearch'
+                :key='item.searchWord'
+                class='flex items-center p-5 hover:bg-gray-100 dark:hover:bg-gray-100/20 cursor-pointer'
+                @click='toSearchResult(item.searchWord)'
               >
                 <span
-                  class="text-base"
-                  :style="{color:index >= 0 && index <= 2 ? themeVars.primaryColor : themeVars.textColor1}"
+                  :style='{color:index >= 0 && index <= 2 ? themeVars.primaryColor : themeVars.textColor1}'
+                  class='text-base'
                 >
-                  {{ index+1 }}
+                  {{ index + 1 }}
                 </span>
-                <div class="ml-4">
+                <div class='ml-4'>
                   <span :style="{fontWeight:index >= 0 && index <= 2 ?'bold' :'initial'}"> {{ item.searchWord }}</span>
                   <span class="pl-2 text-sm opacity-40">{{ item.score }}</span>
                 </div>

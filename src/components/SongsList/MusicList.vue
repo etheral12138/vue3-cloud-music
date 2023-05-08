@@ -79,15 +79,16 @@ export default defineComponent({
         key: 'name',
         width: '200',
         render(row) {
-          return <div>
+          return <div class='cursor-pointer'>
             {row.nameRichText
-              ? <span class='cursor-pointer'>{row.nameRichText}</span>
-              : <span class='cursor-pointer'>{row.name}</span> }
+              ? <span v-html={row.nameRichText}></span>
+              : row.name}
             {row.mv !== 0
-              ? <NTag onClick={() => router.push(`/mv/${row.mv}`)} size="small" color={tagColor.value} class="ml-2">MV</NTag>
+              ? <NTag onClick={() => router.push(`/mv/${row.mv}`)} size='small' color={tagColor.value}
+                      class='ml-2'>MV</NTag>
               : null}
             {row.fee === 1
-              ? <NTag size="small" color={tagColor.value} class="ml-2">VIP</NTag>
+              ? <NTag size='small' color={tagColor.value} class='ml-2'>VIP</NTag>
               : null}
           </div>;
         }
