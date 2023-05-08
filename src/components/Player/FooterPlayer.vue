@@ -25,6 +25,10 @@ import observer from '@/utils/observer';
 import type { HeartIconExpose } from '../common/HeartIcon.vue';
 import { useAudioLoadProgress } from './hook/useAudioLoadProgress';
 import HeartIcon from '@/components/common/HeartIcon.vue';
+import PlayList from '@/components/Player/PlayList.vue';
+import MusicDetail from '@/components/Player/MusicDetail.vue';
+import SubscribePlayListModal from '@/components/common/SubscribePlayListModal.vue';
+import SliderBar from '@/components/Base/SliderBar.vue';
 
 let slideValueChange = false;// 记录slider值是否手动发生了改变
 let triggerOriginalAudioTimeUpdate = true;

@@ -14,6 +14,10 @@ import { getSimilarPlaylist, getSimilarSong } from '@/service/playlist';
 import { useAsyncState } from '@vueuse/core';
 import { mapSongs } from '@/utils/arr-map';
 import { useBlurLineGradient } from './hook/useBlurLineGradient';
+import RotateCd from '@/components/Player/RotateCd.vue';
+import MusicLyric from '@/components/Player/MusicLyric.vue';
+import CommentList from '@/components/CommentList/CommentList.vue';
+import RepliedCommentModal from '@/components/CommentList/RepliedCommentModal.vue';
 
 export interface MusicDetailExpose {
   show: () => void;
@@ -21,7 +25,8 @@ export interface MusicDetailExpose {
   toggle: () => void;
   active: Ref<boolean>;
 }
-let backTopEle:HTMLElement;
+
+let backTopEle: HTMLElement;
 
 const mainStore = useMainStore();
 const router = useRouter();
@@ -227,9 +232,9 @@ watch(pageParams, () => {
           size="35" :component="KeyboardArrowDownOutlined" class="ml-4"
           @click="mainStore.setShowMusicDetail(false)"
         />
-        <div class="flex items-center ml-20">
-          <layout-header-search />
-        </div>
+        <!--        <div class="flex items-center ml-20">-->
+        <!--          <layout-header-search />-->
+        <!--        </div>-->
         <transition v-show="showTopLyric" name="slide">
           <div class="ml-10 text-center" style="width:550px">
             <p>

@@ -8,6 +8,7 @@ import { onClickOutside } from '@vueuse/core';
 import { getLoginStatus, getUserDetail, getUserInfo, logout, signIn } from '@/service';
 import type { AnyObject } from 'env';
 import { useRouter } from 'vue-router';
+import LayoutHeaderSearch from '@/components/Layout/components/LayoutHeaderSearch.vue';
 
 let mainStore = useMainStore();
 const router = useRouter();
