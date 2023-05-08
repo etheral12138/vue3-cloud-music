@@ -44,8 +44,8 @@ dependencies:
     specifier: ^4.0.12
     version: 4.0.15(vue@3.2.36)
   vue-virtual-scroller:
-    specifier: ^2.0.0-alpha.1
-    version: 2.0.0-alpha.1(vue@3.2.36)
+    specifier: 2.0.0-beta.8
+    version: 2.0.0-beta.8(vue@3.2.36)
   xgplayer:
     specifier: ^2.31.6
     version: 2.31.6
@@ -4134,7 +4134,7 @@ packages:
     dev: false
 
   /vue-tsc@0.31.4(typescript@4.5.5):
-    resolution: {integrity: sha512-8RnKGmQRo/0rbXkyZmKCOdT62fNWyEaMdS/BDAPE+saGNAniUZsjpOSOjAiLwsQc5qgeI9/mY1W3o4tX7H/7MA==}
+    resolution: { integrity: sha512-8RnKGmQRo/0rbXkyZmKCOdT62fNWyEaMdS/BDAPE+saGNAniUZsjpOSOjAiLwsQc5qgeI9/mY1W3o4tX7H/7MA== }
     hasBin: true
     peerDependencies:
       typescript: '*'
@@ -4144,10 +4144,10 @@ packages:
       vscode-vue-languageservice: 0.31.4
     dev: true
 
-  /vue-virtual-scroller@2.0.0-alpha.1(vue@3.2.36):
-    resolution: {integrity: sha512-Mn5w3Qe06t7c3Imm2RHD43RACab1CCWplpdgzq+/FWJcpQtcGKd5vDep8i+nIwFtzFLsWAqEK0RzM7KrfAcBng==}
+  /vue-virtual-scroller@2.0.0-beta.8(vue@3.2.36):
+    resolution: { integrity: sha512-b8/f5NQ5nIEBRTNi6GcPItE4s7kxNHw2AIHLtDp+2QvqdTjVN0FgONwX9cr53jWRgnu+HRLPaWDOR2JPI5MTfQ== }
     peerDependencies:
-      vue: ^3.0.11
+      vue: ^3.2.0
     dependencies:
       mitt: 2.1.0
       vue: 3.2.36

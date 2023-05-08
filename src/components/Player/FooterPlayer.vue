@@ -21,9 +21,10 @@ import { useMainStore } from '@/stores/main';
 import dayjs from 'dayjs';
 import type { PlayListExpose } from './PlayList.vue';
 import { useElementHover } from '@vueuse/core';
-import obverser from '@/utils/obverser';
+import observer from '@/utils/observer';
 import type { HeartIconExpose } from '../common/HeartIcon.vue';
 import { useAudioLoadProgress } from './hook/useAudioLoadProgress';
+import HeartIcon from '@/components/common/HeartIcon.vue';
 
 let slideValueChange = false;// 记录slider值是否手动发生了改变
 let triggerOriginalAudioTimeUpdate = true;
@@ -148,7 +149,7 @@ const handleEnded = () => {
   } else {
     mainStore.toggleNext();
   }
-  obverser.emit('ended');
+  observer.emit('ended');
 };
 // 播放进度变化
 const handleTimeupdate = (event:Event) => {
@@ -170,8 +171,8 @@ const updatePlayTime = async (time:number, triggerPlay=false) => {
     if (audioRef.value) {
       audioRef.value!.currentTime = time;
     }
-  } 
-  obverser.emit('timeUpdate', Math.round(time));
+  }
+  observer.emit('timeUpdate', Math.round(time));
 };
 // 媒体的第一帧加载完成
 const handleLoadeddata = () => {
@@ -213,7 +214,7 @@ const handleSliderDone = () => {
   currentPlayTime.value = dayjs(currentTime).format('mm:ss');
   audioRef.value!.currentTime = currentTime / 1000;
   slideValueChange = false;
-  obverser.emit(
+  observer.emit(
     'slideValueChange', Math.round(currentTime / 1000), true
   );
 };
@@ -272,10 +273,10 @@ const handleLikeHeartClick = () => {
 };
 onMounted(() => {
   document.body.addEventListener('keypress', handlePressSpace);
-  obverser.on('selectLyricPlay', (time) => {
+  observer.on('selectLyricPlay', (time) => {
     updatePlayTime(time, true);
   });
-  obverser.on('scrollComplete', () => {
+  observer.on('scrollComplete', () => {
     triggerOriginalAudioTimeUpdate = true;
   });
 });

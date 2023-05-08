@@ -19,7 +19,7 @@ export const throttle = (fn:Function, delay:number) => {
   let timer:any = null;
   return function () {
     if (timer) return;
-    timer = setTimeout((...rest) => {
+    timer = setTimeout((...rest: any) => {
       fn(...rest);
       timer = null;
     }, delay);

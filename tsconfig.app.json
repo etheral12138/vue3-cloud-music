@@ -6,9 +6,15 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": [
+        "./src/*"
+      ]
     },
     "module": "ESNext",
-    "lib": ["es2018"]
+    "lib": [
+      "es2018"
+    ],
+    "noImplicitAny": false,
+    "allowJs": true
   }
 }

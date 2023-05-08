@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useThemeVars } from 'naive-ui';
-import obverser from '@/utils/obverser';
+import obverser from '@/utils/observer';
 import { PlayArrowSharp } from '@vicons/material';
 import { computed, type CSSProperties, nextTick, onMounted, ref, toRaw, watch } from 'vue';
 import { useMainStore } from '@/stores/main';

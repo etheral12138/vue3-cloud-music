@@ -24,7 +24,7 @@
     "unplugin-vue-components": "^0.18.5",
     "vue": "^3.2.31",
     "vue-router": "^4.0.12",
-    "vue-virtual-scroller": "^2.0.0-alpha.1",
+    "vue-virtual-scroller": "2.0.0-beta.8",
     "xgplayer": "^2.31.6"
   },
   "devDependencies": {

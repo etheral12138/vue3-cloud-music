@@ -17,7 +17,7 @@ import { Edit } from '@vicons/carbon';
 import { useMainStore } from '@/stores/main';
 import type { SelectSongListTagModalExpose } from '@/components/SongsList/SelectSongListTagModal.vue';
 import { useDialog, useThemeVars } from 'naive-ui';
-import obverser from '@/utils/obverser';
+import obverser from '@/utils/observer';
 import { userCheckLogin } from '@/hook/useCheckLogin';
 import { useMemorizeRequest } from '@/hook/useMemorizeRequest';
 import { cloneDeep } from 'lodash';

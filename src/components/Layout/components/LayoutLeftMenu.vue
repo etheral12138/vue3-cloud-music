@@ -9,7 +9,7 @@ import { NIcon, useLoadingBar } from 'naive-ui';
 import { computed, type CSSProperties, KeepAlive, onMounted, ref, type VNodeChild, watch } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import LoginModal, { type LoginModalExpose } from './LoginModal.vue';
-import obverser from '@/utils/obverser';
+import obverser from '@/utils/observer';
 
 const mainStore = useMainStore();
 type MySongsList = { myCreatePlayList: any[], collectPlayList: any[] };

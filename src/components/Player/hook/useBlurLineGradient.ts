@@ -1,5 +1,5 @@
 import { getPixelColor } from '@/utils/getPixelColor';
-import obverser from '@/utils/obverser';
+import obverser from '@/utils/observer';
 import { type CSSProperties, nextTick } from 'vue';
 
 export function useBlurLineGradient() {

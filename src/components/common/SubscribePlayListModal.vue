@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { createPlaylist, updatePlaylistTracks } from '@/service/playlist';
 import { useMainStore } from '@/stores/main';
-import obverser from '@/utils/obverser';
+import obverser from '@/utils/observer';
 import { ArrowBackIosSharp } from '@vicons/material';
 import { computed, ref, watch } from 'vue';
 
