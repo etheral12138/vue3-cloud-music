@@ -15,7 +15,7 @@ export default defineConfig({
   ],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   server: {
-    port: 8081,
-    open: 'http://localhost:8081'
+    port: 3333,
+    open: 'http://localhost:3333'
   }
 });
