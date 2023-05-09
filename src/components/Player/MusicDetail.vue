@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang='ts' setup>
 import { type CSSProperties, nextTick, reactive, type Ref, ref, watch } from 'vue';
 import analyze from 'rgbaster';
 import { BackToTop, Edit } from '@vicons/carbon';
@@ -32,7 +32,7 @@ const mainStore = useMainStore();
 const router = useRouter();
 const { tagColor } = useThemeStyle();
 const { updateFooterMaskColor, resetBackground } = useBlurLineGradient();
-const commentModalRef= ref();
+const commentModalRef = ref();
 const commentLoading = ref(true);
 const scrollContainerRef = ref<HTMLElement>(null as unknown as HTMLElement);
 const musicComment = ref<AnyObject>({});
@@ -64,7 +64,7 @@ const pageParams = reactive({
 });
 const target = () => scrollContainerRef.value;
 
-const fillBackground = async (updateMask=true) => {
+const fillBackground = async (updateMask = true) => {
   await nextTick();
   let ctx = myCanvas.value!.getContext('2d') as CanvasRenderingContext2D;
   let width = (window.innerWidth * 0.85);
@@ -85,7 +85,7 @@ const fillBackground = async (updateMask=true) => {
   } else {
     primary = mainStore.currentPlaySong.primaryColor;
   }
- 
+
   let bgColor = color(baseColor).mix(color(primary), 0.2)
     .hex();
   myCanvas.value!.width = width;
@@ -104,9 +104,9 @@ const fillBackground = async (updateMask=true) => {
   }
 };
 // 获取歌单评论
-const fetchMusicComment = (id:string) => {
-  let params:{
-    id:string;limit:number;offset:number;before?:string;
+const fetchMusicComment = (id: string) => {
+  let params: {
+    id: string; limit: number; offset: number; before?: string;
   } = {
     id,
     limit: pageParams.pageSize,
@@ -123,12 +123,12 @@ const fetchMusicComment = (id:string) => {
     commentLoading.value = false;
   });
 };
-const handleSimiPlayListItem = (id:string) => {
+const handleSimiPlayListItem = (id: string) => {
   router.push(`/songList/${id}`);
   mainStore.setShowMusicDetail(false);
 };
 
-const handleScroll = (e:Event) => {
+const handleScroll = (e: Event) => {
   let target = e.target as HTMLElement;
   if (target.scrollTop >= 120) {
     showTopLyric.value = true;
@@ -138,11 +138,11 @@ const handleScroll = (e:Event) => {
   updateFooterMaskColor(myCanvas.value!.getContext('2d')!);
 };
 
-const updateCommentList = (value:any) => {
+const updateCommentList = (value: any) => {
   musicComment.value.total += 1;
   musicComment.value.comments.unshift(value);
 };
-const updateCommentLiked = (data:{liked:boolean, index:number}, isHot:boolean) => {
+const updateCommentLiked = (data: { liked: boolean, index: number }, isHot: boolean) => {
   let { index, liked } = data;
   if (isHot) {
     musicComment.value.hotComments[index].liked = liked;
@@ -156,10 +156,10 @@ const updateCommentLiked = (data:{liked:boolean, index:number}, isHot:boolean) =
       : musicComment.value.comments[index].likedCount - 1;
   }
 };
-const handleUpdateShow = (value:boolean) => {
+const handleUpdateShow = (value: boolean) => {
   showBackTop.value = value;
 };
-const handleContextMenu = (ev:MouseEvent) => {
+const handleContextMenu = (ev: MouseEvent) => {
   ev.preventDefault();
   return false;
 };
@@ -176,7 +176,7 @@ const setTagPositionStyle = async () => {
   await nextTick();
   isShowTag.value = false;
   let left = titleRef.value!.offsetLeft + titleRef.value!.offsetWidth + 20;
-  tagPositionStyle.value = { left: left+'px', top: '-15px' };
+  tagPositionStyle.value = { left: left + 'px', top: '-15px' };
   isShowTag.value = true;
 };
 watch(() => mainStore.theme, () => {
@@ -222,151 +222,151 @@ watch(pageParams, () => {
 </script>
 
 <template>
-  <transition name="bottom-slide-transform" @after-enter="handleTransitionAfterEnter">
+  <transition name='bottom-slide-transform' @after-enter='handleTransitionAfterEnter'>
     <div
-      v-show="mainStore.showMusicDetail"
-      class="fixed inset-x-0 m-auto music-detail"
-    > 
-      <div class="box-border flex items-center p-4" style="height:77px;">
+      v-show='mainStore.showMusicDetail'
+      class='fixed inset-x-0 m-auto music-detail'
+    >
+      <div class='box-border flex items-center p-4' style='height:77px;'>
         <n-icon
-          size="35" :component="KeyboardArrowDownOutlined" class="ml-4"
-          @click="mainStore.setShowMusicDetail(false)"
+          :component='KeyboardArrowDownOutlined' class='ml-4' size='35'
+          @click='mainStore.setShowMusicDetail(false)'
         />
         <!--        <div class="flex items-center ml-20">-->
         <!--          <layout-header-search />-->
         <!--        </div>-->
-        <transition v-show="showTopLyric" name="slide">
-          <div class="ml-10 text-center" style="width:550px">
+        <transition v-show='showTopLyric' name='slide'>
+          <div class='ml-10 text-center' style='width:550px'>
             <p>
               {{ mainStore.currentPlaySong.name }}
             </p>
-            <p class="opacity-50">
+            <p class='opacity-50'>
               {{ mainStore.currentPlayLyric }}
             </p>
           </div>
         </transition>
       </div>
-      <div ref="scrollContainerRef" class="flex px-10 pt-5 detail-content" @scroll="handleScroll">
+      <div ref='scrollContainerRef' class='flex px-10 pt-5 detail-content' @scroll='handleScroll'>
         <rotate-cd />
-        <div class="ml-10">
-          <div style="width:550px">
-            <div class="relative">
-              <div class="text-3xl text-center">
-                <span ref="titleRef"> {{ mainStore.currentPlaySong.name }}</span>
-                <div class="absolute" :style="tagPositionStyle">
+        <div class='ml-10'>
+          <div style='width:550px'>
+            <div class='relative'>
+              <div class='text-3xl text-center'>
+                <span ref='titleRef'> {{ mainStore.currentPlaySong.name }}</span>
+                <div :style='tagPositionStyle' class='absolute'>
                   <n-tag
-                    v-if="mainStore.currentPlaySong.mv !== 0"
-                    size="small" :color="tagColor"
-                    @click="handleMvTagClick"
+                    v-if='mainStore.currentPlaySong.mv !== 0'
+                    :color='tagColor' size='small'
+                    @click='handleMvTagClick'
                   >
                     MV
                   </n-tag>
                 </div>
               </div>
             </div>
-            <p v-if="mainStore.currentPlaySong.alia" class="mt-2 text-sm text-center opacity-50">
+            <p v-if='mainStore.currentPlaySong.alia' class='mt-2 text-sm text-center opacity-50'>
               {{ mainStore.currentPlaySong.alia[0] }}
             </p>
-            <p class="mt-2 text-sm text-center opacity-50">
+            <p class='mt-2 text-sm text-center opacity-50'>
               {{ mainStore.currentPlaySong.al.name }}
               <span>-</span>
               {{ formateSongsAuthor(mainStore.currentPlaySong.ar || []) }}
             </p>
           </div>
-          <div class="flex">
+          <div class='flex'>
             <div>
               <music-lyric />
               <!-- 评论-->
-              <div style="width:550px;height:300px;" class="mt-5">
-                <n-spin :show="commentLoading" description="加载中">
-                  <div v-show="commentLoading" class="h-80" />
+              <div class='mt-5' style='width:550px;height:300px;'>
+                <n-spin :show='commentLoading' description='加载中'>
+                  <div v-show='commentLoading' class='h-80' />
                   <comment-list
-                    :type="0"
-                    :comment-total-num="musicComment.total"
-                    :resource-id="mainStore.currentPlaySong.id" title="精彩评论" :list="musicComment.hotComments || []"
-                    @update-comment-list="updateCommentList"
-                    @update-comment-liked="(data:any) => updateCommentLiked(data,true)"
+                    :comment-total-num='musicComment.total'
+                    :list='musicComment.hotComments || []'
+                    :resource-id='mainStore.currentPlaySong.id' :type='0' title='精彩评论'
+                    @update-comment-list='updateCommentList'
+                    @update-comment-liked='(data:any) => updateCommentLiked(data,true)'
                   />
                   <!-- 最新评论 -->
                   <comment-list
-                    :resource-id="mainStore.currentPlaySong.id"
-                    :type="0"
-                    :comment-total-num="musicComment.total" title="最新评论" :list="musicComment.comments || []"
-                    @update-comment-list="updateCommentList"
-                    @update-comment-liked="(data:any) => updateCommentLiked(data,false)"
+                    :comment-total-num='musicComment.total'
+                    :list='musicComment.comments || []'
+                    :resource-id='mainStore.currentPlaySong.id' :type='0' title='最新评论'
+                    @update-comment-list='updateCommentList'
+                    @update-comment-liked='(data:any) => updateCommentLiked(data,false)'
                   />
                 </n-spin>
-                <p v-if="!musicComment.comments?.length && !commentLoading" class="text-center opacity-50">
+                <p v-if='!musicComment.comments?.length && !commentLoading' class='text-center opacity-50'>
                   还没有评论, 快来抢沙发~
                 </p>
-                <div v-if="pageParams.pageCount > 1 && musicComment.comments" class="flex justify-end mt-6">
+                <div v-if='pageParams.pageCount > 1 && musicComment.comments' class='flex justify-end mt-6'>
                   <n-pagination
-                    v-model:page="pageParams.page" 
-                    v-model:page-size="pageParams.pageSize" 
-                    :page-count="pageParams.pageCount" 
+                    v-model:page='pageParams.page'
+                    v-model:page-size='pageParams.pageSize'
+                    :page-count='pageParams.pageCount'
+                    :page-sizes='[10, 20, 30, 40,50]'
                     show-size-picker
-                    :page-sizes="[10, 20, 30, 40,50]"
                   />
                 </div>
-                <div class="h-20" />
+                <div class='h-20' />
               </div>
             </div>
-            <n-scrollbar style="max-height: 350px;padding-right:20px;" class="pt-10 ml-20">
-              <h3 v-if="similarPlaylist.length" class="m-0 text-left">
+            <n-scrollbar class='pt-10 ml-20' style='max-height: 350px;padding-right:20px;'>
+              <h3 v-if='similarPlaylist.length' class='m-0 text-left'>
                 包含这首歌的歌单
               </h3>
-              <n-divider v-if="similarPlaylist.length" />
-              <n-spin :show="fetchSimiPlayListLoading" size="small">
-                <div v-show="fetchSimiPlayListLoading" class="w-80 h-32" />
+              <n-divider v-if='similarPlaylist.length' />
+              <n-spin :show='fetchSimiPlayListLoading' size='small'>
+                <div v-show='fetchSimiPlayListLoading' class='w-80 h-32' />
                 <!-- 相似歌单推荐 -->
                 <div
-                  v-for="item in similarPlaylist"
-                  v-show="!fetchSimiPlayListLoading"
-                  :key="item.id"
-                  class="flex items-center p-2 hover:bg-neutral-50 dark:hover:bg-neutral-50/20 cursor-pointer"
-                  @click="handleSimiPlayListItem(item.id)"
+                  v-for='item in similarPlaylist'
+                  v-show='!fetchSimiPlayListLoading'
+                  :key='item.id'
+                  class='flex items-center p-2 hover:bg-neutral-50 dark:hover:bg-neutral-50/20 cursor-pointer'
+                  @click='handleSimiPlayListItem(item.id)'
                 >
                   <n-image
-                    width="45" height="45" 
-                    class="rounded-md"
-                    :src="item.coverImgUrl"
+                    :src='item.coverImgUrl' class='rounded-md'
+                    height='45'
+                    width='45'
                   />
-                  <div class="ml-4">
-                    <p class="w-60 text-sm text-left truncate">
+                  <div class='ml-4'>
+                    <p class='w-60 text-sm text-left truncate'>
                       {{ item.name }}
                     </p>
-                    <p class="mt-2 w-60 text-sm text-left truncate">
-                      <span class="opacity-50">by</span> <span class="opacity-80">  {{ item.creator.nickname }}</span>
+                    <p class='mt-2 w-60 text-sm text-left truncate'>
+                      <span class='opacity-50'>by</span> <span class='opacity-80'>  {{ item.creator.nickname }}</span>
                     </p>
                   </div>
                 </div>
               </n-spin>
-              <div class="mt-2">
-                <h3 v-if="similarMusicList.length" class="m-0 text-left">
+              <div class='mt-2'>
+                <h3 v-if='similarMusicList.length' class='m-0 text-left'>
                   喜欢这首歌的也喜欢听
                 </h3>
-                <n-divider v-if="similarMusicList.length" />
+                <n-divider v-if='similarMusicList.length' />
               </div>
               <!-- 相似歌曲 -->
-              <n-spin :show="fetchSimilarSongIsLoading">
-                <div v-show="fetchSimilarSongIsLoading" class="w-80 h-40" />
+              <n-spin :show='fetchSimilarSongIsLoading'>
+                <div v-show='fetchSimilarSongIsLoading' class='w-80 h-40' />
                 <div
-                  v-for="item in similarMusicList"
-                  v-show="!fetchSimilarSongIsLoading"
-                  :key="item.id"
-                  class="flex items-center p-1 hover:bg-neutral-50 dark:hover:bg-neutral-50/20 cursor-pointer"
-                  @click="mainStore.insertPlay(item)"
+                  v-for='item in similarMusicList'
+                  v-show='!fetchSimilarSongIsLoading'
+                  :key='item.id'
+                  class='flex items-center p-1 hover:bg-neutral-50 dark:hover:bg-neutral-50/20 cursor-pointer'
+                  @click='mainStore.insertPlay(item)'
                 >
                   <n-image
-                    width="45" height="45" 
-                    class="rounded-md"
-                    :src="item.album.picUrl"
+                    :src='item.album.picUrl' class='rounded-md'
+                    height='45'
+                    width='45'
                   />
-                  <div class="ml-4">
-                    <p class="w-60 text-sm text-left truncate">
+                  <div class='ml-4'>
+                    <p class='w-60 text-sm text-left truncate'>
                       {{ item.name }}
                     </p>
-                    <p class="mt-2 w-60 text-sm text-left truncate opacity-50">
+                    <p class='mt-2 w-60 text-sm text-left truncate opacity-50'>
                       {{ formateSongsAuthor(item.artists) }}
                     </p>
                   </div>
@@ -378,48 +378,48 @@ watch(pageParams, () => {
       </div>
     </div>
   </transition>
-  <transition name="bottom-slide-transform">
+  <transition name='bottom-slide-transform'>
     <canvas
-      v-show="mainStore.showMusicDetail" ref="myCanvas" class="background"
-      @contextmenu="handleContextMenu"
+      v-show='mainStore.showMusicDetail' ref='myCanvas' class='background'
+      @contextmenu='handleContextMenu'
     />
   </transition>
- 
+
   <n-back-top
-    style="z-index: 9999;"
-    :show="showBackTop"
-    :on-update:show="handleUpdateShow"
-    :listen-to="target" :bottom="90" :right="400"
+    :bottom='90'
+    :listen-to='target'
+    :on-update:show='handleUpdateShow'
+    :right='400' :show='showBackTop' style='z-index: 9999;'
   >
-    <n-icon :component="BackToTop" />
+    <n-icon :component='BackToTop' />
   </n-back-top>
   <!-- 发表评论-->
   <replied-comment-modal
-    ref="commentModalRef" comment-placeholder="发表评论" :title="'歌曲：'+ mainStore.currentPlaySong.name"
-    :update-comment-list="updateCommentList" :t="1" :type="0"
-    :resource-id="mainStore.currentPlaySong.id"
+    ref='commentModalRef' :resource-id='mainStore.currentPlaySong.id' :t='1'
+    :title="'歌曲：'+ mainStore.currentPlaySong.name" :type='0' :update-comment-list='updateCommentList'
+    comment-placeholder='发表评论'
   />
-  <transition name="slide">
+  <transition name='slide'>
     <n-button
-      v-show="!showBackTop && mainStore.showMusicDetail"
-      class="fixed" style="z-index:9999;bottom: 90px;right:400px"
-      round type="primary"
-      @click="commentModalRef?.show()"
+      v-show='!showBackTop && mainStore.showMusicDetail'
+      class='fixed' round
+      style='z-index:9999;bottom: 90px;right:400px' type='primary'
+      @click='commentModalRef?.show()'
     >
-      <n-icon :component="Edit" />
+      <n-icon :component='Edit' />
       写评论
     </n-button>
   </transition>
   <!-- 发表我的音乐评论 -->
-  <transition name="slide">
+  <transition name='slide'>
     <n-button
-      v-show="showBackTop && mainStore.showMusicDetail"
-      type="primary"
-      class="fixed w-44" style="z-index:9999;bottom: 90px;right:0;left:0;margin:auto"
-      round
-      @click="commentModalRef?.show()"
+      v-show='showBackTop && mainStore.showMusicDetail'
+      class='fixed w-44'
+      round style='z-index:9999;bottom: 90px;right:0;left:0;margin:auto'
+      type='primary'
+      @click='commentModalRef?.show()'
     >
-      <n-icon :component="Edit" />
+      <n-icon :component='Edit' />
       发表我的音乐评论
     </n-button>
   </transition>
@@ -427,47 +427,57 @@ watch(pageParams, () => {
 
 <style scoped>
 .music-detail {
-  bottom: 73px;
-  width: 85vw;
-  height: calc(100vh - 73px);
-  z-index: 1000;
-  overflow: hidden;
+    bottom: 73px;
+    width: 85vw;
+    height: calc(100vh - 73px);
+    z-index: 1000;
+    overflow: hidden;
+    transition: transform 0.5s;
 }
-.detail-content{
-  height: calc(100vh - 73px - 77px);
-  box-sizing: border-box;
-  overflow-y: scroll;
+
+.detail-content {
+    height: calc(100vh - 73px - 77px);
+    box-sizing: border-box;
+    overflow-y: scroll;
 }
-.background{
-  position: fixed;
-  width: 85vw;
-  height: calc(100vh - 73px);
-  bottom: 73px;
-  left:0;
-  right:0;
-  margin:auto;
-  z-index: 999;
+
+.background {
+    position: fixed;
+    width: 85vw;
+    height: calc(100vh - 73px);
+    bottom: 73px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 999;
 }
-:deep(.n-back-top-placeholder){
-  z-index:8888 !important;
+
+:deep(.n-back-top-placeholder) {
+    z-index: 8888 !important;
 }
+
 /* 从底部弹出或隐藏过渡 */
 .bottom-slide-transform-leave-active {
-  transition: height .2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: height .2s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .bottom-slide-transform-enter-active {
-  transition: height .6s cubic-bezier(0.4, 0, 0.2, 1);;
+    transition: height .6s cubic-bezier(0.4, 0, 0.2, 1);;
 }
+
 .bottom-slide-transform-enter-from {
-  height: 0;
+    height: 0;
 }
+
 .bottom-slide-transform-enter-to {
-  height: calc(100vh - 73px);
+    height: calc(100vh - 73px);
 }
+
 .bottom-slide-transform-leave-to {
-  height: 0;
+    height: 0;
 }
-:deep(.n-divider:not(.n-divider--vertical)){
-  margin: 10px 0;
+
+:deep(.n-divider:not(.n-divider--vertical)) {
+    margin: 10px 0;
 }
 </style>
