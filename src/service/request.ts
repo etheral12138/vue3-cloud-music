@@ -5,6 +5,7 @@ const instance = axios.create({
   // method: 'get',
   withCredentials: true
 });
+
 //add request interceptor
 instance.interceptors.request.use((config) => {
   return config;
