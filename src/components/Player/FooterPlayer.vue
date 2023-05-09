@@ -410,7 +410,7 @@ onUnmounted(() => {
 </template>
 <style scoped>
 .footer-player{
-    height: calc(100vh - 800px - 10px);
+    height: calc(100vh - 830px);
     box-sizing: border-box;
 }
 :deep(.custom-icon:hover){

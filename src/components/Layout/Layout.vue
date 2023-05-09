@@ -30,7 +30,7 @@ onMounted(() => {
     <n-layout>
       <base-header />
       <layout-left-menu />
-      <n-layout-footer v-if="!route.meta.hidden" :inverted="false" bordered>
+      <n-layout-footer v-if='!route.meta.hidden'>
         <footer-player />
       </n-layout-footer>
     </n-layout>
