@@ -1,7 +1,7 @@
 import axios from 'axios';
 // create axios instance
 const instance = axios.create({
-  baseURL: 'http://neteaseapi.etheral.cc/',
+  baseURL: 'https://neteaseapi.etheral.cc/',
   // method: 'get',
   withCredentials: true
 });
