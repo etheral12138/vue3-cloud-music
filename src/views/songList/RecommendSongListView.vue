@@ -5,6 +5,9 @@ import { getArrLast } from '@/utils';
 import { useAsyncState } from '@vueuse/core';
 import { useLoadingBar, useThemeVars } from 'naive-ui';
 import { computed, nextTick, onBeforeMount, ref, watch } from 'vue';
+import LoadImg from '@/components/Base/LoadImg.vue';
+import ListLoading from '@/components/Base/ListLoading.vue';
+import SongListSkeleton from '@/components/SongsList/SongListSkeleton.vue';
 //精品歌单
 const tabsTabSelector = '.myTabs > .n-tabs-nav .n-tabs-wrapper > .n-tabs-tab-wrapper>.n-tabs-tab';
 const {
@@ -194,12 +197,12 @@ const loadMore = (successCallback: any) => {
   padding-top: 0;
 }
 :deep(.n-tabs .n-tabs-nav) {
-  overflow-x: scroll;
-  position: sticky;
-  top: 0px;
-  z-index: 999;
-  padding-top: 10px;
-  background-color: v-bind(bodyColor);
+    overflow-x: scroll;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    padding-top: 10px;
+    background-color: v-bind(bodyColor);
 }
 :deep(.n-tabs .n-tabs-nav::-webkit-scrollbar-thumb) {
   height: 15px;

@@ -410,8 +410,8 @@ onUnmounted(() => {
 </template>
 <style scoped>
 .footer-player{
-  height: calc(100vh - 800px - 57px);
-  box-sizing: border-box;
+    height: calc(100vh - 800px - 10px);
+    box-sizing: border-box;
 }
 :deep(.custom-icon:hover){
   color: v-bind(primaryColor);
