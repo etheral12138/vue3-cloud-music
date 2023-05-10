@@ -248,8 +248,7 @@ const changeModelBirthday = () => {
     +birthday.value.month - 1,
     +birthday.value.day
   );
-  let timestamp = date.getTime();
-  model.value.birthday = timestamp;
+  model.value.birthday = date.getTime();
 };
 initData();
       
