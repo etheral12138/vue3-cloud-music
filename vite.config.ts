@@ -14,15 +14,5 @@ export default defineConfig({
     viteCompression()
   ],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } }
-  // server: {
-  //   // https: true,
-  //   // open: 'https://localhost:3000',
-  //   // proxy: {
-  //   //   '/': {
-  //   //     target: 'http://127.0.0.1:3333',
-  //   //     changeOrigin: true
-  //   //   }
-  //   // },
-  //   // cors: true
-  // }
+
 });
