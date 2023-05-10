@@ -102,9 +102,6 @@ devDependencies:
   autoprefixer:
     specifier: ^10.4.4
     version: 10.4.7(postcss@8.4.14)
-  axios-jsonp:
-    specifier: ^1.0.4
-    version: 1.0.4
   eslint:
     specifier: ^8.5.0
     version: 8.16.0
@@ -1392,10 +1389,6 @@ packages:
       picocolors: 1.0.0
       postcss: 8.4.14
       postcss-value-parser: 4.2.0
-    dev: true
-
-  /axios-jsonp@1.0.4:
-    resolution: { integrity: sha512-KI5Fc4ery6DR+oneXG09hPZfGuNUW8Lblhe750h53Z0Eh5MRsrHn49YitDU4RsMk0HV+12zcvL2Q51QkOLGdIQ== }
     dev: true
 
   /axios@0.26.1:
