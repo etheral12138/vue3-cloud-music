@@ -8,7 +8,7 @@ import './assets/css/transition.css';
 import './index.css';
 import router from './router';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
-
+// export  const  theme=ref(null)
 const app = createApp(App);
 app.use(createPinia());
 app.use(VueVirtualScroller);
