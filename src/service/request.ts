@@ -1,11 +1,8 @@
 import axios from 'axios';
-// @ts-ignore
-import axiosJsonp from 'axios-jsonp';
 // create axios instance
 const instance = axios.create({
   baseURL: 'https://neteaseapi.etheral.cc/',
   // method: 'get',
-  adapter: axiosJsonp,
   withCredentials: true
 });
 
