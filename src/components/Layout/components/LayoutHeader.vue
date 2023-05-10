@@ -220,9 +220,9 @@ if (mainStore.isLogin) {
         <!--              <n-icon :component="SunnySharp" />-->
         <!--            </template>-->
         <!--          </n-switch>-->
-        <!--          &lt;!&ndash;          <n-button @click="changetheme">&ndash;&gt;-->
-        <!--          &lt;!&ndash;            {{ themebtntit }}&ndash;&gt;-->
-        <!--          &lt;!&ndash;          </n-button>&ndash;&gt;-->
+        <!--                <n-button @click="changetheme">&ndash;&gt;-->
+        <!--                     {{ themebtntit }}&ndash;&gt;-->
+        <!--                 </n-button>&ndash;&gt;-->
         <!--          <n-global-style />-->
         <!--        </n-config-provider>-->
       </div>
