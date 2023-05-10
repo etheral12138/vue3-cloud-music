@@ -16,14 +16,23 @@ const popoverContainerRef = ref();
 const userDetail = ref<AnyObject>();
 const showUserPopover = ref(false);
 const signBtnLoading = ref(false);
-
+// import { theme } from '@/main';
+// const themebtntit = ref('暗色主题'); //主体按钮title
+// const changetheme = () => {
+//   theme.value = theme.value == null
+//     ? darkTheme
+//     : null;
+//   themebtntit.value = themebtntit.value == '亮色主题'
+//     ? '暗色主题'
+//     : '亮色主题';
+// };
 // 监听登录状态 获取用户信息
 watch(() => mainStore.isLogin, (val) => {
   if (val) {
     getUserProfile();
   }
 });
-onClickOutside(popoverContainerRef, (event:MouseEvent) => {
+onClickOutside(popoverContainerRef, (event: MouseEvent) => {
   let target = event.target as HTMLElement;
   // 如果点击的不是不是触发弹出选择的元素
   if (!target.classList.contains('trigger')) {
@@ -91,9 +100,9 @@ const handleSignInClick = () => {
     }
   });
 };
-const handleThemeSwitchUpdateChange = () => {
-  mainStore.toggleTheme();
-};
+// const handleThemeSwitchUpdateChange = () => {
+//   mainStore.toggleTheme();
+// };
 const BackToDiscovery = () => {
   router.push('/discovery');
 };
@@ -194,14 +203,28 @@ if (mainStore.isLogin) {
         </div>
       </div>
       <div class="flex items-center ml-2">
-        <n-switch :value="mainStore.isActiveDarkTheme" size="large" :on-update:value="handleThemeSwitchUpdateChange">
+        <n-switch :on-update:value='mainStore.toggleTheme' :value='mainStore.isActiveDarkTheme' size='large'>
           <template #checked-icon>
-            <n-icon :component="Moon" />
+            <n-icon :component='Moon' />
           </template>
           <template #unchecked-icon>
-            <n-icon :component="SunnySharp" />
+            <n-icon :component='SunnySharp' />
           </template>
         </n-switch>
+        <!--        <n-config-provider :theme="theme">-->
+        <!--          <n-switch :value="theme===null" size="large" :on-update:value="changetheme">-->
+        <!--            <template #checked-icon>-->
+        <!--              <n-icon :component="Moon" />-->
+        <!--            </template>-->
+        <!--            <template #unchecked-icon>-->
+        <!--              <n-icon :component="SunnySharp" />-->
+        <!--            </template>-->
+        <!--          </n-switch>-->
+        <!--          &lt;!&ndash;          <n-button @click="changetheme">&ndash;&gt;-->
+        <!--          &lt;!&ndash;            {{ themebtntit }}&ndash;&gt;-->
+        <!--          &lt;!&ndash;          </n-button>&ndash;&gt;-->
+        <!--          <n-global-style />-->
+        <!--        </n-config-provider>-->
       </div>
     </div>
   </n-layout-header>
