@@ -479,7 +479,4 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
     border: none;
 }
 
-.tag:hover {
-    color: var(--n-color-target);
-}
 </style>

@@ -103,20 +103,20 @@ if (mainStore.isLogin) {
 }
 </script>
 <template>
-  <n-layout-header bordered class="flex justify-between items-center px-4 h-14 sm:px-3">
+  <n-layout-header bordered class='flex justify-between items-center px-4 h-14 sm:px-3'>
     <div class='flex leading-7'>
       <img alt='' class='w-7 h-7' src='https://etheral.oss-cn-shanghai.aliyuncs.com/images/mao.png'>
       <span class='ml-2 text-xl italic truncate cursor-pointer' @click='BackToDiscovery'>NTR音乐</span>
       <layout-header-search />
     </div>
-    <div class="flex items-center">
+    <div class='flex items-center'>
       <!-- 用户信息入口 -->
-      <div v-if="mainStore.isLogin">
-        <div v-if="mainStore.userProfile" class="flex items-center mr-2">
-          <n-avatar round :size="30" :src="mainStore.userProfile?.profile?.avatarUrl" />
+      <div v-if='mainStore.isLogin'>
+        <div v-if='mainStore.userProfile' class='flex items-center mr-2'>
+          <n-avatar :size='30' :src='mainStore.userProfile?.profile?.avatarUrl' round />
           <n-popover
-            :show="showUserPopover"
-            trigger="click" style="padding:0"
+            :show='showUserPopover'
+            style='padding:0' trigger='click'
             display-directive="show"
           >
             <template #trigger>
@@ -125,26 +125,26 @@ if (mainStore.isLogin) {
                 @click="() => (userDetail && (showUserPopover = !showUserPopover ))
                 "
               >
-                {{ mainStore.userProfile?.profile.nickname }}
+                {{ mainStore.userProfile?.profile?.nickname }}
               </p>
             </template>
             <div ref="popoverContainerRef" style="width:300px">
               <div class="flex justify-evenly py-4">
                 <div class="flex flex-col items-center">
                   <p class="text-lg font-bold">
-                    {{ mainStore.userProfile?.profile.eventCount }}
+                    {{ mainStore.userProfile?.profile?.eventCount }}
                   </p>
                   动态
                 </div>
                 <div>
                   <p class="text-lg font-bold">
-                    {{ mainStore.userProfile?.profile.follows }}
+                    {{ mainStore.userProfile?.profile?.follows }}
                   </p>
                   关注
                 </div>
                 <div>
                   <p class="text-lg font-bold">
-                    {{ mainStore.userProfile?.profile.followeds }}
+                    {{ mainStore.userProfile?.profile?.followeds }}
                   </p>
                   粉丝
                 </div>
