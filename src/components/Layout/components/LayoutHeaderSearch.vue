@@ -152,9 +152,9 @@ const handleSearchSongClick = async(song:any) => {
   }
   song.like = mainStore.hasLikeSong(song.id);
   if (mainStore.playList.length) {
-    mainStore.insertPlay(song);
+    await mainStore.insertPlay(song);
   } else {
-    mainStore.initPlayList(
+    await mainStore.initPlayList(
       [song], 0, nanoid()
     );
   }

@@ -93,7 +93,7 @@ const init = () => {
 init();
 const handleImgClick = async (id:number) => {
   videoPlayRef.value?.stop();
-  router.push(`/mv/${id}`);
+  await router.push(`/mv/${id}`);
 };
 watch(() => route.path, (val:string) => {
   if (route.path.includes('mv')) {

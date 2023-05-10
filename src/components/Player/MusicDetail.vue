@@ -188,7 +188,7 @@ watch(() => mainStore.showMusicDetail, async (val) => {
     showBackTop.value = false;
   }
   if (!isShowTag.value) {
-    setTagPositionStyle();
+    await setTagPositionStyle();
   }
 });
 watch(

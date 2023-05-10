@@ -80,10 +80,10 @@ const loadCurrentPrevAndNext = async (val:any) => {
   let next = mainStore.playList[val.nextIndex] as any;
   let prev = mainStore.playList[val.prevIndex] as any;
   if (!next.url) {
-    mainStore.setMusicData({ data: mainStore.playList, id: next.id, index: val.nextIndex, showMessage: false });
+    await mainStore.setMusicData({ data: mainStore.playList, id: next.id, index: val.nextIndex, showMessage: false });
   }
   if (!prev.url) {
-    mainStore.setMusicData({ data: mainStore.playList, id: next.id, index: val.prevIndex, showMessage: false });
+    await mainStore.setMusicData({ data: mainStore.playList, id: next.id, index: val.prevIndex, showMessage: false });
   }
   localStorage.playList = JSON.stringify(mainStore.playList);
 };
