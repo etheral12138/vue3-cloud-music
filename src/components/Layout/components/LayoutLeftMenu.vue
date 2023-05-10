@@ -116,11 +116,7 @@ const handlePlayListItemClick = (item:any) => {
 };
 watch(() => route.path, (newVal) => {
   activeKey.value = newVal;
-  if (route.meta.hidden) {
-    hiddenLeftMenu.value = true;
-  } else {
-    hiddenLeftMenu.value = false;
-  }
+  hiddenLeftMenu.value = !!route.meta.hidden;
 });
 watch(() => mainStore.userProfile, (val) => {
   let userId = mainStore.userProfile?.profile?.userId;
@@ -165,7 +161,7 @@ const classifySongsList = (userId:number, playList:any[]) => {
     prev, currentValue, index
   ) => {
     if (index === 0) currentValue.name = '我喜欢的音乐';
-    if (currentValue.creator?.userId === userId) {
+    if (currentValue.creator.userId === userId) {
       prev.myCreatePlayList.push(currentValue);
     } else {
       prev.collectPlayList.push(currentValue);

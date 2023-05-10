@@ -16,14 +16,17 @@ import { Search, ShareSocialOutline, Star, StarOutline } from '@vicons/ionicons5
 import { Edit } from '@vicons/carbon';
 import { useMainStore } from '@/stores/main';
 import type { SelectSongListTagModalExpose } from '@/components/SongsList/SelectSongListTagModal.vue';
+import SelectSongListTagModal from '@/components/SongsList/SelectSongListTagModal.vue';
 import { useDialog, useThemeVars } from 'naive-ui';
 import obverser from '@/utils/observer';
 import { userCheckLogin } from '@/hook/useCheckLogin';
 import { useMemorizeRequest } from '@/hook/useMemorizeRequest';
 import { cloneDeep } from 'lodash';
 import { markSearchKeyword } from '@/utils/markSearhKeyword';
+import PlayAllButton from '@/components/common/PlayAllButton.vue';
+import CommentList from '@/components/CommentList/CommentList.vue';
 
-let backTopEle:HTMLElement;
+let backTopEle: HTMLElement;
 let songListIndexMap = new Map();
 const router = useRouter();
 const route = useRoute();
@@ -467,13 +470,15 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
   </div>
 </template>
 <style scoped>
-:deep(.n-card-header__main){
-  text-align: center;
+:deep(.n-card-header__main) {
+    text-align: center;
 }
-:deep(.n-tabs .n-tabs-nav.n-tabs-nav--line-type .n-tabs-nav-scroll-content){
-  border: none;
+
+:deep(.n-tabs .n-tabs-nav.n-tabs-nav--line-type .n-tabs-nav-scroll-content) {
+    border: none;
 }
-.tag:hover{
-  color: var(--n-color-target);
-}
+
+/*.tag:hover{*/
+/*  color: var(--n-color-target);*/
+//}
 </style>
