@@ -386,7 +386,7 @@ watch(pageParams, () => {
   </transition>
 
   <n-back-top
-    :bottom='90'
+    :bottom='95'
     :listen-to='target'
     :on-update:show='handleUpdateShow'
     :right='400' :show='showBackTop' style='z-index: 9999;'
@@ -403,7 +403,7 @@ watch(pageParams, () => {
     <n-button
       v-show='!showBackTop && mainStore.showMusicDetail'
       class='fixed' round
-      style='z-index:9999;bottom: 90px;right:400px' type='primary'
+      style='z-index:9999;bottom: 95px;right:400px' type='primary'
       @click='commentModalRef?.show()'
     >
       <n-icon :component='Edit' />
@@ -415,7 +415,7 @@ watch(pageParams, () => {
     <n-button
       v-show='showBackTop && mainStore.showMusicDetail'
       class='fixed w-44'
-      round style='z-index:9999;bottom: 90px;right:0;left:0;margin:auto'
+      round style='z-index:9999;bottom: 95px;right:0;left:0;margin:auto'
       type='primary'
       @click='commentModalRef?.show()'
     >
@@ -427,16 +427,16 @@ watch(pageParams, () => {
 
 <style scoped>
 .music-detail {
-    bottom: 73px;
+    bottom: 95px;
     width: 85vw;
-    height: calc(100vh - 73px);
+    height: calc(100vh - 95px);
     z-index: 1000;
     overflow: hidden;
     transition: transform 0.5s;
 }
 
 .detail-content {
-    height: calc(100vh - 73px - 77px);
+    height: calc(100vh - 95px);
     box-sizing: border-box;
     overflow-y: scroll;
 }
@@ -444,8 +444,8 @@ watch(pageParams, () => {
 .background {
     position: fixed;
     width: 85vw;
-    height: calc(100vh - 73px);
-    bottom: 73px;
+    height: calc(100vh - 95px);
+    bottom: 95px;
     left: 0;
     right: 0;
     margin: auto;
