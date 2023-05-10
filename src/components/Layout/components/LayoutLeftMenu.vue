@@ -165,7 +165,7 @@ const classifySongsList = (userId:number, playList:any[]) => {
     prev, currentValue, index
   ) => {
     if (index === 0) currentValue.name = '我喜欢的音乐';
-    if (currentValue.creator.userId === userId) {
+    if (currentValue.creator?.userId === userId) {
       prev.myCreatePlayList.push(currentValue);
     } else {
       prev.collectPlayList.push(currentValue);

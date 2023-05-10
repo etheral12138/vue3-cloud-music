@@ -2,15 +2,16 @@ import type { MessageApiInjection } from 'naive-ui/lib/message/src/MessageProvid
 /// <reference types="vite/client" />
 // naive-ui组件库全局类型声明 给编辑器提供更好的类型提示
 export * from 'naive-ui/volar';
-export { };
+export {};
 
 type localValue = 'zh-cn' | 'en';
 declare global {
   interface Window {
     $message: MessageApiInjection;
   }
+
   interface ImportMeta {
-    env: Record<string, string>
+    env: Record<string, string>;
   }
 }
 declare module 'vue' {
@@ -22,6 +23,7 @@ declare module 'vue' {
 export type AnyObject = {
   [key: string]: any;
 };
+
 export interface TopAlbumParams {
   limit?: number;
   offset?: number;
@@ -29,4 +31,8 @@ export interface TopAlbumParams {
   type?: '全部' | '热门',
   year?: number;
   month?: number;
+}
+
+interface ImportMetaEnv {
+  VITE_API_BASEURL: string;
 }

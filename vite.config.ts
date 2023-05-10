@@ -13,15 +13,16 @@ export default defineConfig({
     Components({ resolvers: [NaiveUiResolver()] }),
     viteCompression()
   ],
-  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
-  server: {
-    port: 3000,
-    open: 'http://localhost:3000'
-    // proxy: {
-    //   '/': {
-    //     target: 'https://netease.etheral.cc',
-    //     changeOrigin: true
-    //   }
-    // }
-  }
+  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } }
+  // server: {
+  //   // https: true,
+  //   // open: 'https://localhost:3000',
+  //   // proxy: {
+  //   //   '/': {
+  //   //     target: 'http://127.0.0.1:3333',
+  //   //     changeOrigin: true
+  //   //   }
+  //   // },
+  //   // cors: true
+  // }
 });

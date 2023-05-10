@@ -85,7 +85,7 @@ const handleSliderChange = (time:number, listenScroll=false) => {
   }
 };
 const triggerLyricChange = (time:number, listenScroll=false) => {
-  if (mainStore.currentPlaySong.isNotLyric) return;
+  if (mainStore.currentPlaySong?.isNotLyric) return;
   if (!lyricData.value.length) return;
   let currentLyric = rangeLyricList.value.get(time) as RangeLyricItem;
   if (currentLyric) {
@@ -96,7 +96,7 @@ const triggerLyricChange = (time:number, listenScroll=false) => {
 };
 const handleScroll = (event:Event) => {
   if (!triggerScroll) return;
-  if (mainStore.currentPlaySong.isNotLyric) return;
+  if (mainStore.currentPlaySong?.isNotLyric) return;
   const target = event.target as HTMLElement;
   triggerScroll = true;
   let { scrollTop } = target;
