@@ -9,7 +9,7 @@ import { NIcon, useLoadingBar } from 'naive-ui';
 import { computed, type CSSProperties, KeepAlive, onMounted, ref, type VNodeChild, watch } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import LoginModal, { type LoginModalExpose } from './LoginModal.vue';
-import obverser from '@/utils/observer';
+import observer from '@/utils/observer';
 
 const mainStore = useMainStore();
 type MySongsList = { myCreatePlayList: any[], collectPlayList: any[] };
@@ -187,7 +187,7 @@ registerRouteHook((to) => {
 });
 //监听歌单收藏状态
 const watchUpdateCollectPlayList = () => {
-  obverser.on('updateCollectPlayList', (data:any) => {
+  observer.on('updateCollectPlayList', (data: any) => {
     let { subscribed } = data;
     // 收藏 添加歌单
     if (subscribed) {
@@ -208,7 +208,7 @@ const watchUpdateCollectPlayList = () => {
   });
 };
 const watchUpdateMyCreatePlayList = () => {
-  obverser.on('updateMyCreatePlayList', (data:any) => {
+  observer.on('updateMyCreatePlayList', (data: any) => {
     myMenuOptions.value[0].children?.splice(
       1, 0, {
         label: () => <span onClick={() => handlePlayListItemClick(data)}>{data.name}</span>,
