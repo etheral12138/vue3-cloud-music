@@ -25,6 +25,7 @@ import { cloneDeep } from 'lodash';
 import { markSearchKeyword } from '@/utils/markSearhKeyword';
 import PlayAllButton from '@/components/common/PlayAllButton.vue';
 import CommentList from '@/components/CommentList/CommentList.vue';
+import MusicList from '@/components/SongsList/MusicList.vue';
 
 let backTopEle: HTMLElement;
 let songListIndexMap = new Map();
@@ -67,7 +68,7 @@ const { wrapRequest: wrapFetchPlayList, requestLoading: isLoading, loadSuccess: 
 const fetchSongListDetail = (id:string=route.params.id as string) => {
   wrapFetchPlayList(id).then((res: { data: { playlist: AnyObject }; }) => {
     let creator = res.data.playlist.creator;
-    if (res.data.playlist.name === (creator?.nickname + '喜欢的音乐') && creator.userId === mainStore.userProfile?.profile?.userId) {
+    if (res.data.playlist.name === (creator?.nickname + '喜欢的音乐') && creator.userId === mainStore.userProfile?.profile.userId) {
       res.data.playlist.isMyLike = true;
       res.data.playlist.name = '我喜欢的音乐';
     } else {
@@ -477,8 +478,4 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
 :deep(.n-tabs .n-tabs-nav.n-tabs-nav--line-type .n-tabs-nav-scroll-content) {
     border: none;
 }
-
-/*.tag:hover{*/
-/*  color: var(--n-color-target);*/
-//}
 </style>
