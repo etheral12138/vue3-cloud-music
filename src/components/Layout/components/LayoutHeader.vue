@@ -125,7 +125,7 @@ if (mainStore.isLogin) {
                 @click="() => (userDetail && (showUserPopover = !showUserPopover ))
                 "
               >
-                {{ mainStore.userProfile?.profile?.nickname }}
+                {{ mainStore.userProfile?.profile.nickname }}
               </p>
             </template>
             <div ref="popoverContainerRef" style="width:300px">
@@ -138,13 +138,13 @@ if (mainStore.isLogin) {
                 </div>
                 <div>
                   <p class="text-lg font-bold">
-                    {{ mainStore.userProfile?.profile?.follows }}
+                    {{ mainStore.userProfile?.profile.follows }}
                   </p>
                   关注
                 </div>
                 <div>
                   <p class="text-lg font-bold">
-                    {{ mainStore.userProfile?.profile?.followeds }}
+                    {{ mainStore.userProfile?.profile.followeds }}
                   </p>
                   粉丝
                 </div>

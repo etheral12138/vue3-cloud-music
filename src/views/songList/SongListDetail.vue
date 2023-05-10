@@ -18,14 +18,14 @@ import { useMainStore } from '@/stores/main';
 import type { SelectSongListTagModalExpose } from '@/components/SongsList/SelectSongListTagModal.vue';
 import SelectSongListTagModal from '@/components/SongsList/SelectSongListTagModal.vue';
 import { useDialog, useThemeVars } from 'naive-ui';
-import obverser from '@/utils/observer';
 import { userCheckLogin } from '@/hook/useCheckLogin';
 import { useMemorizeRequest } from '@/hook/useMemorizeRequest';
 import { cloneDeep } from 'lodash';
 import { markSearchKeyword } from '@/utils/markSearhKeyword';
-import PlayAllButton from '@/components/common/PlayAllButton.vue';
+import observer from '@/utils/observer';
 import CommentList from '@/components/CommentList/CommentList.vue';
 import MusicList from '@/components/SongsList/MusicList.vue';
+import PlayAllButton from '@/components/common/PlayAllButton.vue';
 
 let backTopEle: HTMLElement;
 let songListIndexMap = new Map();
@@ -188,8 +188,8 @@ const handleSubscribeClick = (subscribed:boolean) => {
           if (res.data.code === 200) {
             window.$message.success('取消收藏成功');
             (songListDetail.value as AnyObject).subscribed = false;
-            (songListDetail.value as AnyObject).subscribedCount-=1;
-            obverser.emit('updateCollectPlayList', { subscribed: false, id: route.params.id });
+            (songListDetail.value as AnyObject).subscribedCount -= 1;
+            observer.emit('updateCollectPlayList', { subscribed: false, id: route.params.id });
           } else {
             window.$message.error('取消收藏失败');
           }
@@ -203,8 +203,8 @@ const handleSubscribeClick = (subscribed:boolean) => {
       if (res.data.code === 200) {
         window.$message.success('收藏成功!');
         (songListDetail.value as AnyObject).subscribed = true;
-        (songListDetail.value as AnyObject).subscribedCount+=1;
-        obverser.emit('updateCollectPlayList', { subscribed: true, songListDetail: toRaw(songListDetail.value) });
+        (songListDetail.value as AnyObject).subscribedCount += 1;
+        observer.emit('updateCollectPlayList', { subscribed: true, songListDetail: toRaw(songListDetail.value) });
       } else {
         window.$message.error('收藏失败');
       }
@@ -329,14 +329,14 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
             <n-space>
               <play-all-button :song-list="rawSongList" :song-list-id="songListId" />
               <n-button
-                size="medium" round
-                :disabled="starButtonDisabled" :loading="subscribeBtnLoading"
-                @click="handleSubscribeClick(songListDetail!.subscribed)"
+                :disabled='starButtonDisabled as boolean' :loading='subscribeBtnLoading'
+                round size='medium'
+                @click='handleSubscribeClick(songListDetail!.subscribed)'
               >
                 <template #icon>
-                  <n-icon :component="songListDetail.subscribed ? Star : StarOutline" />
+                  <n-icon :component='songListDetail.subscribed ? Star : StarOutline' />
                 </template>
-                {{ songListDetail.subscribed ? '已收藏' :' 收藏' }}
+                {{ songListDetail.subscribed ? '已收藏' : ' 收藏' }}
                 ({{ formateNumber(songListDetail.subscribedCount) }})
               </n-button>
               <n-button size="medium" round @click="handleShareClick">
@@ -477,5 +477,9 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
 
 :deep(.n-tabs .n-tabs-nav.n-tabs-nav--line-type .n-tabs-nav-scroll-content) {
     border: none;
+}
+
+.tag:hover {
+    color: var(--n-color-target);
 }
 </style>
