@@ -2,7 +2,7 @@
 import useThemeStyle from '@/hook/useThemeStyle';
 import useValidateVipSong from '@/hook/useValidateVipSong';
 import { useMainStore } from '@/stores/main';
-import { formateSongsAuthor } from '@/utils';
+import { formatSongsAuthor } from '@/utils';
 import { VolumeMuteFilled, VolumeUpFilled } from '@vicons/material';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -115,7 +115,7 @@ const handleGoHemeClick = () => {
                 </n-tag>
               </div>
               <p class=" w-24 truncate">
-                {{ formateSongsAuthor(item?.ar || []) }}
+                {{ formatSongsAuthor(item?.ar || []) }}
               </p>
               <n-time class="pl-4 opacity-40" format="mm:ss" :time="item?.dt" />
             </div>

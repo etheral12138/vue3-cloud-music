@@ -1,4 +1,4 @@
-import type { AnyObject } from './../../env.d';
+import type { AnyObject } from '../../env';
 
 export interface StoreState{
   theme: 'dark' | 'light',

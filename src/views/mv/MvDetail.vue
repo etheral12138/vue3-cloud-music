@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getMvComment, getMvDetail, getSimiMv, getSingerSong, getVideoUrl, sendComment } from '@/service';
 import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
-import { formateNumber, formateSongsAuthor, getArrLast } from '@/utils';
+import { formatNumber, formatSongsAuthor, getArrLast } from '@/utils';
 import { useRoute, useRouter } from 'vue-router';
 import VideoPlayer, { type VideoPlayerExpose } from '@/components/Base/VideoPlayer.vue';
 import type { AnyObject } from 'env';
@@ -215,7 +215,7 @@ onUnmounted(() => {
                   发布：{{ mvDetail.publishTime }}
                 </span>
                 <span class="ml-6">
-                  播放：{{ formateNumber(mvDetail.playCount) }}
+                  播放：{{ formatNumber(mvDetail.playCount) }}
                 </span>
               </div>
             </div>
@@ -308,7 +308,7 @@ onUnmounted(() => {
                 {{ item.name }}
               </n-ellipsis>
               <n-ellipsis class="opacity-60">
-                buy {{ formateSongsAuthor(item.artists) }}
+                buy {{ formatSongsAuthor(item.artists) }}
               </n-ellipsis>
             </div>
           </div>

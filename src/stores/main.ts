@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 import { checkMusic, getLyric, getMusicUrl } from '@/service';
-import { formateSongsAuthor, getNextIndex, getPrevIndex } from '@/utils';
+import { formatSongsAuthor, getNextIndex, getPrevIndex } from '@/utils';
 import type { AnyObject } from 'env';
 import { cloneDeep, shuffle } from 'lodash';
 import { darkTheme } from 'naive-ui';
@@ -86,12 +86,11 @@ export const useMainStore = defineStore({
     mapSongListAddLike(data:any[]) {
       return data.map((item, index) => {
         if (this.likeSongs) {
-          const hasLike = this.hasLikeSong(item.id);
-          item.like = hasLike;
+          item.like = this.hasLikeSong(item.id);
         } else {
           item.like = false;
         }
-        item.formatAuthor = formateSongsAuthor(item.ar);
+        item.formatAuthor = formatSongsAuthor(item.ar);
         item.key = index;
         return item;
       });
@@ -180,7 +179,7 @@ export const useMainStore = defineStore({
         // 如果获取失败说明无版权,则获取下一首
         if (!res.success) {
           const nextIndex = getNextIndex(this.currentPlayIndex, this.playListCount - 1);
-          this.toggleNext(nextIndex);
+          await this.toggleNext(nextIndex);
           return; 
         }
       }
@@ -197,7 +196,7 @@ export const useMainStore = defineStore({
         const res = await this.setMusicData({ data: this.playList, id: this.playList[resultIndex].id, index: resultIndex });
         if (!res.success) {
           const prevIndex = getPrevIndex(this.currentPlayIndex, this.playListCount - 1);
-          this.togglePrev(prevIndex);
+          await this.togglePrev(prevIndex);
           return;
         }
       }
@@ -218,9 +217,9 @@ export const useMainStore = defineStore({
         );
         const insertIndex = this.playList.findIndex((item:any) => item.id === value.id);
         localStorage.playList = JSON.stringify(this.playList);
-        this.changePlayIndex(insertIndex);
+        await this.changePlayIndex(insertIndex);
       } else {
-        this.changePlayIndex(index);
+        await this.changePlayIndex(index);
       }
     },
     updatePlayListLike(like:boolean, index?:number) {
@@ -262,11 +261,7 @@ export const useMainStore = defineStore({
       const lyricRes = await getLyric(id);
       if (res.data.code === 200) {
         result.lyric = lyricRes.data?.lrc?.lyric;
-        if (result.lyric.includes('纯音乐，请欣赏') || !result.lyric) {
-          result.isNotLyric = true;
-        } else {
-          result.isNotLyric = false;
-        }
+        result.isNotLyric = !!(result.lyric.includes('纯音乐，请欣赏') || !result.lyric);
         result.tlyric = lyricRes.data?.tlyric?.lyric;
       } else {
         console.log('获取歌词失败');

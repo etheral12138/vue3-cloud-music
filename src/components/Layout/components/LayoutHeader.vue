@@ -117,13 +117,13 @@ if (mainStore.isLogin) {
           <n-popover
             :show='showUserPopover'
             style='padding:0' trigger='click'
-            display-directive="show"
+            display-directive='show'
           >
             <template #trigger>
               <p
-                class="pl-2 text-xs truncate opacity-80 hover:opacity-100 cursor-pointer w-30 trigger" 
-                @click="() => (userDetail && (showUserPopover = !showUserPopover ))
-                "
+                class='pl-2 text-xs truncate opacity-80 hover:opacity-100 cursor-pointer w-30 trigger'
+                @click='() => (userDetail && (showUserPopover = !showUserPopover ))
+                '
               >
                 {{ mainStore.userProfile?.profile?.nickname }}
               </p>

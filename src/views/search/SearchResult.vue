@@ -3,7 +3,7 @@ import { search } from '@/service';
 import { PlayCircleOutlined } from '@vicons/antd';
 import { useMainStore } from '@/stores/main';
 import { useAsyncState } from '@vueuse/core';
-import { formateNumber } from '@/utils';
+import { formatNumber } from '@/utils';
 import { type CSSProperties, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useThemeStyle from '@/hook/useThemeStyle';
@@ -181,7 +181,7 @@ watch([playListPageParams, songListPageParams], () => {
             </p>
             <p class="flex items-center w-80 opacity-50">
               <n-icon :component="PlayCircleOutlined" />
-              <span class="pl-2"> {{ formateNumber(item.playCount) }}</span>
+              <span class='pl-2'> {{ formatNumber(item.playCount) }}</span>
             </p>
           </div>
           <!-- 分页 -->

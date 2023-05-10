@@ -2,7 +2,7 @@
 import { type CSSProperties, nextTick, reactive, type Ref, ref, watch } from 'vue';
 import analyze from 'rgbaster';
 import { BackToTop, Edit } from '@vicons/carbon';
-import { formateSongsAuthor, getArrLast } from '@/utils';
+import { formatSongsAuthor, getArrLast } from '@/utils';
 import { KeyboardArrowDownOutlined } from '@vicons/material';
 import color from 'color';
 import { useMainStore } from '@/stores/main';
@@ -270,7 +270,7 @@ watch(pageParams, () => {
             <p class='mt-2 text-sm text-center opacity-50'>
               {{ mainStore.currentPlaySong.al.name }}
               <span>-</span>
-              {{ formateSongsAuthor(mainStore.currentPlaySong.ar || []) }}
+              {{ formatSongsAuthor(mainStore.currentPlaySong.ar || []) }}
             </p>
           </div>
           <div class='flex'>
@@ -367,7 +367,7 @@ watch(pageParams, () => {
                       {{ item.name }}
                     </p>
                     <p class='mt-2 w-60 text-sm text-left truncate opacity-50'>
-                      {{ formateSongsAuthor(item.artists) }}
+                      {{ formatSongsAuthor(item.artists) }}
                     </p>
                   </div>
                 </div>

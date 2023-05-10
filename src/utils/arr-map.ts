@@ -1,4 +1,4 @@
-import { formateSongsAuthor } from '.';
+import { formatSongsAuthor } from '.';
 
 export function mapSongs(songs:any[]) {
   return songs.map((item:any) => {
@@ -9,7 +9,7 @@ export function mapSongs(songs:any[]) {
     item.dt = target.duration;
     item.al = target.album;
     item.ar = target.artists;
-    item.formatAuthor = formateSongsAuthor(target.artists);
+    item.formatAuthor = formatSongsAuthor(target.artists);
     return item;
   });
 } 

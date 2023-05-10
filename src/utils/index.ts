@@ -1,12 +1,12 @@
 // 格式化数字
-export function formateNumber(num:number) {
+export function formatNumber(num: number) {
   // 小于999的数字直接返回
   if (num < 99999) return num.toString();
   // 大于1万 小于1亿
   if (num < 100000000) return Math.round(num / 10000) + '万';
   // 大于1亿
   if (num >= 100000000) return Math.round(num / 100000000) + '亿';
- 
+
   return num.toString();
 }
 // 获取数组最后一位
@@ -39,7 +39,7 @@ export const debounce = (fn:Function, delay:number) => {
 // 根据不同类型记忆函数
 export const memorize = (fn:Function) => {
   const cache = new Map();
-  return (...args:any[]) => {
+  return (...args: any[]) => {
     const key = JSON.stringify(args);
     if (cache.has(key)) {
       return cache.get(key);
@@ -49,7 +49,7 @@ export const memorize = (fn:Function) => {
     return result;
   };
 };
-export const formateSongsAuthor = (attr: any[]) => {
+export const formatSongsAuthor = (attr: any[]) => {
   return attr.map(item => item.name).join(' / ');
 };
 // 根据指定的数量将数组切片
@@ -58,7 +58,7 @@ export const sliceArr = (count=20, list:any[]) => {
   let index = 0;
   let nextSliceIndex = 0;
   while (index < list.length) {
-    const item = list.slice(nextSliceIndex, nextSliceIndex+count);
+    const item: any = list.slice(nextSliceIndex, nextSliceIndex + count);
     arr.push(item);
     index++;
     nextSliceIndex+=count;
@@ -69,7 +69,7 @@ export const sliceArr = (count=20, list:any[]) => {
 export const generalTimeOptions = (
   start:number, end:number, label:string
 ) => {
-  const arr = [];
+  const arr: any = [];
   for (let i = start; i <= end; i++) {
     arr.push({
       label: i+label,

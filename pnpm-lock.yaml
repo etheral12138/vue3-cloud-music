@@ -1,9 +1,6 @@
 lockfileVersion: '6.0'
 
 dependencies:
-  '@types/axios':
-    specifier: ^0.14.0
-    version: 0.14.0
   '@vueuse/core':
     specifier: ^8.2.3
     version: 8.6.0(vue@3.2.36)
@@ -765,15 +762,6 @@ packages:
     resolution: { integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A== }
     engines: { node: '>= 10' }
     dev: true
-
-  /@types/axios@0.14.0:
-    resolution: { integrity: sha512-KqQnQbdYE54D7oa/UmYVMZKq7CO4l8DEENzOKc4aBRwxCXSlJXGz83flFx5L7AWrOQnmuN3kVsRdt+GZPPjiVQ== }
-    deprecated: This is a stub types definition for axios (https://github.com/mzabriskie/axios). axios provides its own type definitions, so you don't need @types/axios installed!
-    dependencies:
-      axios: 0.26.1
-    transitivePeerDependencies:
-      - debug
-    dev: false
 
   /@types/chai-subset@1.3.3:
     resolution: { integrity: sha512-frBecisrNGz+F4T6bcc+NLeolfiojh5FxW2klu669+8BARtyQv2C/GkNW6FUodVe4BroGMP/wER/YDGc7rEllw== }

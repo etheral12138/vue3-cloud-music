@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PlayIcon from '@/components/Base/PlayIcon.vue';
-import { formateNumber } from '@/utils';
+import { formatNumber } from '@/utils';
 import { Play } from '@vicons/carbon';
 import { useRouter } from 'vue-router';
 import BaseEmpty from '../Base/BaseEmpty.vue';
@@ -41,7 +41,7 @@ defineProps<{
                 class="flex absolute top-0 right-0 justify-end items-center p-1 w-full text-white card-mask"
               >
                 <n-icon :component="Play" />
-                <span class="pl-1">{{ formateNumber(item.playCount) }}</span>
+                <span class='pl-1'>{{ formatNumber(item.playCount) }}</span>
               </div>
               <play-icon />
             </div>

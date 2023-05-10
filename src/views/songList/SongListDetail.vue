@@ -8,7 +8,7 @@ import {
   updatePlaylistTags
 } from '@/service';
 import type { AnyObject } from 'env';
-import { formateNumber, getArrLast } from '@/utils';
+import { formatNumber, getArrLast } from '@/utils';
 import { computed, reactive, ref, toRaw, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import LoadImg from '@/components/Base/LoadImg.vue';
@@ -337,14 +337,14 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
                   <n-icon :component='songListDetail.subscribed ? Star : StarOutline' />
                 </template>
                 {{ songListDetail.subscribed ? '已收藏' : ' 收藏' }}
-                ({{ formateNumber(songListDetail.subscribedCount) }})
+                ({{ formatNumber(songListDetail.subscribedCount) }})
               </n-button>
               <n-button size="medium" round @click="handleShareClick">
                 <template #icon>
                   <n-icon :component="ShareSocialOutline" />
                 </template>
                 分享
-                ({{ formateNumber(songListDetail.shareCount) }})
+                ({{ formatNumber(songListDetail.shareCount) }})
               </n-button>
             </n-space>
           </div>
@@ -367,7 +367,7 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
               <div class="ml-4">
                 <span>歌曲</span>
                 <span class="px-1">:</span>
-                {{ formateNumber(songListDetail.playCount) }}
+                {{ formatNumber(songListDetail.playCount) }}
               </div>
             </div>
             <div v-if="isMySongList && !songListDetail.description && !songListDetail.isMyLike" class="flex">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formateNumber } from '@/utils/index';
+import { formatNumber } from '@/utils/index';
 import { Play } from '@vicons/carbon';
 import { useRouter } from 'vue-router';
 
@@ -38,7 +38,7 @@ const styleBorderRadius = { borderRadius: props.borderRadius };
       class="box-border flex absolute top-0 right-0 justify-end items-center p-1 w-full text-white rounded-t-md card-mask"
     >
       <n-icon :component="Play" />
-      <span class="pl-1">{{ formateNumber(item.playCount) }}</span>
+      <span class='pl-1'>{{ formatNumber(item.playCount) }}</span>
     </div>
     <play-icon
       class="cursor-pointer position-center"

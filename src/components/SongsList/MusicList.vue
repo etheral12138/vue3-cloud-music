@@ -2,7 +2,7 @@
 /* eslint-disable consistent-return */
 import { useDbClickPlay } from '@/hook/useDbClickPlay';
 import { useMainStore } from '@/stores/main';
-import { formateSongsAuthor } from '@/utils';
+import { formatSongsAuthor } from '@/utils';
 import { VolumeMuteFilled, VolumeUpFilled } from '@vicons/material';
 import { type DataTableColumns, NIcon, NTag, NTime, useThemeVars } from 'naive-ui';
 import { computed, defineComponent } from 'vue';
@@ -101,7 +101,7 @@ export default defineComponent({
           return <p class="text-sm truncate">
             {row.formatAuthorRichText
               ? <span v-html={row.formatAuthorRichText}></span>
-              : formateSongsAuthor(row.ar)}
+              : formatSongsAuthor(row.ar)}
           </p>;
         }
       },

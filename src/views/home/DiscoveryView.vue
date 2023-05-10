@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMemoryScrollTop } from '@/hook/useMemoryScrollTop';
 import { getBanner, getNewSong, getPersonalized, getRecommendMv } from '@/service';
-import { formateSongsAuthor } from '@/utils';
+import { formatSongsAuthor } from '@/utils';
 import { useAsyncState, useElementHover } from '@vueuse/core';
 import { computed, ref } from 'vue';
 import { ArrowBackIosSharp, ArrowForwardIosRound } from '@vicons/material';
@@ -195,7 +195,7 @@ const handleArrowClick = (type: 'next' | 'prev') => {
               <n-ellipsis>{{ item.name }}</n-ellipsis>
             </p>
             <p class="mt-2 w-full text-sm opacity-60">
-              <n-ellipsis>{{ formateSongsAuthor(item.song.artists) }}</n-ellipsis>
+              <n-ellipsis>{{ formatSongsAuthor(item.song.artists) }}</n-ellipsis>
             </p>
           </div>
         </div>

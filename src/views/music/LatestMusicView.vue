@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formateSongsAuthor } from '@/utils';
+import { formatSongsAuthor } from '@/utils';
 import { computed, type CSSProperties, ref } from 'vue';
 import { getTopSong } from '../../service';
 import LoadImg from '@/components/Base/LoadImg.vue';
@@ -160,7 +160,7 @@ fetchData();
             </n-tag>
           </p>
           <p class="ml-2 w-xs text-sm opacity-80 flex-30">
-            <n-ellipsis>{{ formateSongsAuthor(item.artists) }}</n-ellipsis>
+            <n-ellipsis>{{ formatSongsAuthor(item.artists) }}</n-ellipsis>
           </p>
           <p class="flex-1 ml-2 w-xs text-sm truncate opacity-80 flex-30">
             {{ item.album.name }}

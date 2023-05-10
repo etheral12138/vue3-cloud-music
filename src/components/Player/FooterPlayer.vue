@@ -3,7 +3,7 @@ import StopIcon from '@/components/Icon/StopIcon.vue';
 import OrderPlay from '@/components/Icon/OrderPlay.vue';
 import RandomIcon from '@/components/Icon/RandomIcon.vue';
 import SingleLoop from '@/components/Icon/SingleLoop.vue';
-import { formateSongsAuthor } from '@/utils';
+import { formatSongsAuthor } from '@/utils';
 import { List } from '@vicons/ionicons5';
 import {
   AddBoxOutlined,
@@ -317,7 +317,7 @@ onUnmounted(() => {
               /> 
             </p>
             <n-ellipsis>
-              <p>{{ formateSongsAuthor(currentSong?.ar || []) }}</p>
+              <p>{{ formatSongsAuthor(currentSong?.ar || []) }}</p>
             </n-ellipsis>
           </div>
         </div>
