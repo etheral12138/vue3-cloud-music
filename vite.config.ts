@@ -15,7 +15,13 @@ export default defineConfig({
   ],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   server: {
-    port: 3333,
-    open: 'http://localhost:3333'
+    port: 3000,
+    open: 'http://localhost:3000'
+    // proxy: {
+    //   '/': {
+    //     target: 'https://netease.etheral.cc',
+    //     changeOrigin: true
+    //   }
+    // }
   }
 });

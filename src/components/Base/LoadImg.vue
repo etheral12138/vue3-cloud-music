@@ -44,9 +44,7 @@ export default defineComponent({
   setup(props) {
     const isLoading = ref(true);
     const error = ref(false);
-    let myPreviewDisabled = ref(props.doubleClickPreview && props.previewDisabled
-      ? true
-      : false);
+    let myPreviewDisabled = ref(props.doubleClickPreview && props.previewDisabled);
     const handleLoad = () => {
       isLoading.value = false;
     };
