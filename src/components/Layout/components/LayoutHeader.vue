@@ -19,14 +19,10 @@ const userDetail = ref<AnyObject>();
 const showUserPopover = ref(false);
 const signBtnLoading = ref(false);
 
-const themebtntit = ref('暗色主题'); //主体按钮title
-const changetheme = () => {
+const changeTheme = () => {
   theme.value = theme.value == null
     ? darkTheme
     : null;
-  // themebtntit.value = themebtntit.value == '亮色主题'
-  //   ? '暗色主题'
-  //   : '亮色主题';
 };
 // 监听登录状态 获取用户信息
 watch(() => mainStore.isLogin, (val) => {
@@ -126,9 +122,11 @@ if (mainStore.isLogin) {
         <div v-if='mainStore.userProfile' class='flex items-center mr-2'>
           <n-avatar :size='30' :src='mainStore.userProfile?.profile?.avatarUrl' round />
           <n-popover
+            :style="{'background-color':theme!==null?'rgb(16,16,20)':'white'}"
             :show='showUserPopover'
-            style='padding:0' trigger='click'
+            animated
             display-directive='show'
+            trigger='click'
           >
             <template #trigger>
               <p
@@ -139,46 +137,49 @@ if (mainStore.isLogin) {
                 {{ mainStore.userProfile?.profile?.nickname }}
               </p>
             </template>
-            <div ref="popoverContainerRef" style="width:300px">
-              <div class="flex justify-evenly py-4">
-                <div class="flex flex-col items-center">
-                  <p class="text-lg font-bold">
+            <div ref='popoverContainerRef' style='width:200px'>
+              <div class='flex justify-evenly py-4'>
+                <div class='flex flex-col items-center'>
+                  <p class='text-base font-bold'>
                     {{ mainStore.userProfile?.profile?.eventCount }}
                   </p>
                   动态
                 </div>
                 <div>
-                  <p class="text-lg font-bold">
+                  <p class='text-base font-bold'>
                     {{ mainStore.userProfile?.profile?.follows }}
                   </p>
                   关注
                 </div>
                 <div>
-                  <p class="text-lg font-bold">
+                  <p class='text-base font-bold'>
                     {{ mainStore.userProfile?.profile?.followeds }}
                   </p>
                   粉丝
                 </div>
-              </div>
-              <div class="flex justify-center">
                 <n-button
-                  :loading="signBtnLoading" :disabled="mainStore.userProfile.pcSign" round
-                  @click="handleSignInClick"
+                  :disabled='mainStore.userProfile.pcSign' :loading='signBtnLoading' round
+                  @click='handleSignInClick'
                 >
-                  {{ mainStore.userProfile.pcSign ? '已签到' :' 签到' }}
+                  {{ mainStore.userProfile.pcSign ? '已签到' : ' 签到' }}
                 </n-button>
               </div>
-              <div class="mt-3 hover:bg-neutral-200/20 border-0 border-b border-gray-200  dark:border-gray-200/20 border-solid">
+              <!--              <div class="flex justify-center">-->
+
+              <!--              </div>-->
+              <div
+                class='mt-2 hover:bg-neutral-200/20 border-0 border-b border-gray-200  dark:border-gray-200/20 border-solid'>
                 <!-- 个人信息设置 -->
-                <div class="flex justify-between items-center py-2 px-4 cursor-pointer" @click="handleInfoEditClick">
-                  <div class="flex items-center text-base">
-                    <n-icon :size="20" :component="UserProfile" />
-                    <span class="ml-2">个人信息设置</span>
+                <div class='flex justify-between items-center py-2 px-4 cursor-pointer' @click='handleInfoEditClick'>
+                  <div class='flex items-center text-base'>
+                    <n-icon :component='UserProfile' :size='20' />
+                    <span class='ml-2'>个人信息设置</span>
                   </div>
-                  <n-icon :component="ArrowForwardIosRound" />
+                  <n-icon :component='ArrowForwardIosRound' />
                 </div>
               </div>
-              <div class="hover:bg-neutral-200/20 border-0 border-b border-gray-200  dark:border-gray-200/20 border-solid">
+              <div
+                class='hover:bg-neutral-200/20 border-0 border-b border-gray-200  dark:border-gray-200/20 border-solid'>
                 <n-popconfirm
                   @positive-click="handlePositiveClick"
                 >
@@ -213,8 +214,8 @@ if (mainStore.isLogin) {
         <!--            <n-icon :component='SunnySharp' />-->
         <!--          </template>-->
         <!--        </n-switch>-->
-        <n-config-provider :theme='theme'>
-          <n-switch :on-update:value='changetheme' :value='theme!==null' size='large'>
+        <n-config-provider :theme='theme as any'>
+          <n-switch :on-update:value='changeTheme' :value='theme!==null' size='large'>
             <template #checked-icon>
               <n-icon :component='Moon' />
             </template>

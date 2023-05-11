@@ -18,7 +18,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <n-config-provider :locale='zhCN' :theme='theme'>
+  <n-config-provider :locale='zhCN' :theme='theme as any'>
     <n-loading-bar-provider>
       <div class='w-100vw'>
         <n-message-provider>

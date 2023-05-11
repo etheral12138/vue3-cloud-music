@@ -4,6 +4,7 @@ import { likeComment } from '@/service';
 import { ThumbsUp, ThumbsUpFilled } from '@vicons/carbon';
 import { CommentOutlined } from '@vicons/material';
 import { computed, ref } from 'vue';
+import RepliedCommentModal from '@/components/CommentList/RepliedCommentModal.vue';
 
 export interface CommentListProps{
   list:any[],

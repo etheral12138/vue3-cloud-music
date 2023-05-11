@@ -11,8 +11,8 @@ let timeId:any;// 回退滚动位置延时器
 let clearTriggerScrollTimer:any;// 设置滚动是否触发延时器
 let triggerScroll = true;
 let triggerPlayLyric = true;
-let selectLyricLineIndex = 0;
-let pendingSetScrollFn:(() => void)| null = null;
+let selectLyricLineIndex: number | undefined = 0;
+let pendingSetScrollFn: (() => void) | null = null;
 const mainStore = useMainStore();
 const themeVars = useThemeVars();
 const currentPlayLine = ref(0);
@@ -111,7 +111,7 @@ const handleScroll = (event:Event) => {
   if (!mainStore.currentPlaySong?.isNotLyric) {
     showSelectLyric.value = true;
   }
-  selectLyricLineIndex = selectLyricLine.value!.index;
+  selectLyricLineIndex = selectLyricLine.value?.index;
   clearTimeout(timeId);
   timeId = setTimeout(() => {
     if (selectLyricLineIndex && selectLyricLineIndex !== currentPlayLine.value) {
@@ -308,11 +308,11 @@ onMounted(() => {
     color:#646463;
   }
 }
-.footer-mask{
+.footer-mask {
   position: absolute;
-  width:500px;
-  height:50px;
-  bottom: 0px;
+  width: 500px;
+  height: 50px;
+  bottom: 0;
 }
 .top-mask{
   position: absolute;
