@@ -1,5 +1,5 @@
 import { getPixelColor } from '@/utils/getPixelColor';
-import obverser from '@/utils/observer';
+import observer from '@/utils/observer';
 import { type CSSProperties, nextTick } from 'vue';
 
 export function useBlurLineGradient() {
@@ -42,12 +42,12 @@ export function useBlurLineGradient() {
       footerMaskStyle = { background: `linear-gradient(-180deg, rgba(255, 255, 255, 0) 0%, ${footerRgb} 80%)` };
 
     }
-    obverser.emit('updateLyricMaskStyle', { footerMaskStyle, topMaskStyle });
+    observer.emit('updateLyricMaskStyle', { footerMaskStyle, topMaskStyle });
   };
   const resetBackground = () => {
     footerMaskStyle = { background: 'transparent' };
     topMaskStyle = { background: 'transparent' };
-    obverser.emit('updateLyricMaskStyle', { footerMaskStyle, topMaskStyle });
+    observer.emit('updateLyricMaskStyle', { footerMaskStyle, topMaskStyle });
   };
 
   return { updateFooterMaskColor, resetBackground };
