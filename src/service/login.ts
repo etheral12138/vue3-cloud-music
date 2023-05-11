@@ -1,4 +1,5 @@
 import service from './request';
+
 //二维码 key 生成接口
 export function getQrCode() {
   return service.get('/login/qr/key?timestamp=' + new Date().getTime());
