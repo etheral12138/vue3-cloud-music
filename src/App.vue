@@ -3,6 +3,7 @@ import LayOut from '@/components/Layout/Layout.vue';
 import { zhCN } from 'naive-ui';
 import { onMounted } from 'vue';
 import { useMainStore } from './stores/main';
+import { theme } from '@/main';
 
 const mainStore = useMainStore();
 
@@ -17,9 +18,9 @@ onMounted(() => {
 });
 </script>
 <template>
-  <n-config-provider :locale="zhCN" :theme="mainStore.activeTheme">
+  <n-config-provider :locale='zhCN' :theme='theme'>
     <n-loading-bar-provider>
-      <div class="w-100vw">
+      <div class='w-100vw'>
         <n-message-provider>
           <n-dialog-provider>
             <LayOut />

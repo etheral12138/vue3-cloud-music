@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useThemeVars } from 'naive-ui';
-import obverser from '@/utils/observer';
+import observer from '@/utils/observer';
 import { PlayArrowSharp } from '@vicons/material';
 import { computed, type CSSProperties, nextTick, onMounted, ref, toRaw, watch } from 'vue';
 import { useMainStore } from '@/stores/main';
@@ -129,7 +129,7 @@ const handlePlayIconClick = () => {
   showSelectLyric.value = false;
   triggerScroll = false;
   selectLyricLine.value = null;
-  obverser.emit('selectLyricPlay', time);
+  observer.emit('selectLyricPlay', time);
 };
 const handleWheel = () => {
   triggerScroll = true;
@@ -184,7 +184,7 @@ const scrollTo = (top:number, listen=false) => {
   scrollBarRef.value?.scrollTo({ top: top, behavior: 'smooth' });
   if (listen) {
     listenScrollComplete(top, () => {
-      obverser.emit('scrollComplete');
+      observer.emit('scrollComplete');
       triggerPlayLyric = true;
     });
   }
@@ -211,11 +211,7 @@ watch(isHover, (val) => {
   if (!val) {
     showSelectLyric.value = false;
   } else {
-    if (selectLyricLine.value && !mainStore.currentPlaySong?.isNotLyric) {
-      showSelectLyric.value = true;
-    } else {
-      showSelectLyric.value = false;
-    }
+    showSelectLyric.value = !!(selectLyricLine.value && !mainStore.currentPlaySong?.isNotLyric);
   }
 });
 watch(() => mainStore.currentPlaySong, async () => {
@@ -248,14 +244,14 @@ watch(
     }
   }, { immediate: true }
 );
-obverser.on('updateLyricMaskStyle', ({ footerMaskStyle, topMaskStyle }) => {
+observer.on('updateLyricMaskStyle', ({ footerMaskStyle, topMaskStyle }) => {
   footerMaskBackground.value = footerMaskStyle;
   topMaskBackground.value = topMaskStyle;
 });
 onMounted(() => {
-  obverser.on('timeUpdate', handlePlayLyric);
-  obverser.on('slideValueChange', handleSliderChange);
-  obverser.on('ended', () => {
+  observer.on('timeUpdate', handlePlayLyric);
+  observer.on('slideValueChange', handleSliderChange);
+  observer.on('ended', () => {
     currentScrollTop = 0;
     scrollTo(0, true);
   });
@@ -299,8 +295,8 @@ onMounted(() => {
         <n-icon :component="PlayArrowSharp" :size="20" @click="handlePlayIconClick" />
       </div>
     </div>
-    <div class="top-mask" :style="topMaskBackground" />
-    <div class="footer-mask" :style="footerMaskBackground" />
+    <!--    <div class="top-mask" :style="topMaskBackground" />-->
+    <!--    <div class="footer-mask" :style="footerMaskBackground" />-->
   </div>
 </template>
 

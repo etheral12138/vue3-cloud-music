@@ -14,6 +14,7 @@ import { userHistory } from '../hook/useHistoryRoutePath';
 import { mapSongs } from '@/utils/arr-map';
 import { nanoid } from 'nanoid';
 import { markSearchKeyword } from '@/utils/markSearhKeyword';
+import BaseEmpty from '@/components/Base/BaseEmpty.vue';
 
 const backIconRef = ref();
 const forwardIconRef = ref();

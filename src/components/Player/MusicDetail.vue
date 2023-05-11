@@ -18,6 +18,7 @@ import RotateCd from '@/components/Player/RotateCd.vue';
 import MusicLyric from '@/components/Player/MusicLyric.vue';
 import CommentList from '@/components/CommentList/CommentList.vue';
 import RepliedCommentModal from '@/components/CommentList/RepliedCommentModal.vue';
+import { theme } from '@/main';
 
 export interface MusicDetailExpose {
   show: () => void;
@@ -100,7 +101,7 @@ const fillBackground = async (updateMask = true) => {
     0, 0, width, height
   );
   if (updateMask) {
-    updateFooterMaskColor(ctx);
+    await updateFooterMaskColor(ctx);
   }
 };
 // 获取歌单评论
@@ -226,6 +227,7 @@ watch(pageParams, () => {
     <div
       v-show='mainStore.showMusicDetail'
       class='fixed inset-x-0 m-auto music-detail'
+      :class='{night:theme!==null}'
     >
       <div class='box-border flex items-center p-4' style='height:77px;'>
         <n-icon
@@ -433,6 +435,11 @@ watch(pageParams, () => {
     z-index: 1000;
     overflow: hidden;
     transition: transform 0.5s;
+
+}
+
+.night {
+    background-color: rgb(16, 16, 20);
 }
 
 .detail-content {

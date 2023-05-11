@@ -76,8 +76,8 @@ const handleLikedClick = (item:any, index:number) => {
         <span class="text-sky-500"> {{ item?.user.nickname }}：</span>
         <span>{{ item.content }}</span>
       </div>
-      <div v-if="item.beReplied.length" style="overflow-wrap: anywhere;" class="p-2 mt-2 bg-stone-100 dark:bg-stone-100/10 rounded-md">
-        <span class="text-sky-500">@{{ item.beReplied[0]?.user?.nickname }}：</span>
+      <div v-if='item.beReplied.length' class='p-2 mt-2  rounded-md' style='overflow-wrap: anywhere;'>
+        <span class='text-sky-500'>@{{ item.beReplied[0]?.user?.nickname }}：</span>
         <span>{{ item?.beReplied[0].content }}</span>
       </div>
       <div class="flex justify-between mt-2 text-xs opacity-60">

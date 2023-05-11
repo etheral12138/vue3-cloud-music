@@ -21,9 +21,7 @@ const triggerLike = () => {
   if (!mainStore.isLogin) {
     return window.$message.error('请先登录');
   }
-  let like = props.like
-    ? false
-    : true;
+  let like = !props.like;
   return likeMusic(props.id, like).then(res => {
     if (res.data.code !== 200) {
       return window.$message.error('喜欢音乐失败!');
