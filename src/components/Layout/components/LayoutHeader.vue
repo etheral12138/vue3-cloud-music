@@ -43,10 +43,10 @@ onClickOutside(popoverContainerRef, (event: MouseEvent) => {
 const getUserProfile = () => {
   // 如果已经设置过,则从store读取userId
   if (mainStore.userProfile?.userId) {
-    getUserDetailInfo(mainStore.userProfile.profile.userId);
+    getUserDetailInfo(mainStore.userProfile.profile?.userId);
   } else {
     getUserInfo().then(res => {
-      getUserDetailInfo(res.data.profile.userId);
+      getUserDetailInfo(res.data.profile?.userId);
     });
   }
 };
