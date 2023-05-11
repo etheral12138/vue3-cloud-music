@@ -289,15 +289,15 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div class="flex z-30 items-center p-2 footer-player">
-    <div v-if="isShow" class="overflow-hidden w-60 h-12">
-      <div :style="activeStyle" class="open-detail-control-wrap">
-        <div class="flex items-center w-40 h-full">
-          <div ref="triggerRef" class="relative" @click="handleArrowClick">
+  <div class='flex z-30 relative items-center p-2 footer-player'>
+    <div v-if='isShow' class='overflow-hidden w-60 h-12'>
+      <div :style='activeStyle' class='open-detail-control-wrap'>
+        <div class='flex items-center w-40 h-full'>
+          <div ref='triggerRef' class='relative' @click='handleArrowClick'>
             <n-image
-              class="w-12 h-12"
-              :src="currentSong?.al?.picUrl"
-              :preview-disabled="true"
+              :preview-disabled='true'
+              :src='currentSong?.al?.picUrl'
+              class='w-12 h-12'
               :style="{filter:isHover ? 'blur(1px)' : 'none'}"
             />
             <transition v-show="isHover" name="fade">
@@ -321,28 +321,28 @@ onUnmounted(() => {
             </n-ellipsis>
           </div>
         </div>
-        <div class="flex items-center h-12">
+        <div class='flex items-center h-12 ml-1'>
           <n-icon
-            size="35" :component="KeyboardArrowDownOutlined" class="ml-4"
-            @click="mainStore.setShowMusicDetail(false)"
+            :component='KeyboardArrowDownOutlined' size='45'
+            @click='mainStore.setShowMusicDetail(false)'
           />
-          <div class="ml-4">
-            <div class="circleContainer" @click="handleLikeHeartClick">
+          <div class='ml-2'>
+            <div class='circleContainer' @click='handleLikeHeartClick'>
               <heart-icon
-                :id="mainStore.currentPlaySong.id"
-                ref="heardLikeRef" :like="mainStore.currentPlaySong.like"
-                :size="25" :trigger-click="true" @like-success="likeSuccess"
-              /> 
+                :id='mainStore.currentPlaySong.id'
+                ref='heardLikeRef' :like='mainStore.currentPlaySong.like'
+                :size='25' :trigger-click='true' @like-success='likeSuccess'
+              />
             </div>
           </div>
-          <div class="ml-4 circleContainer" @click="subscribeModalRef?.show()">
-            <n-icon :component="AddBoxOutlined" :size="20" />
+          <div class='ml-2 circleContainer' @click='subscribeModalRef?.show()'>
+            <n-icon :component='AddBoxOutlined' :size='20' />
           </div>
         </div>
       </div>
     </div>
     <div :style="{opacity:isShow ? '1' : '0.6'}" class="flex flex-col flex-1 items-center control">
-      <div v-if="!isShow" class="absolute z-50 w-full footer-player" />
+      <div v-if='!isShow' class='absolute bottom-0 z-50 w-full footer-player' />
       <div style="width:300px" class="flex justify-between items-center">
         <n-icon
           class="custom-icon" :size="22" :component="currentPlayModeIcon"
@@ -409,8 +409,8 @@ onUnmounted(() => {
   </div>
 </template>
 <style scoped>
-.footer-player{
-    height: calc(100vh - 873px);
+.footer-player {
+    height: calc(100vh - 858px);
     box-sizing: border-box;
 }
 :deep(.custom-icon:hover){

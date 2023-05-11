@@ -4,6 +4,7 @@ import { useMainStore } from '@/stores/main';
 import obverser from '@/utils/observer';
 import { ArrowBackIosSharp } from '@vicons/material';
 import { computed, ref, watch } from 'vue';
+import BaseEmpty from '@/components/Base/BaseEmpty.vue';
 
 let isLoad = false;
 const mainStore = useMainStore();

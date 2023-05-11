@@ -164,12 +164,12 @@ const handleContextMenu = (ev: MouseEvent) => {
   ev.preventDefault();
   return false;
 };
-const handleMvTagClick = () => {
-  if (mainStore.playing) {
-    mainStore.changePlaying(false);
-  }
-  router.push(`/mv/${mainStore.currentPlaySong.mv}`);
-};
+// const handleMvTagClick = () => {
+//   if (mainStore.playing) {
+//     mainStore.changePlaying(false);
+//   }
+//   router.push(`/mv/${mainStore.currentPlaySong?.mv}`);
+// };
 const handleTransitionAfterEnter = () => {
   updateFooterMaskColor(myCanvas.value!.getContext('2d')!);
 };
@@ -226,7 +226,7 @@ watch(pageParams, () => {
   <transition name='bottom-slide-transform' @after-enter='handleTransitionAfterEnter'>
     <div
       v-show='mainStore.showMusicDetail'
-      class='fixed inset-x-0 m-auto music-detail'
+      class='absolute inset-x-0  music-detail'
       :class='{night:theme!==null}'
     >
       <div class='box-border flex items-center p-4' style='height:77px;'>
@@ -248,22 +248,23 @@ watch(pageParams, () => {
           </div>
         </transition>
       </div>
-      <div ref='scrollContainerRef' class='flex px-10 pt-5 detail-content' @scroll='handleScroll'>
+      <div ref='scrollContainerRef' class='flex  justify-center px-4 pt-5 w-screen detail-content '
+           @scroll='handleScroll'>
         <rotate-cd />
         <div class='ml-10'>
           <div style='width:550px'>
             <div class='relative'>
               <div class='text-3xl text-center'>
                 <span ref='titleRef'> {{ mainStore.currentPlaySong.name }}</span>
-                <div :style='tagPositionStyle' class='absolute'>
-                  <n-tag
-                    v-if='mainStore.currentPlaySong.mv !== 0'
-                    :color='tagColor' size='small'
-                    @click='handleMvTagClick'
-                  >
-                    MV
-                  </n-tag>
-                </div>
+                <!--                <div :style='tagPositionStyle' class='absolute'>-->
+                <!--                  <n-tag-->
+                <!--                    v-show='mainStore.currentPlaySong?.mv !== 0'-->
+                <!--                    :color='tagColor' size='small'-->
+                <!--                    @click='handleMvTagClick'-->
+                <!--                  >-->
+                <!--                    MV-->
+                <!--                  </n-tag>-->
+                <!--                </div>-->
               </div>
             </div>
             <p v-if='mainStore.currentPlaySong.alia' class='mt-2 text-sm text-center opacity-50'>
@@ -388,7 +389,7 @@ watch(pageParams, () => {
   </transition>
 
   <n-back-top
-    :bottom='95'
+    :bottom='120'
     :listen-to='target'
     :on-update:show='handleUpdateShow'
     :right='400' :show='showBackTop' style='z-index: 9999;'
@@ -404,8 +405,8 @@ watch(pageParams, () => {
   <transition name='slide'>
     <n-button
       v-show='!showBackTop && mainStore.showMusicDetail'
-      class='fixed' round
-      style='z-index:9999;bottom: 95px;right:400px' type='primary'
+      class='absolute' round
+      style='z-index:9999;bottom: 100px;right:400px' type='primary'
       @click='commentModalRef?.show()'
     >
       <n-icon :component='Edit' />
@@ -416,8 +417,8 @@ watch(pageParams, () => {
   <transition name='slide'>
     <n-button
       v-show='showBackTop && mainStore.showMusicDetail'
-      class='fixed w-44'
-      round style='z-index:9999;bottom: 95px;right:0;left:0;margin:auto'
+      class='absolute w-44'
+      round style='z-index:9999;bottom: 100px;right:0;left:0;margin:auto'
       type='primary'
       @click='commentModalRef?.show()'
     >
@@ -429,13 +430,13 @@ watch(pageParams, () => {
 
 <style scoped>
 .music-detail {
-    bottom: 95px;
-    width: 85vw;
-    height: calc(100vh - 95px);
+    bottom: 100px;
+    width: 100vw;
+    height: calc(100vh - 100px);
     z-index: 1000;
     overflow: hidden;
     transition: transform 0.5s;
-
+    margin: 0
 }
 
 .night {
@@ -443,19 +444,18 @@ watch(pageParams, () => {
 }
 
 .detail-content {
-    height: calc(100vh - 95px);
+    height: calc(100vh - 100px);
     box-sizing: border-box;
     overflow-y: scroll;
 }
 
 .background {
-    position: fixed;
-    width: 85vw;
-    height: calc(100vh - 95px);
-    bottom: 95px;
+    position: absolute;
+    width: 100vw;
+    height: calc(100vh - 100px);
+    bottom: 100px;
     left: 0;
     right: 0;
-    margin: auto;
     z-index: 999;
 }
 
