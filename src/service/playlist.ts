@@ -100,7 +100,11 @@ export function getSimilarPlaylist(id:string) {
 }
 // 相似歌曲
 export function getSimilarSong(id:string) {
-  return service.get('/simi/song?id='+id);
+  const res = service.get('/simi/song?id=' + id);
+  res.data.songs.forEach(song => {
+    song.mp3Url = `https://${song.mp3Url.slice(7)}`;
+  });
+  return res;
 }
 //对歌单添加或删除歌曲
 export function updatePlaylistTracks(data:{
