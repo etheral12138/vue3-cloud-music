@@ -1,9 +1,9 @@
 <template>
-    <div ref="playerRef" class=" video-player"/>
+  <div ref="playerRef" class=" video-player" />
 </template>
 <script lang="ts" setup>
-import {useThemeVars} from 'naive-ui';
-import {computed, onUnmounted, ref, watch} from 'vue';
+import { useThemeVars } from 'naive-ui';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import Player from 'xgplayer';
 
 export interface VideoPlayProps {
@@ -22,40 +22,40 @@ const props = defineProps<VideoPlayProps>();
 const themVars = useThemeVars();
 const primaryColor = computed(() => themVars.value.primaryColor);
 const initPlayer = () => {
-    if (props.url) {
-        player = new Player({
-            el: playerRef.value as HTMLElement,
-            url: props.url,
-            poster: props.poster,
-            videoInit: true,
-            lang: 'zh-cn',
-            width: '100%',
-            height: '440px',
-            playbackRate: [
-                0.5, 0.75, 1, 1.5, 2
-            ]
-        });
-    }
+  if (props.url) {
+    player = new Player({
+      el: playerRef.value as HTMLElement,
+      url: props.url,
+      poster: props.poster,
+      videoInit: true,
+      lang: 'zh-cn',
+      width: '100%',
+      height: '440px',
+      playbackRate: [
+        0.5, 0.75, 1, 1.5, 2
+      ]
+    });
+  }
 };
 
 defineExpose({
-    initPlayer, stop() {
-        player.pause();
-    }
+  initPlayer, stop() {
+    player.pause();
+  }
 });
 
 watch(() => props.url, (url, oldUrl) => {
-    if (url && url !== oldUrl) {
-        if (!player) {
-            initPlayer();
-        } else {
-            player.src = url;
-            player.reload();
-        }
+  if (url && url !== oldUrl) {
+    if (!player) {
+      initPlayer();
+    } else {
+      player.src = url;
+      player.reload();
     }
+  }
 });
 onUnmounted(() => {
-    player.destroy();
+  player.destroy();
 });
 </script>
 

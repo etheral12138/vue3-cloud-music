@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {formatNumber} from '@/utils/index';
-import {Play} from '@vicons/carbon';
-import {useRouter} from 'vue-router';
+import { formatNumber } from '@/utils/index';
+import { Play } from '@vicons/carbon';
+import { useRouter } from 'vue-router';
 
 const props = withDefaults(defineProps<{
     item: any;
@@ -10,51 +10,51 @@ const props = withDefaults(defineProps<{
     borderRadius?: string;
     className?: string;
 }>(), {
-    height: '9vw',
-    isToDetail: true,
-    borderRadius: '10px',
-    className: ''
+  height: '9vw',
+  isToDetail: true,
+  borderRadius: '10px',
+  className: ''
 });
 const emit = defineEmits(['handle-img-click']);
 const router = useRouter();
 const toDetail = (id: number) => {
-    if (props.isToDetail) {
-        router.push(`/mv/${id}`);
-    }
-    emit('handle-img-click', id);
+  if (props.isToDetail) {
+    router.push(`/mv/${id}`);
+  }
+  emit('handle-img-click', id);
 };
-const styleBorderRadius = {borderRadius: props.borderRadius};
+const styleBorderRadius = { borderRadius: props.borderRadius };
 </script>
 <template>
-    <div :style="styleBorderRadius" class="overflow-hidden relative flex-1">
-        <load-img
-                :class-name="className"
-                :loading-height="height"
-                :src="item.picUrl || item.cover"
-                @click="toDetail(item.id)"
-        />
-        <div
-                :style="styleBorderRadius"
-                class="box-border flex absolute top-0 right-0 justify-end items-center p-1 w-full text-white rounded-t-md card-mask"
-        >
-            <n-icon :component="Play"/>
-            <span class='pl-1'>{{ formatNumber(item.playCount) }}</span>
-        </div>
-        <play-icon
-                class="cursor-pointer position-center"
-                style="width: 40px;height: 40px;"
-        />
-        <p v-if="item.copywriter" class="tips">
-            {{ item.copywriter }}
-        </p>
-        <div :style="styleBorderRadius" class="absolute bottom-0 w-full text-right bg-linear-mask">
-            <n-time
-                    :time="item.duration"
-                    class="mr-2 text-white"
-                    format="mm:ss"
-            />
-        </div>
+  <div :style="styleBorderRadius" class="overflow-hidden relative flex-1">
+    <load-img
+      :class-name="className"
+      :loading-height="height"
+      :src="item.picUrl || item.cover"
+      @click="toDetail(item.id)"
+    />
+    <div
+      :style="styleBorderRadius"
+      class="box-border flex absolute top-0 right-0 justify-end items-center p-1 w-full text-white rounded-t-md card-mask"
+    >
+      <n-icon :component="Play" />
+      <span class="pl-1">{{ formatNumber(item.playCount) }}</span>
     </div>
+    <play-icon
+      class="cursor-pointer position-center"
+      style="width: 40px;height: 40px;"
+    />
+    <p v-if="item.copywriter" class="tips">
+      {{ item.copywriter }}
+    </p>
+    <div :style="styleBorderRadius" class="absolute bottom-0 w-full text-right bg-linear-mask">
+      <n-time
+        :time="item.duration"
+        class="mr-2 text-white"
+        format="mm:ss"
+      />
+    </div>
+  </div>
 </template>
 <style scoped>
 .tips {

@@ -3,17 +3,17 @@ import service from './request';
 
 // 默认搜索关键词
 export function getDefaultSearchKeyword() {
-    return service.get('/search/default');
+  return service.get('/search/default');
 }
 
 // 热搜列表
 export function getHotSearchList() {
-    return service.get('/search/hot/detail');
+  return service.get('/search/hot/detail');
 }
 
 // 搜索建议
 export function getSuggestSearchList(keyword: string) {
-    return service.get(`/search/suggest?keywords=${keyword}`);
+  return service.get(`/search/suggest?keywords=${keyword}`);
 }
 
 export interface SearchParams {
@@ -25,9 +25,9 @@ export interface SearchParams {
 
 //搜索
 export function search(data: SearchParams) {
-    const query = qs.stringify({
-        ...data,
-        timestamp: Date.now()
-    });
-    return service.get('/cloudsearch?' + query);
+  const query = qs.stringify({
+    ...data,
+    timestamp: Date.now()
+  });
+  return service.get('/cloudsearch?' + query);
 }

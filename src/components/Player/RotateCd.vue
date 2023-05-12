@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {useMainStore} from '@/stores/main';
+import { useMainStore } from '@/stores/main';
 import playBar from '@/assets/img/play-bar.png';
-import {ref, watch} from 'vue';
+import { ref, watch } from 'vue';
 import useThemeStyle from '@/hook/useThemeStyle';
 
 let maxCircleLine = 7;
@@ -11,61 +11,63 @@ let rotate = ref(0);
 let cancelAnimationFrameId: number;
 let imgSize = baseSize - (maxCircleLine * gap);
 const mainStore = useMainStore();
-const {baseColor} = useThemeStyle();
+const { baseColor } = useThemeStyle();
 const computedCircleStyle = (index: number) => {
-    return {
-        width: `${baseSize - (gap * index)}px`,
-        height: `${baseSize - (gap * index)}px`,
-        border: '1px solid #232426'
-    };
+  return {
+    width: `${baseSize - (gap * index)}px`,
+    height: `${baseSize - (gap * index)}px`,
+    border: '1px solid #232426'
+  };
 };
 watch([() => mainStore.playing, () => mainStore.playWaiting], ([playing, playWaiting]) => {
-    if (playing && !playWaiting) {
-        cancelAnimationFrameId = window.requestAnimationFrame(loopSetRotate);
-    } else {
-        window.cancelAnimationFrame(cancelAnimationFrameId);
-    }
+  if (playing && !playWaiting) {
+    cancelAnimationFrameId = window.requestAnimationFrame(loopSetRotate);
+  } else {
+    window.cancelAnimationFrame(cancelAnimationFrameId);
+  }
 });
 let start: undefined | number;
 const loopSetRotate = (timestamp: number) => {
-    if (start === undefined) {
-        start = timestamp;
-    }
-    const elapsed = timestamp - start;
-    if (elapsed > 1000) { // 在两秒后停止动画
-        rotate.value = rotate.value + 5;
-        start = timestamp;
-    }
-    cancelAnimationFrameId = window.requestAnimationFrame(loopSetRotate);
+  if (start === undefined) {
+    start = timestamp;
+  }
+  const elapsed = timestamp - start;
+  if (elapsed > 1000) { // 在两秒后停止动画
+    rotate.value = rotate.value + 5;
+    start = timestamp;
+  }
+  cancelAnimationFrameId = window.requestAnimationFrame(loopSetRotate);
 };
 </script>
 
 <template>
-    <div class="wrapContainer">
-        <div :style="{transform: mainStore.playing ? 'rotate(0deg)' : 'rotate(-40deg)'}" class="playerBarContainer">
-            <img :src="playBar" class="playBar">
-            <div class="playBarSupport">
-                <div class="center">
-                    <div class="dot"/>
-                </div>
-            </div>
+  <div class="wrapContainer">
+    <div :style="{transform: mainStore.playing ? 'rotate(0deg)' : 'rotate(-40deg)'}" class="playerBarContainer">
+      <img :src="playBar" class="playBar">
+      <div class="playBarSupport">
+        <div class="center">
+          <div class="dot" />
         </div>
-        <div :style="{background: mainStore.isDark ? '#373636' : '#DBDCDA'}" class="cd">
-            <div :style="{transform:`rotate(${rotate}deg)`,background: mainStore.isDark ? '#1D1E21' : '#1B1C1F'}"
-                 class="transition-all  blackCenter">
-                <div
-                        v-for="item in maxCircleLine" :key="item" :style="computedCircleStyle(item)"
-                        class="rounded-full circleItem"
-                />
-                <div class="imgBg">
-                    <n-image
-                            :height="imgSize" :src="mainStore.currentPlaySong.al.picUrl"
-                            :width="imgSize"
-                    />
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div :style="{background: mainStore.isDark ? '#373636' : '#DBDCDA'}" class="cd">
+      <div
+        :style="{transform:`rotate(${rotate}deg)`,background: mainStore.isDark ? '#1D1E21' : '#1B1C1F'}"
+        class="transition-all  blackCenter"
+      >
+        <div
+          v-for="item in maxCircleLine" :key="item" :style="computedCircleStyle(item)"
+          class="rounded-full circleItem"
+        />
+        <div class="imgBg">
+          <n-image
+            :height="imgSize" :src="mainStore.currentPlaySong.al.picUrl"
+            :width="imgSize"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="less" scoped>

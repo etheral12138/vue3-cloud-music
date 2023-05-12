@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
+import { ref } from 'vue';
 
 export interface MvListItemProps {
     name: string;
@@ -13,35 +13,35 @@ let activeIndex = ref(0);
 let categoryValue = ref(props.list[0]);
 
 const handleClick = (item: string, index: number) => {
-    activeIndex.value = index;
-    categoryValue.value = item;
-    emit('update:modelValue', item);
+  activeIndex.value = index;
+  categoryValue.value = item;
+  emit('update:modelValue', item);
 };
 </script>
 
 <template>
-    <div class="flex items-center">
-        <span> {{ name }}： </span>
-        <div class="w-3/5">
-            <div class="flex">
-                <div
-                        v-for="(item, index) in list"
-                        :key="index"
-                        class="flex relative justify-center  items-center text-center cursor-pointer"
-                        style="flex: 0.1666;"
-                        @click="handleClick(item, index)"
-                >
-                    <n-tag
-                            :checked="index === activeIndex" checkable
-                            round
-                    >
-                        {{ item }}
-                    </n-tag>
-                    <div v-if="index !== list.length - 1" class="after-border"/>
-                </div>
-            </div>
+  <div class="flex items-center">
+    <span> {{ name }}： </span>
+    <div class="w-3/5">
+      <div class="flex">
+        <div
+          v-for="(item, index) in list"
+          :key="index"
+          class="flex relative justify-center  items-center text-center cursor-pointer"
+          style="flex: 0.1666;"
+          @click="handleClick(item, index)"
+        >
+          <n-tag
+            :checked="index === activeIndex" checkable
+            round
+          >
+            {{ item }}
+          </n-tag>
+          <div v-if="index !== list.length - 1" class="after-border" />
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped>
