@@ -1,22 +1,33 @@
-<script setup lang="ts">
-import { getPlaylistAllDetail, getPlaylistComment, getPlaylistDetail, sendComment, updatePlayListSubscribe, updatePlaylistTags } from '@/service';
-import type { AnyObject } from 'env';
-import { formateNumber, getArrLast } from '@/utils';
-import { computed, reactive, ref, toRaw, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+<script lang="ts" setup>
+import {
+    getPlaylistAllDetail,
+    getPlaylistComment,
+    getPlaylistDetail,
+    sendComment,
+    updatePlayListSubscribe,
+    updatePlaylistTags
+} from '@/service';
+import type {AnyObject} from 'env';
+import {formatNumber, getArrLast} from '@/utils';
+import {computed, reactive, ref, toRaw, watch} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
 import LoadImg from '@/components/Base/LoadImg.vue';
-import { StarOutline, Star, ShareSocialOutline, Search } from '@vicons/ionicons5';
-import { Edit } from '@vicons/carbon';
-import { useMainStore } from '@/stores/main';
-import type { SelectSongListTagModalExpose } from '@/components/SongsList/SelectSongListTagModal.vue';
-import { useDialog, useThemeVars } from 'naive-ui';
-import obverser from '@/utils/obverser';
-import { userCheckLogin } from '@/hook/useCheckLogin';
-import { useMemorizeRequest } from '@/hook/useMemorizeRequest';
-import { cloneDeep } from 'lodash';
-import { markSearchKeyword } from '@/utils/markSearhKeyword';
+import {Search, ShareSocialOutline, Star, StarOutline} from '@vicons/ionicons5';
+import {Edit} from '@vicons/carbon';
+import {useMainStore} from '@/stores/main';
+import type {SelectSongListTagModalExpose} from '@/components/SongsList/SelectSongListTagModal.vue';
+import SelectSongListTagModal from '@/components/SongsList/SelectSongListTagModal.vue';
+import {useDialog, useThemeVars} from 'naive-ui';
+import {userCheckLogin} from '@/hook/useCheckLogin';
+import {useMemorizeRequest} from '@/hook/useMemorizeRequest';
+import {cloneDeep} from 'lodash';
+import {markSearchKeyword} from '@/utils/markSearhKeyword';
+import observer from '@/utils/observer';
+import CommentList from '@/components/CommentList/CommentList.vue';
+import MusicList from '@/components/SongsList/MusicList.vue';
+import PlayAllButton from '@/components/common/PlayAllButton.vue';
 
-let backTopEle:HTMLElement;
+let backTopEle: HTMLElement;
 let songListIndexMap = new Map();
 const router = useRouter();
 const route = useRoute();
@@ -42,22 +53,27 @@ const searchKeyword = ref('');
 const dialog = useDialog();
 const songListId = ref(route.params.id as string);
 const isMySongList = computed(() => {
-  return songListDetail.value 
-   && mainStore.userProfile
-   && songListDetail.value?.userId === mainStore.userProfile?.profile?.userId;
+  return songListDetail.value
+        && mainStore.userProfile
+        && songListDetail.value?.userId === mainStore.userProfile?.profile?.userId;
 });
 const starButtonDisabled = computed(() => {
-  return songListDetail.value 
-   && mainStore.userProfile
-    && songListDetail.value?.userId === mainStore.userProfile?.profile?.userId;
+  return songListDetail.value
+        && mainStore.userProfile
+        && songListDetail.value?.userId === mainStore.userProfile?.profile?.userId;
 });
-const { wrapRequest: wrapFetchPlayList, requestLoading: isLoading, loadSuccess: loadPlayListSuccess, removeCache } = useMemorizeRequest(getPlaylistDetail, 'getPlaylistDetail');
+const {
+  wrapRequest: wrapFetchPlayList,
+  requestLoading: isLoading,
+  loadSuccess: loadPlayListSuccess,
+  removeCache
+} = useMemorizeRequest(getPlaylistDetail, 'getPlaylistDetail');
 
 // 获取歌单详情
-const fetchSongListDetail = (id:string=route.params.id as string) => {
+const fetchSongListDetail = (id: string = route.params.id as string) => {
   wrapFetchPlayList(id).then((res: { data: { playlist: AnyObject }; }) => {
     let creator = res.data.playlist.creator;
-    if (res.data.playlist.name === (creator?.nickname +'喜欢的音乐') && creator.userId === mainStore.userProfile?.profile.userId) {
+    if (res.data.playlist.name === (creator?.nickname + '喜欢的音乐') && creator.userId === mainStore.userProfile?.profile?.userId) {
       res.data.playlist.isMyLike = true;
       res.data.playlist.name = '我喜欢的音乐';
     } else {
@@ -67,16 +83,20 @@ const fetchSongListDetail = (id:string=route.params.id as string) => {
     loadPlayListSuccess();
   });
 };
-const { wrapRequest: wrapFetchPlayListComment, requestLoading: isCommentLoading, loadSuccess: loadPlayListCommentSuccess } = useMemorizeRequest(getPlaylistComment, 'getPlaylistComment');
+const {
+  wrapRequest: wrapFetchPlayListComment,
+  requestLoading: isCommentLoading,
+  loadSuccess: loadPlayListCommentSuccess
+} = useMemorizeRequest(getPlaylistComment, 'getPlaylistComment');
 // 获取歌单评论
-const fetchSongListComment = (id:string=route.params.id as string) => {
-  let params:{
-    id:string;limit:number;offset:number;before?:string;
-  } = {
-    id,
-    limit: pageParams.pageSize,
-    offset: ((pageParams.page) - 1) * pageParams.pageSize
-  };
+const fetchSongListComment = (id: string = route.params.id as string) => {
+  let params: {
+        id: string; limit: number; offset: number; before?: string;
+    } = {
+      id,
+      limit: pageParams.pageSize,
+      offset: ((pageParams.page) - 1) * pageParams.pageSize
+    };
   if (songListComment.value.total > 5000) {
     params.before = songListComment.value.comments[getArrLast(songListComment.value.comments)];
   }
@@ -88,7 +108,7 @@ const fetchSongListComment = (id:string=route.params.id as string) => {
 };
 const { wrapRequest, requestLoading, loadSuccess } = useMemorizeRequest(getPlaylistAllDetail, 'getPlaylistAllDetail');
 
-const fetchMusicList = (id:string=route.params.id as string) => {
+const fetchMusicList = (id: string = route.params.id as string) => {
   wrapRequest({ id }).then((res: { data: { code: number; songs: any[]; }; }) => {
     if (res?.data?.code === 200) {
       let data = mainStore.mapSongListAddLike(res.data.songs);
@@ -101,14 +121,14 @@ const fetchMusicList = (id:string=route.params.id as string) => {
     }
   });
 };
-const searchSongList = (keyword:string) => {
+const searchSongList = (keyword: string) => {
   if (!keyword) {
     songList.value = toRaw(rawSongList.value);
   }
-  let result = rawSongList.value.filter((item:any) => {
-    return item.name.includes(keyword) 
-      || item.ar.some((ar:any) => ar.name.includes(keyword))
-      || item.al.name.includes(keyword);
+  let result = rawSongList.value.filter((item: any) => {
+    return item.name.includes(keyword)
+            || item.ar.some((ar: any) => ar.name.includes(keyword))
+            || item.al.name.includes(keyword);
   }).map(item => {
     return { ...item, isSearch: true, index: songListIndexMap.get(item.id) };
   });
@@ -145,7 +165,7 @@ const toSongListEdit = () => {
   let id = route.params.id;
   if (songListDetail.value) {
     router.push({
-      path: '/songList/edit/'+id,
+      path: '/songList/edit/' + id,
       query: {
         songListName: songListDetail.value.name,
         desc: songListDetail.value.description,
@@ -156,7 +176,7 @@ const toSongListEdit = () => {
   }
 };
 // 点击收藏/取消收藏事件
-const handleSubscribeClick = (subscribed:boolean) => {
+const handleSubscribeClick = (subscribed: boolean) => {
   if (!mainStore.isLogin) {
     return window.$message.error('请先登录');
   }
@@ -170,21 +190,21 @@ const handleSubscribeClick = (subscribed:boolean) => {
     dialog.warning({
       title: '警告',
       content: '确定不在收藏该歌单?',
-      positiveText: '确定', 
+      positiveText: '确定',
       onPositiveClick: () => {
         subscribeBtnLoading.value = true;
         updatePlayListSubscribe(params).then((res) => {
           if (res.data.code === 200) {
             window.$message.success('取消收藏成功');
             (songListDetail.value as AnyObject).subscribed = false;
-            (songListDetail.value as AnyObject).subscribedCount-=1;
-            obverser.emit('updateCollectPlayList', { subscribed: false, id: route.params.id });
+            (songListDetail.value as AnyObject).subscribedCount -= 1;
+            observer.emit('updateCollectPlayList', { subscribed: false, id: route.params.id });
           } else {
             window.$message.error('取消收藏失败');
           }
         })
           .finally(() => subscribeBtnLoading.value = false);
-      } 
+      }
     });
   } else {
     subscribeBtnLoading.value = true;
@@ -192,18 +212,18 @@ const handleSubscribeClick = (subscribed:boolean) => {
       if (res.data.code === 200) {
         window.$message.success('收藏成功!');
         (songListDetail.value as AnyObject).subscribed = true;
-        (songListDetail.value as AnyObject).subscribedCount+=1;
-        obverser.emit('updateCollectPlayList', { subscribed: true, songListDetail: toRaw(songListDetail.value) });
+        (songListDetail.value as AnyObject).subscribedCount += 1;
+        observer.emit('updateCollectPlayList', { subscribed: true, songListDetail: toRaw(songListDetail.value) });
       } else {
         window.$message.error('收藏失败');
       }
-    }) 
+    })
       .finally(() => subscribeBtnLoading.value = false);
   }
   return undefined;
 };
 // 点击完成设置标签
-const handleCompleteClick = (selectTagList:any[]) => {
+const handleCompleteClick = (selectTagList: any[]) => {
   let detail = songListDetail.value as AnyObject;
   let tags = selectTagList.map((item: { name: any; }) => item.name);
   if (tags.length === 0) {
@@ -254,14 +274,14 @@ const handleCommentClick = () => {
     })
       .finally(() => {
         commentBtnLoading.value = false;
-      }); 
+      });
   });
 };
-const updateCommentList = (value:any) => {
+const updateCommentList = (value: any) => {
   songListComment.value.total += 1;
   songListComment.value.comments.unshift(value);
 };
-const updateCommentLiked = (data:{liked:boolean, index:number}, isHot:boolean) => {
+const updateCommentLiked = (data: { liked: boolean, index: number }, isHot: boolean) => {
   let { index, liked } = data;
   if (isHot) {
     songListComment.value.hotComments[index].liked = liked;
@@ -275,7 +295,7 @@ const updateCommentLiked = (data:{liked:boolean, index:number}, isHot:boolean) =
       : songListComment.value.comments[index].likedCount - 1;
   }
 };
-const handleUpdateMusicListLike = (like:boolean, index:number) => {
+const handleUpdateMusicListLike = (like: boolean, index: number) => {
   let target = songList.value[index];
   // 更新元数据
   if (target.isSearch) {
@@ -291,8 +311,8 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
         <load-img
           ref="imageRef"
           :has-hover-scale="false"
-          class-name="w-52 h-52"
           :src="songListDetail.coverImgUrl "
+          class-name="w-52 h-52"
         />
         <div class="flex-1 ml-8">
           <div class="flex items-center">
@@ -303,11 +323,11 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
               {{ songListDetail.name }}
             </p>
             <div class="ml-2" style="line-height:0" @click="toSongListEdit">
-              <n-icon v-if="isMySongList" :size="20" :component="Edit" />
+              <n-icon v-if="isMySongList" :component="Edit" :size="20" />
             </div>
           </div>
           <div class="mt-3 text-sm flex-items-center">
-            <n-avatar round :size="30" :src="songListDetail.creator.avatarUrl" />
+            <n-avatar :size="30" :src="songListDetail.creator.avatarUrl" round />
             <span class="pl-4 text-primary">{{ songListDetail.creator.nickname }}</span>
             <div class="ml-3 text-gray-600">
               <n-time :time="songListDetail.createTime" type="date" />
@@ -318,22 +338,22 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
             <n-space>
               <play-all-button :song-list="rawSongList" :song-list-id="songListId" />
               <n-button
-                size="medium" round
-                :disabled="starButtonDisabled" :loading="subscribeBtnLoading"
+                :disabled="starButtonDisabled as boolean" :loading="subscribeBtnLoading"
+                round size="medium"
                 @click="handleSubscribeClick(songListDetail!.subscribed)"
               >
                 <template #icon>
                   <n-icon :component="songListDetail.subscribed ? Star : StarOutline" />
                 </template>
-                {{ songListDetail.subscribed ? '已收藏' :' 收藏' }}
-                ({{ formateNumber(songListDetail.subscribedCount) }})
+                {{ songListDetail.subscribed ? '已收藏' : ' 收藏' }}
+                ({{ formatNumber(songListDetail.subscribedCount) }})
               </n-button>
-              <n-button size="medium" round @click="handleShareClick">
+              <n-button round size="medium" @click="handleShareClick">
                 <template #icon>
                   <n-icon :component="ShareSocialOutline" />
                 </template>
                 分享
-                ({{ formateNumber(songListDetail.shareCount) }})
+                ({{ formatNumber(songListDetail.shareCount) }})
               </n-button>
             </n-space>
           </div>
@@ -343,7 +363,7 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
               <span class="px-1">:</span>
               <span class="cursor-pointer text-primary"> {{ songListDetail.tags.join(' / ') }} </span>
               <span
-                v-if="isMySongList && !songListDetail.tags.length " 
+                v-if="isMySongList && !songListDetail.tags.length "
                 class="cursor-pointer text-primary" @click="() => selectSongListTagRef?.show()"
               > 添加标签</span>
             </div>
@@ -356,18 +376,21 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
               <div class="ml-4">
                 <span>歌曲</span>
                 <span class="px-1">:</span>
-                {{ formateNumber(songListDetail.playCount) }}
+                {{ formatNumber(songListDetail.playCount) }}
               </div>
             </div>
-            <div v-if="isMySongList && !songListDetail.description && !songListDetail.isMyLike" class="flex">
+            <div
+              v-if="isMySongList && !songListDetail.description && !songListDetail.isMyLike"
+              class="flex"
+            >
               <span>简介</span>
               <span class="px-1">:</span>
               <span class="cursor-pointer text-primary" @click="toSongListEdit">添加简介</span>
             </div>
             <div v-else-if="songListDetail.description" class="flex">
               <n-ellipsis
-                expand-trigger="click" line-clamp="1"
-                :tooltip="false"
+                :tooltip="false" expand-trigger="click"
+                line-clamp="1"
               >
                 <span>简介</span>
                 <span class="px-1">:</span>
@@ -380,7 +403,7 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
       <div v-else style="height:200px" />
       <div :value="tabsValue" class="mt-10">
         <div class="flex justify-between">
-          <n-tabs type="line" :value="tabsValue">
+          <n-tabs :value="tabsValue" type="line">
             <n-tab name="musicList" @click="tabsValue = 'musicList'">
               歌曲列表
             </n-tab>
@@ -392,45 +415,48 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
             <n-input
               v-model:value="searchKeyword"
               clearable
-              size="small" placeholder="搜索歌单歌曲"
-              round
+              placeholder="搜索歌单歌曲" round
+              size="small"
             >
               <template #prefix>
-                <n-icon class="cursor-pointer" :component="Search" />
+                <n-icon :component="Search" class="cursor-pointer" />
               </template>
             </n-input>
           </div>
         </div>
         <div v-show="tabsValue === 'musicList'" class="mt-5">
           <music-list
-            :song-list="songList" :raw-song-list="rawSongList"
-            :loading="requestLoading" :play-list-id="songListId" @update-music-list-like="handleUpdateMusicListLike"
+            :loading="requestLoading" :play-list-id="songListId"
+            :raw-song-list="rawSongList" :song-list="songList"
+            @update-music-list-like="handleUpdateMusicListLike"
           />
         </div>
         <div v-show="tabsValue === 'comment'" class="mt-8">
           <div>
             <n-input
-              v-model:value="commentValue" type="textarea" :maxlength="140"
-              :show-count="true"
+              v-model:value="commentValue" :maxlength="140" :show-count="true"
+              type="textarea"
             />
             <div class="flex justify-end mt-5">
-              <n-button round :loading="commentBtnLoading" @click="handleCommentClick">
+              <n-button :loading="commentBtnLoading" round @click="handleCommentClick">
                 评论
               </n-button>
             </div>
             <!-- 精彩评论 -->
             <n-spin :show="isCommentLoading">
               <comment-list
-                :type="2"
-                :resource-id="+songListId" title="精彩评论" :list="songListComment.hotComments || []"
+                :list="songListComment.hotComments || []"
+                :resource-id="+songListId" :type="2"
+                title="精彩评论"
                 @update-comment-list="updateCommentList"
                 @update-comment-liked="(data:any) => updateCommentLiked(data,true)"
               />
               <!-- 最新评论 -->
               <comment-list
-                :resource-id="+songListId"
-                :type="2"
-                :comment-total-num="songListComment.total" title="最新评论" :list="songListComment.comments || []"
+                :comment-total-num="songListComment.total"
+                :list="songListComment.comments || []"
+                :resource-id="+songListId" :type="2"
+                title="最新评论"
                 @update-comment-list="updateCommentList"
                 @update-comment-liked="(data:any) => updateCommentLiked(data,false)"
               />
@@ -440,11 +466,11 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
             </p>
             <div v-if="pageParams.pageCount > 1" class="flex justify-end mt-6">
               <n-pagination
-                v-model:page="pageParams.page" 
-                v-model:page-size="pageParams.pageSize" 
-                :page-count="pageParams.pageCount" 
-                show-size-picker
+                v-model:page="pageParams.page"
+                v-model:page-size="pageParams.pageSize"
+                :page-count="pageParams.pageCount"
                 :page-sizes="[10, 20, 30, 40,50]"
+                show-size-picker
               />
             </div>
           </div>
@@ -453,20 +479,19 @@ const handleUpdateMusicListLike = (like:boolean, index:number) => {
       <!-- 标签选择弹窗 -->
       <select-song-list-tag-modal
         ref="selectSongListTagRef"
-        :handle-complete-click="handleCompleteClick" 
         :btn-loading="btnLoading"
+        :handle-complete-click="handleCompleteClick"
       />
     </n-spin>
   </div>
 </template>
 <style scoped>
-:deep(.n-card-header__main){
-  text-align: center;
+:deep(.n-card-header__main) {
+    text-align: center;
 }
-:deep(.n-tabs .n-tabs-nav.n-tabs-nav--line-type .n-tabs-nav-scroll-content){
-  border: none;
+
+:deep(.n-tabs .n-tabs-nav.n-tabs-nav--line-type .n-tabs-nav-scroll-content) {
+    border: none;
 }
-.tag:hover{
-  color: var(--n-color-target);
-}
+
 </style>

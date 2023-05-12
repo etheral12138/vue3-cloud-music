@@ -1,10 +1,11 @@
-import { ref } from 'vue';
-import { nanoid } from 'nanoid';
+import {ref} from 'vue';
+import {nanoid} from 'nanoid';
+
 export function useNanoid() {
   const idMaps = new Map();
   const currentId = ref('');
   return {
-    set(key:any) {
+    set(key: any) {
       if (!idMaps.has(key)) {
         const id = nanoid();
         currentId.value = id;
@@ -14,5 +15,5 @@ export function useNanoid() {
       }
     },
     currentId
-  }; 
+  };
 }

@@ -1,14 +1,14 @@
-import { getPixelColor } from '@/utils/getPixelColor';
-import obverser from '@/utils/obverser';
-import { nextTick, type CSSProperties } from 'vue';
+import {getPixelColor} from '@/utils/getPixelColor';
+import observer from '@/utils/observer';
+import {type CSSProperties, nextTick} from 'vue';
 
 export function useBlurLineGradient() {
-  let lyricFooterMaskELement:HTMLElement;
-  let lyricTopMaskElement:HTMLElement;
-  let footerMaskStyle:CSSProperties;
-  let topMaskStyle:CSSProperties;
+  let lyricFooterMaskELement: HTMLElement;
+  let lyricTopMaskElement: HTMLElement;
+  let footerMaskStyle: CSSProperties;
+  let topMaskStyle: CSSProperties;
   const eleHeight = 50;
-  const updateFooterMaskColor = async (context:CanvasRenderingContext2D) => {
+  const updateFooterMaskColor = async (context: CanvasRenderingContext2D) => {
     await nextTick();
     if (!lyricFooterMaskELement) {
       lyricFooterMaskELement = document.querySelector('.footer-mask') as HTMLElement;
@@ -18,7 +18,7 @@ export function useBlurLineGradient() {
     }
     // dom 还未在页面显示 可能为0
     let { top: footerEleTop } = lyricFooterMaskELement.getBoundingClientRect();
-    let { top: topEleTop } = lyricTopMaskElement.getBoundingClientRect(); 
+    let { top: topEleTop } = lyricTopMaskElement.getBoundingClientRect();
     if (footerEleTop <= 0) {
       footerEleTop = 0;
     }
@@ -26,7 +26,7 @@ export function useBlurLineGradient() {
       topEleTop = 0;
     }
     const { rgb: footerRgb } = getPixelColor(
-      context, 0, footerEleTop+eleHeight
+      context, 0, footerEleTop + eleHeight
     );
     const { rgb: topRgb } = getPixelColor(
       context, 0, topEleTop
@@ -42,12 +42,12 @@ export function useBlurLineGradient() {
       footerMaskStyle = { background: `linear-gradient(-180deg, rgba(255, 255, 255, 0) 0%, ${footerRgb} 80%)` };
 
     }
-    obverser.emit('updateLyricMaskStyle', { footerMaskStyle, topMaskStyle });
+    observer.emit('updateLyricMaskStyle', { footerMaskStyle, topMaskStyle });
   };
   const resetBackground = () => {
     footerMaskStyle = { background: 'transparent' };
     topMaskStyle = { background: 'transparent' };
-    obverser.emit('updateLyricMaskStyle', { footerMaskStyle, topMaskStyle });
+    observer.emit('updateLyricMaskStyle', { footerMaskStyle, topMaskStyle });
   };
 
   return { updateFooterMaskColor, resetBackground };

@@ -1,37 +1,35 @@
-<script setup lang="ts">
-import { useMemoryScrollTop } from '@/hook/useMemoryScrollTop';
-import {
-  getBanner,
-  getNewSong,
-  getPersonalized,
-  getRecommendMv
-} from '@/service';
-import { formateSongsAuthor } from '@/utils';
-import { useAsyncState, useElementHover } from '@vueuse/core';
-import { computed, ref } from 'vue';
-import { ArrowBackIosSharp, ArrowForwardIosRound } from '@vicons/material';
-import { useDbClickPlay } from '@/hook/useDbClickPlay';
-import { nanoid } from 'nanoid';
-import { mapSongs } from '@/utils/arr-map';
-import { useMainStore } from '@/stores/main';
+<script lang="ts" setup>
+import {useMemoryScrollTop} from '@/hook/useMemoryScrollTop';
+import {getBanner, getNewSong, getPersonalized, getRecommendMv} from '@/service';
+import {formatSongsAuthor} from '@/utils';
+import {useAsyncState, useElementHover} from '@vueuse/core';
+import {computed, ref} from 'vue';
+import {ArrowBackIosSharp, ArrowForwardIosRound} from '@vicons/material';
+import {useDbClickPlay} from '@/hook/useDbClickPlay';
+import {nanoid} from 'nanoid';
+import {mapSongs} from '@/utils/arr-map';
+import {useMainStore} from '@/stores/main';
+import SongListSkeleton from '@/components/SongsList/SongListSkeleton.vue';
+import SongList from '@/components/SongsList/SongList.vue';
+
 const hoverRef = ref();
 const currentIndex = ref(0);
 const {
   state: banners,
-  isLoading 
+  isLoading
 } = useAsyncState(getBanner().then(res => res.data.banners), []);
 const {
   state: SongsList,
-  isLoading: SongsListIsLoading 
+  isLoading: SongsListIsLoading
 } = useAsyncState(getPersonalized().then(res => res.data.result), []);
 const {
   state: newSongList,
-  isLoading: newSongListIsLoading 
+  isLoading: newSongListIsLoading
 } = useAsyncState(getNewSong().then(res => {
   return mainStore.mapSongListAddLike(mapSongs(res.data.result));
 }), []);
 const { state: MVList, isLoading: MVIsLoading }
-  = useAsyncState(getRecommendMv().then(res => res.data.result), []);
+    = useAsyncState(getRecommendMv().then(res => res.data.result), []);
 const onlyId = nanoid();
 const isHovered = useElementHover(hoverRef);
 const mainStore = useMainStore();
@@ -63,19 +61,19 @@ const handleArrowClick = (type: 'next' | 'prev') => {
       class="flex items-center"
     >
       <n-skeleton
-        width="25%"
-        height="170px"
         :sharp="false"
+        height="170px"
+        width="25%"
       />
       <n-skeleton
-        width="50%"
+        :sharp="false"
         height="250px"
-        :sharp="false"
+        width="50%"
       />
       <n-skeleton
-        width="25%"
-        height="170px"
         :sharp="false"
+        height="170px"
+        width="25%"
       />
     </div>
     <div
@@ -84,15 +82,15 @@ const handleArrowClick = (type: 'next' | 'prev') => {
       class="relative cursor-pointer"
     >
       <n-carousel
-        effect="card"
-        dot-type="line"
-        draggable
         :autoplay="!isHovered"
         :current-index="currentIndex"
-        prev-slide-style="transform: translateX(-150%) translateZ(-450px);opacity:1"
-        next-slide-style="transform: translateX(50%) translateZ(-450px);opacity:1"
-        style="height: 250px"
         :show-dots="true"
+        dot-type="line"
+        draggable
+        effect="card"
+        next-slide-style="transform: translateX(50%) translateZ(-450px);opacity:1"
+        prev-slide-style="transform: translateX(-150%) translateZ(-450px);opacity:1"
+        style="height: 250px"
       >
         <n-carousel-item
           v-for="item in banners"
@@ -100,9 +98,9 @@ const handleArrowClick = (type: 'next' | 'prev') => {
           :style="{ width: '50%' }"
         >
           <load-img
-            loading-height="250px"
-            class-name="w-full h-full rounded cursor-pointer cover-banner"
             :src="item.imageUrl"
+            class-name="w-full h-full rounded cursor-pointer cover-banner"
+            loading-height="250px"
           />
         </n-carousel-item>
       </n-carousel>
@@ -140,9 +138,9 @@ const handleArrowClick = (type: 'next' | 'prev') => {
     </p>
     <n-grid
       v-if="newSongListIsLoading"
+      :y-gap="20"
       cols="3"
       x-gap="20"
-      :y-gap="20"
     >
       <n-grid-item
         v-for="(item, index) in 12"
@@ -150,16 +148,16 @@ const handleArrowClick = (type: 'next' | 'prev') => {
       >
         <div class="flex justify-between h-16">
           <n-skeleton
+            :sharp="false"
             height="64px"
             width="64px"
-            :sharp="false"
           />
           <div class="flex-1 ml-2">
             <n-skeleton
-              text
-              class="mt-2"
               :repeat="2"
               :sharp="false"
+              class="mt-2"
+              text
             />
           </div>
         </div>
@@ -167,10 +165,10 @@ const handleArrowClick = (type: 'next' | 'prev') => {
     </n-grid>
     <n-grid
       v-else
-      x-gap="20"
       :y-gap="20"
       cols="2 s:2 m:3 l:3 xl:3 2xl:4"
       responsive="screen"
+      x-gap="20"
     >
       <n-grid-item
         v-for="(item,index) in newSongList"
@@ -183,10 +181,10 @@ const handleArrowClick = (type: 'next' | 'prev') => {
         <div class="flex justify-between h-16">
           <div class="relative">
             <load-img
-              loading-height="64px"
-              class-name="w-16 h-16 rounded-md"
-              :src="item.picUrl"
               :show-message="false"
+              :src="item.picUrl"
+              class-name="w-16 h-16 rounded-md"
+              loading-height="64px"
             />
             <play-icon
               :size="15"
@@ -199,7 +197,7 @@ const handleArrowClick = (type: 'next' | 'prev') => {
               <n-ellipsis>{{ item.name }}</n-ellipsis>
             </p>
             <p class="mt-2 w-full text-sm opacity-60">
-              <n-ellipsis>{{ formateSongsAuthor(item.song.artists) }}</n-ellipsis>
+              <n-ellipsis>{{ formatSongsAuthor(item.song.artists) }}</n-ellipsis>
             </p>
           </div>
         </div>

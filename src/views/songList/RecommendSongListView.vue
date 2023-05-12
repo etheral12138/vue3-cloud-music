@@ -1,10 +1,13 @@
-<script setup lang="ts">
-import { useMemoryScrollTop } from '@/hook/useMemoryScrollTop';
-import { getTopPlayList, getTopPlayListTags } from '@/service';
-import { getArrLast } from '@/utils';
-import { useAsyncState } from '@vueuse/core';
-import { useLoadingBar, useThemeVars } from 'naive-ui';
-import { computed, nextTick, onBeforeMount, ref, watch } from 'vue';
+<script lang="ts" setup>
+import {useMemoryScrollTop} from '@/hook/useMemoryScrollTop';
+import {getTopPlayList, getTopPlayListTags} from '@/service';
+import {getArrLast} from '@/utils';
+import {useAsyncState} from '@vueuse/core';
+import {useLoadingBar, useThemeVars} from 'naive-ui';
+import {computed, nextTick, onBeforeMount, ref, watch} from 'vue';
+import LoadImg from '@/components/Base/LoadImg.vue';
+import ListLoading from '@/components/Base/ListLoading.vue';
+import SongListSkeleton from '@/components/SongsList/SongListSkeleton.vue';
 //精品歌单
 const tabsTabSelector = '.myTabs > .n-tabs-nav .n-tabs-wrapper > .n-tabs-tab-wrapper>.n-tabs-tab';
 const {
@@ -106,7 +109,6 @@ const loadMore = (successCallback: any) => {
     }
     songList.value[selectIndex.value].noMore = !res.data.more;
     successCallback && successCallback();
-
   });
 };
 </script>
@@ -117,13 +119,13 @@ const loadMore = (successCallback: any) => {
       <div class="flex p-4">
         <n-skeleton class="w-36 h-36 rounded-xl" />
         <div class="flex-1 ml-4">
-          <n-skeleton width="70px" height="28px" :sharp="false" />
+          <n-skeleton :sharp="false" height="28px" width="70px" />
           <n-skeleton
-            class="my-2" :sharp="false"
+            :sharp="false" class="my-2"
             type="text"
           />
           <n-skeleton
-            height="28px" :sharp="false"
+            :sharp="false" height="28px"
             type="text"
           />
         </div>
@@ -131,14 +133,14 @@ const loadMore = (successCallback: any) => {
     </div>
     <div v-else class="overflow-hidden relative mt-4 h-44 rounded-xl cursor-pointer">
       <div
-        class="flex absolute w-full h-44 blur-lg"
         :style="{ backgroundImage: `url(${currentSongList.list[0]?.coverImgUrl})` }"
+        class="flex absolute w-full h-44 blur-lg"
       />
-      <div class="box-border flex absolute z-50 p-4 w-full h-44 bg-black/30">
+      <div class="box-border flex absolute  p-4 w-full h-44 bg-black/30">
         <load-img
-          loading-height="144px "
-          class-name="w-36 h-36 rounded-md"
           :src="currentSongList.list[0]?.coverImgUrl"
+          class-name="w-36 h-36 rounded-md"
+          loading-height="144px "
         />
         <div class="flex-1 ml-4">
           <n-tag type="success">
@@ -155,21 +157,23 @@ const loadMore = (successCallback: any) => {
     </div>
     <div>
       <div v-if="songsTagsIsLoading" class="flex justify-between mt-4">
-        <n-skeleton height="28px" :sharp="false" />
+        <n-skeleton :sharp="false" height="28px" />
       </div>
-      <div v-else class="relative">
-        <n-tabs ref="tabsInstRef" v-model:value="selectValue" class="min-w-3xl myTabs">
+      <div v-else class="relative z-0">
+        <n-tabs
+          ref="tabsInstRef" v-model:value="selectValue" class="min-w-3xl myTabs"
+        >
           <n-tab-pane
-            v-for="(tab) in songsTags" :key="tab.name" display-directive="show:lazy"
-            :name="tab.name"
+            v-for="(tab) in songsTags" :key="tab.name" :name="tab.name"
+            display-directive="show:lazy"
           >
             <SongListSkeleton v-if="currentSongList.loading" />
             <div v-else class="mt-4">
               <SongList :songs="currentSongList.list" />
               <ListLoading
                 v-if="currentSongList.list.length > 15"
-                :no-more="currentSongList.noMore"
                 :load-more="loadMore"
+                :no-more="currentSongList.noMore"
               />
             </div>
           </n-tab-pane>
@@ -181,33 +185,40 @@ const loadMore = (successCallback: any) => {
 
 <style scoped>
 :deep(.n-tabs-bar) {
-  display: none;
+    display: none;
 }
+
 :deep(.n-tabs .n-tabs-nav.n-tabs-nav--line-type .n-tabs-nav-scroll-content) {
-  transition: border-color 0.3s var(--n-bezier);
-  border: none;
+    transition: border-color 0.3s var(--n-bezier);
+    border: none;
 }
+
 :deep(.n-tag__content) {
-  display: flex;
+    display: flex;
 }
-:deep(.n-tabs .n-tab-pane){
-  padding-top: 0;
+
+:deep(.n-tabs .n-tab-pane) {
+    padding-top: 0;
 }
+
 :deep(.n-tabs .n-tabs-nav) {
-  overflow-x: scroll;
-  position: sticky;
-  top: 0px;
-  z-index: 999;
-  padding-top: 10px;
-  background-color: v-bind(bodyColor);
+    overflow-x: scroll;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    padding-top: 10px;
+    background-color: v-bind(bodyColor);
 }
+
 :deep(.n-tabs .n-tabs-nav::-webkit-scrollbar-thumb) {
-  height: 15px;
-  background-color: transparent;
+    height: 15px;
+    background-color: transparent;
 }
+
 :deep(.n-tabs .n-tabs-nav):hover.n-tabs-nav::-webkit-scrollbar-thumb {
-  @apply bg-gray-400/40;
+    @apply bg-gray-400/40;
 }
+
 :deep(.n-tabs .n-tabs-nav-scroll-wrapper) {
-  overflow: visible;
+    overflow: visible;
 }</style>

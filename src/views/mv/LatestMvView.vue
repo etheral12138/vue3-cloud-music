@@ -1,11 +1,12 @@
-<script setup lang="ts">
-import { useMemorizeRequest } from '@/hook/useMemorizeRequest';
-import { getMvList } from '@/service';
-import { useThemeVars } from 'naive-ui';
-import {
-  nextTick,
-  reactive, ref, toRaw, watch 
-} from 'vue';
+<script lang="ts" setup>
+import {useMemorizeRequest} from '@/hook/useMemorizeRequest';
+import {getMvList} from '@/service';
+import {useThemeVars} from 'naive-ui';
+import {nextTick, reactive, ref, toRaw, watch} from 'vue';
+import CategoryTab from '@/components/Base/CategoryTab.vue';
+import MvListSkeleton from '@/components/MvList/MvListSkeleton.vue';
+import MvList from '@/components/MvList/MvList.vue';
+
 const areaList = [
   '全部', '内地', '港台', '欧美', '日本', '韩国'
 ];
@@ -33,7 +34,7 @@ const themeVars = useThemeVars();
 const fetchList = (setPageCount = true) => {
   let data = getParams();
   list.value = [];
-  
+
   wrapRequest(data).then((res: { data: { data: never[]; count: number; }; }) => {
     list.value = res.data.data;
 
@@ -75,35 +76,36 @@ watch([() => pageParams.page, () => pageParams.pageSize], async () => {
 </script>
 
 <template>
-  <div class="overflow-hidden p-6 musicList" :style="{background:themeVars.bodyColor}">
+  <div :style="{background:themeVars.bodyColor}" class="overflow-hidden p-6 musicList">
     <n-space
-      vertical class="sticky top-0 z-40 py-4" :style="{background:themeVars.bodyColor}"
-      :size="20"
+      :size="20" :style="{background:themeVars.bodyColor}" class="sticky top-0  py-4"
+      vertical
     >
-      <category-tab v-model="params.area" name="地区" :list="areaList" />
-      <category-tab v-model="params.type" name="类型" :list="typeList" />
-      <category-tab v-model="params.order" name="排序" :list="orderList" />
+      <category-tab v-model="params.area" :list="areaList" name="地区" />
+      <category-tab v-model="params.type" :list="typeList" name="类型" />
+      <category-tab v-model="params.order" :list="orderList" name="排序" />
     </n-space>
     <div class="py-4">
       <MvListSkeleton v-if="listIsLoading" :count="pageParams.pageSize" />
       <mv-list v-if="!listIsLoading" :list="list" />
       <div v-if="firstFetchDataSuccess" class="flex justify-end mt-4">
         <n-pagination
-          v-model:page="pageParams.page" 
-          v-model:page-size="pageParams.pageSize" 
-          :page-count="pageParams.pageCount" 
-          show-size-picker
+          v-model:page="pageParams.page"
+          v-model:page-size="pageParams.pageSize"
+          :page-count="pageParams.pageCount"
           :page-sizes="[10, 20, 30, 40,50]"
+          show-size-picker
         />
       </div>
     </div>
   </div>
 </template>
 <style scoped>
-.n-layout .n-layout-scroll-container::-webkit-scrollbar-thumb{
-  background-color: transparent;
+.n-layout .n-layout-scroll-container::-webkit-scrollbar-thumb {
+    background-color: transparent;
 }
-:deep(.n-layout .n-layout-scroll-container){
-  overflow:hidden;
+
+:deep(.n-layout .n-layout-scroll-container) {
+    overflow: hidden;
 }
 </style>

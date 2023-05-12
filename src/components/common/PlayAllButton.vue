@@ -1,10 +1,11 @@
-<script setup lang="ts">
-import { useMainStore } from '@/stores/main';
-import { Play, AddOutline } from '@vicons/ionicons5';
+<script lang="ts" setup>
+import {useMainStore} from '@/stores/main';
+import {AddOutline, Play} from '@vicons/ionicons5';
+
 const mainStore = useMainStore();
 const props = withDefaults(defineProps<{
-  songList?:any[]|undefined;
-  songListId:string;
+    songList?: any[] | undefined;
+    songListId: string;
 }>(), { songList: () => [] });
 // 点击播放全部
 const handleStartPlayAllClick = () => {
@@ -33,7 +34,7 @@ const handleAddToAllPlayListClick = () => {
 </script>
 
 <template>
-  <n-button size="medium" type="primary" round>
+  <n-button round size="medium" type="primary">
     <template #icon>
       <n-icon :component="Play" />
     </template>

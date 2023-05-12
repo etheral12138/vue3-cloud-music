@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+
 export default defineComponent({
   props: {
     height: {
@@ -15,7 +16,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="flex justify-center items-center" :style="{ height: height }">
+  <div :style="{ height: height }" class="flex justify-center items-center">
     <n-empty :description="description" />
   </div>
 </template>

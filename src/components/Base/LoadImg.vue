@@ -44,9 +44,7 @@ export default defineComponent({
   setup(props) {
     const isLoading = ref(true);
     const error = ref(false);
-    let myPreviewDisabled = ref(props.doubleClickPreview && props.previewDisabled
-      ? true
-      : false);
+    let myPreviewDisabled = ref(props.doubleClickPreview && props.previewDisabled);
     const handleLoad = () => {
       isLoading.value = false;
     };
@@ -102,12 +100,13 @@ export default defineComponent({
                 ? 0
                 : 1,
               borderRadius: props.borderRadius
-            }} />
+            }}/>
           <div
             v-show={isLoading.value}
             class='flex absolute top-0 left-0 justify-center items-center w-full h-full'
           >
-            <n-skeleton class={props.className} loadingWidth={props.loadingWidth} height={props.loadingHeight} />
+            <n-skeleton class={props.className} loadingWidth={props.loadingWidth}
+              height={props.loadingHeight}/>
           </div>
         </div>
       );
@@ -117,7 +116,7 @@ export default defineComponent({
 </script>
 <style scoped>
 :deep(.warpImg > img) {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 </style>

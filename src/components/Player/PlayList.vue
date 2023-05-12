@@ -1,20 +1,21 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import useThemeStyle from '@/hook/useThemeStyle';
 import useValidateVipSong from '@/hook/useValidateVipSong';
-import { useMainStore } from '@/stores/main';
-import { formateSongsAuthor } from '@/utils';
-import { VolumeMuteFilled, VolumeUpFilled } from '@vicons/material';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import {useMainStore} from '@/stores/main';
+import {formatSongsAuthor} from '@/utils';
+import {VolumeMuteFilled, VolumeUpFilled} from '@vicons/material';
+import {ref} from 'vue';
+import {useRouter} from 'vue-router';
 
-export interface PlayListExpose{
-  show:() => void
+export interface PlayListExpose {
+    show: () => void
 }
+
 const active = ref(false);
 const mainStore = useMainStore();
 const router = useRouter();
 let isLoad = false;
-const { stripedClass, themeVars, tagColor } = useThemeStyle();
+const { themeVars, tagColor } = useThemeStyle();
 
 defineExpose({
   show() {
@@ -22,13 +23,13 @@ defineExpose({
   }
 });
 // 双击播放
-const handleDoubleClick = async (index:number) => {
+const handleDoubleClick = async (index: number) => {
   const value = useValidateVipSong(mainStore.playList[index]);
   if (value) return;
   if (isLoad) return;
-  isLoad= true;
+  isLoad = true;
   await mainStore.changePlayIndex(index);
-  isLoad= false;
+  isLoad = false;
 };
 // 点击清空播放列表
 const handleRestClick = () => {
@@ -43,16 +44,16 @@ const handleGoHemeClick = () => {
 <template>
   <n-drawer
     v-model:show="active"
+    :block-scroll="false"
+    :trap-focus="false"
     :width="450"
     placement="right"
-    :trap-focus="false"
-    :block-scroll="false"
   >
     <n-drawer-content>
       <template #header>
-        <div class="flex justify-between odd:" style="width:400px"> 
+        <div class="flex justify-between odd:" style="width:400px">
           <span class="text-sm opacity-50">共 {{ mainStore.playListCount }} 首 </span>
-          <n-button type="primary" text @click="handleRestClick">
+          <n-button text type="primary" @click="handleRestClick">
             清空列表
           </n-button>
         </div>
@@ -69,55 +70,55 @@ const handleGoHemeClick = () => {
         </template>
       </n-empty>
       <DynamicScroller
-        class="scroller"
         :items="mainStore.playList"
         :min-item-size="45"
+        class="scroller"
         key-field="id"
       >
         <template #default="{ item, index }">
           <DynamicScrollerItem
-            :item="item"
             :active="active"
+            :data-index="index"
+            :item="item"
             :size-dependencies="[
               item.message,
             ]"
-            :data-index="index"
           >
             <div
-              :class="'flex justify-between text-sm item ' + stripedClass(index)"
+              class="flex justify-between text-sm hover:bg-green-500 hover:bg-opacity-20 item "
               @dblclick="handleDoubleClick(index)"
             >
               <div class="flex overflow-hidden flex-1 items-center pr-2">
                 <n-icon
                   v-if="+mainStore.currentPlayIndex === index"
-                  style="padding-right:5px"
                   :color="mainStore.playing
                     ? themeVars.primaryColor
-                    : themeVars.textColor1" :component="mainStore.playing
+                    : themeVars.textColor1"
+                  :component="mainStore.playing
                     ? VolumeUpFilled
-                    :VolumeMuteFilled"
+                    :VolumeMuteFilled" style="padding-right:5px"
                 />
-                <p class="truncate" style="max-width:'140px'">
+                <p class="truncate" style="max-width:140px">
                   {{ item.name }}
                 </p>
                 <n-tag
                   v-if="item.mv !== 0"
-                  size="small" :color="tagColor" class="ml-2"
+                  :color="tagColor" class="ml-2" size="small"
                   @click="router.push(`/mv/${item.mv}`)"
                 >
                   MV
                 </n-tag>
                 <n-tag
                   v-if="item.fee === 1"
-                  size="small" :color="tagColor" class="ml-2"
+                  :color="tagColor" class="ml-2" size="small"
                 >
                   VIP
                 </n-tag>
               </div>
               <p class=" w-24 truncate">
-                {{ formateSongsAuthor(item?.ar || []) }}
+                {{ formatSongsAuthor(item?.ar || []) }}
               </p>
-              <n-time class="pl-4 opacity-40" format="mm:ss" :time="item?.dt" />
+              <n-time :time="item?.dt" class="pl-4 opacity-40" format="mm:ss" />
             </div>
           </DynamicScrollerItem>
         </template>
@@ -128,28 +129,31 @@ const handleGoHemeClick = () => {
 
 <style scoped>
 .scroller {
-  height: 100%;
+    height: 100%;
 }
-:deep(.resize-observer){
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: transparent;
-  pointer-events: none;
-  display: block;
-  overflow: hidden;
-  opacity: 0;
+
+:deep(.resize-observer) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    pointer-events: none;
+    display: block;
+    overflow: hidden;
+    opacity: 0;
 }
-.item{
-  padding: 12px 20px;
-  cursor: pointer;
+
+.item {
+    padding: 12px 20px;
+    cursor: pointer;
 }
-:deep(.n-drawer-body-content-wrapper){
-  padding: 0 !important;
-  padding-bottom: 15px;
+
+:deep(.n-drawer-body-content-wrapper) {
+    padding: 0 !important;
+    padding-bottom: 15px;
 }
 </style>

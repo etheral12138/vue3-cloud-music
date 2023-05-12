@@ -1,11 +1,11 @@
-import { useMainStore } from '@/stores/main';
-import type { Ref } from 'vue';
+import {useMainStore} from '@/stores/main';
+import type {Ref} from 'vue';
 import useValidateVipSong from './useValidateVipSong';
 
 export function useDbClickPlay() {
   let isLoad = false;
   return async (
-    list:any[]| Ref<any[]>, playListId:string, item:any, index:number
+    list: any[] | Ref<any[]>, playListId: string, item: any, index: number
   ) => {
     const value = useValidateVipSong(item);
     if (value) return;

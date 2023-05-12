@@ -1,9 +1,11 @@
-<script setup lang="ts">
-import { updatePlaylistTracks, createPlaylist } from '@/service/playlist';
-import { useMainStore } from '@/stores/main';
-import obverser from '@/utils/obverser';
-import { ArrowBackIosSharp } from '@vicons/material';
-import { computed, ref, watch } from 'vue';
+<script lang="ts" setup>
+import {createPlaylist, updatePlaylistTracks} from '@/service/playlist';
+import {useMainStore} from '@/stores/main';
+import obverser from '@/utils/observer';
+import {ArrowBackIosSharp} from '@vicons/material';
+import {computed, ref, watch} from 'vue';
+import BaseEmpty from '@/components/Base/BaseEmpty.vue';
+
 let isLoad = false;
 const mainStore = useMainStore();
 const showCreatePlayList = ref(false);
@@ -12,7 +14,7 @@ const playListTitle = ref('');
 const showModal = ref(false);
 const btnLoading = ref(false);
 const props = defineProps<{
-  tracks:number;
+    tracks: number;
 }>();
 const modalStyle = computed(() => {
   return {
@@ -21,16 +23,16 @@ const modalStyle = computed(() => {
     height: showCreatePlayList.value
       ? '250px'
       : '450px',
-    overflow: 'hidden' 
+    overflow: 'hidden'
   };
 });
-const handleItemClick = (item:any, index:number) => {
+const handleItemClick = (item: any, index: number) => {
   if (!mainStore.isLogin) {
     return window.$message.error('请先登录');
   }
   if (isLoad) return undefined;
   isLoad = true;
-  let params:{tracks:number, op:'add'|'del', pid:number} = {
+  let params: { tracks: number, op: 'add' | 'del', pid: number } = {
     tracks: props.tracks,
     op: 'add',
     pid: item.id
@@ -51,7 +53,7 @@ const handleCreateClick = () => {
   if (!mainStore.isLogin) {
     return window.$message.error('请先登录');
   }
-  let params:{name:string, privacy?:string} = { name: playListTitle.value };
+  let params: { name: string, privacy?: string } = { name: playListTitle.value };
   if (isPrivate.value) {
     params.privacy = '10';
   }
@@ -64,7 +66,7 @@ const handleCreateClick = () => {
       mainStore.mySubscribeSongList.push(res.data.playlist);
       obverser.emit('updateMyCreatePlayList', res.data.playlist);
       btnLoading.value = false;
-    } 
+    }
   });
 };
 defineExpose({
@@ -84,15 +86,15 @@ watch(showModal, (val) => {
 <template>
   <n-modal
     v-model:show="showModal"
+    :mask-closable="false"
+    :show-icon="false"
+    :style="modalStyle"
+    class="transition-all duration-300"
     preset="dialog"
     transform-origin="center"
-    :show-icon="false"
-    :mask-closable="false"
-    class="transition-all duration-300"
-    :style="modalStyle"
   >
     <div class="my-4">
-      <transition name="fade" mode="out-in">
+      <transition mode="out-in" name="fade">
         <div v-if="!showCreatePlayList">
           <div class="flex items-center pb-4 pl-4" @click="showCreatePlayList = true">
             <div class="bg-gray-200 dark:bg-gray-200/20 add">
@@ -109,7 +111,7 @@ watch(showModal, (val) => {
               class="flex items-center py-2 px-4 hover:bg-gray-200 dark:hover:bg-gray-200/20 transition-all cursor-pointer"
               @click="handleItemClick(item,index)"
             >
-              <n-image class="w-14 h-14 rounded-lg" :src="item.coverImgUrl" />
+              <n-image :src="item.coverImgUrl" class="w-14 h-14 rounded-lg" />
               <div class="ml-2">
                 <n-ellipsis>
                   <p>{{ item.name }}</p>
@@ -125,11 +127,11 @@ watch(showModal, (val) => {
         <div v-else class="p-4">
           <n-space vertical>
             <n-input v-model:value="playListTitle" placeholder="请输入新歌单标题" />
-            <n-checkbox v-model:checked="isPrivate" size="small" label="设置为隐私歌单" />
+            <n-checkbox v-model:checked="isPrivate" label="设置为隐私歌单" size="small" />
           </n-space>
           <div class="flex justify-center mt-4">
             <n-button
-              :loading="btnLoading" :disabled="!playListTitle" type="primary"
+              :disabled="!playListTitle" :loading="btnLoading" type="primary"
               @click="handleCreateClick"
             >
               创建
@@ -142,7 +144,7 @@ watch(showModal, (val) => {
       <div class="flex flex-1 items-center">
         <n-icon
           v-if="showCreatePlayList"
-          :size="20" class="ml-4 cursor-pointer" :component="ArrowBackIosSharp"
+          :component="ArrowBackIosSharp" :size="20" class="ml-4 cursor-pointer"
           @click="showCreatePlayList = false"
         />
         <h4 class="flex-1 my-5 text-center">
@@ -154,19 +156,21 @@ watch(showModal, (val) => {
 </template>
 
 <style lang="less" scoped>
-.add{
-  width:30px;
-  height:30px;
+.add {
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
-  padding:10px;
+  padding: 10px;
   justify-content: center;
-  .line{
-    width:1px;
-    height:25px;
+
+  .line {
+    width: 1px;
+    height: 25px;
     background-color: var(--n-icon-color);
   }
-  >div:nth-child(2){
+
+  > div:nth-child(2) {
     background-color: var(--n-icon-color);
     transform: rotate(90deg);
   }

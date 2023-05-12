@@ -7,24 +7,24 @@
         ref="formRef"
         :model="model"
         :rules="rules"
-        label-placement="left"
-        label-width="auto"
-        require-mark-placement="right-hanging"
         :style="{
           width: '640px'
         }"
+        label-placement="left"
+        label-width="auto"
+        require-mark-placement="right-hanging"
       >
-        <n-form-item label="昵称：" required path="nickname">
+        <n-form-item label="昵称：" path="nickname" required>
           <n-input v-model:value="model.nickname" placeholder="请输入昵称" />
         </n-form-item>
         <n-form-item label="介绍：" path="textareaValue">
           <n-input
             v-model:value="model.signature"
-            type="textarea"
             :autosize="{
               minRows: 3,
               maxRows: 5
             }"
+            type="textarea"
           />
         </n-form-item>
 
@@ -75,18 +75,18 @@
             </div>
           </div>
         </n-form-item>
-        <n-form-item label="提交：" class="submitFormItem">
+        <n-form-item class="submitFormItem" label="提交：">
           <div style="display: flex; justify-content: flex-end">
             <n-button
-              size="large" round type="primary"
-              :loading="btnSaveLoading"
-              :disabled="btnSaveDisabled"
+              :disabled="btnSaveDisabled" :loading="btnSaveLoading" round
+              size="large"
+              type="primary"
               @click="handleValidateButtonClick"
             >
               保存
             </n-button>
             <n-button
-              size="large" class="ml-4" round
+              class="ml-4" round size="large"
               @click="router.back()"
             >
               取消
@@ -96,9 +96,9 @@
       </n-form>
       <div class="flex flex-col items-center ml-40">
         <n-image
-          width="200"
-          class="rounded-md"
           :src="avatarUrl"
+          class="rounded-md"
+          width="200"
         />
         <n-button :loading="updateAvatarLoading" class="mt-8" @click="handleAvatarButtonClick">
           修改头像
@@ -113,22 +113,22 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, toRaw, watch } from 'vue';
-import { compareObject, generalTimeOptions, getDayOptions, getImgSize } from '@/utils';
-import type { FormInst } from 'naive-ui';
-import { useRouter } from 'vue-router';
+<script lang="ts" setup>
+import {ref, toRaw, watch} from 'vue';
+import {compareObject, generalTimeOptions, getDayOptions, getImgSize} from '@/utils';
+import type {FormInst} from 'naive-ui';
+import {useRouter} from 'vue-router';
 import regionList from '@/assets/js/region.json';
-import { useMainStore } from '@/stores/main';
-import { updateUserAvatar, updateUserInfo } from '@/service';
-import type { AnyObject } from 'env';
+import {useMainStore} from '@/stores/main';
+import {updateUserAvatar, updateUserInfo} from '@/service';
+import type {AnyObject} from 'env';
 
 const rules = {
   nickname: {
     required: true,
     trigger: ['blur', 'input'],
     message: '请输入昵称'
-  
+
   }
 };
 const indexMap = new Map();
@@ -151,7 +151,7 @@ const yearOption = generalTimeOptions(
 );
 const monthOption = generalTimeOptions(
   1, 12, '月'
-); 
+);
 let isInit = false;
 const formRef = ref<FormInst | null>(null);
 const mainStore = useMainStore();
@@ -163,12 +163,12 @@ const profile = mainStore.userProfile?.profile;
 const avatarUrl = ref(profile?.avatarUrl);
 
 const model = ref<{
-  nickname: string,
-  signature: string,
-  gender:number;
-  birthday: number|string,
-  province: number|string,
-  city: number|string,
+    nickname: string,
+    signature: string,
+    gender: number;
+    birthday: number | string,
+    province: number | string,
+    city: number | string,
 }>({
   nickname: profile.nickname,
   signature: profile.signature,
@@ -177,12 +177,19 @@ const model = ref<{
   province: '',
   city: ''
 });
-let rawModel: { nickname: string; signature: string; gender: number; birthday: string | number; province: string | number; city: string | number; };
+let rawModel: {
+    nickname: string;
+    signature: string;
+    gender: number;
+    birthday: string | number;
+    province: string | number;
+    city: string | number;
+};
 
 const birthday = ref<{
-  year:string|number,
-  month: string|number,
-  day: string|number
+    year: string | number,
+    month: string | number,
+    day: string | number
 }>({
   year: '',
   month: '',
@@ -233,7 +240,7 @@ const initData = () => {
   };
   model.value.birthday = profile.birthday;
   let province = regionList[indexMap.get(profile.province)];
-  
+
   model.value.province = province.value;
   cityOption.value = province.cityList;
 
@@ -248,14 +255,13 @@ const changeModelBirthday = () => {
     +birthday.value.month - 1,
     +birthday.value.day
   );
-  let timestamp = date.getTime();
-  model.value.birthday = timestamp;
+  model.value.birthday = date.getTime();
 };
 initData();
-      
+
 const handleValidateButtonClick = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors:any) => {
+  formRef.value?.validate((errors: any) => {
     if (!errors) {
       let params = { ...toRaw(model.value) };
       // 如果为直辖市或者特别行政区
@@ -272,16 +278,16 @@ const handleValidateButtonClick = (e: MouseEvent) => {
           window.$message.success('修改个人资料成功!');
           // 保存成功更新原始数据
           rawModel = JSON.parse(JSON.stringify(toRaw(model.value)));
-          mainStore.userProfile!.profile = {
-            ...mainStore.userProfile!.profile,
-            ...params
-          };
-          localStorage.userProfile = JSON.stringify(toRaw(mainStore.userProfile));
-          btnSaveDisabled.value = true;
-          btnSaveLoading.value = false;
+                    mainStore.userProfile!.profile = {
+                      ...mainStore.userProfile!.profile,
+                      ...params
+                    };
+                    localStorage.userProfile = JSON.stringify(toRaw(mainStore.userProfile));
+                    btnSaveDisabled.value = true;
+                    btnSaveLoading.value = false;
         }
       });
-      
+
     } else {
       window.$message.error('验证失败');
     }
@@ -303,15 +309,15 @@ const handleFileChange = async (event: Event) => {
         window.$message.success('修改头像成功!');
         updateAvatarLoading.value = false;
         avatarUrl.value = res.data.data.url;
-        mainStore.userProfile!.profile.avatarUrl = res.data.data.url;
-        localStorage.userProfile = JSON.stringify(toRaw(mainStore.userProfile));
+                mainStore.userProfile!.profile.avatarUrl = res.data.data.url;
+                localStorage.userProfile = JSON.stringify(toRaw(mainStore.userProfile));
       }
     });
   }
 };
 </script>
 <style scoped>
-:deep(.submitFormItem>.n-form-item-label){
-  opacity: 0;
+:deep(.submitFormItem>.n-form-item-label) {
+    opacity: 0;
 }
 </style>

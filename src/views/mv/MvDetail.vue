@@ -1,17 +1,17 @@
-<script setup lang="ts">
-import { getMvDetail, getSimiMv, getSingerSong, getVideoUrl, getMvComment, sendComment } from '@/service';
-import { ref, reactive, watch, onMounted, onUnmounted } from 'vue';
-import { formateSongsAuthor, formateNumber, getArrLast } from '@/utils';
-import { useRoute, useRouter } from 'vue-router';
-import VideoPlayer, { type VideoPlayerExpose } from '@/components/Base/VideoPlayer.vue';
-import type { AnyObject } from 'env';
+<script lang="ts" setup>
+import {getMvComment, getMvDetail, getSimiMv, getSingerSong, getVideoUrl, sendComment} from '@/service';
+import {onMounted, onUnmounted, reactive, ref, watch} from 'vue';
+import {formatNumber, formatSongsAuthor, getArrLast} from '@/utils';
+import {useRoute, useRouter} from 'vue-router';
+import VideoPlayer, {type VideoPlayerExpose} from '@/components/Base/VideoPlayer.vue';
+import type {AnyObject} from 'env';
 import CommentList from '@/components/CommentList/CommentList.vue';
-import { useMainStore } from '@/stores/main';
-import { userCheckLogin } from '@/hook/useCheckLogin';
+import {useMainStore} from '@/stores/main';
+import {userCheckLogin} from '@/hook/useCheckLogin';
 
 const route = useRoute();
 let mvid = ref(route.params.id);
-let backTopEle:HTMLElement;
+let backTopEle: HTMLElement;
 const loadingMaps = reactive({
   mvUrlLoading: true,
   myDetailLoading: true,
@@ -35,7 +35,7 @@ const commentContent = ref('');
 const commentBtnLoading = ref(false);
 const router = useRouter();
 const mainStore = useMainStore();
-const getMvVideoUrl = (mvId:number=+mvid.value, setReloadLoading=false) => {
+const getMvVideoUrl = (mvId: number = +mvid.value, setReloadLoading = false) => {
   getVideoUrl(+mvId).then(res => {
     mvUrl.value = res.data.data.url;
     if (!loadingMaps.reloadLoading) {
@@ -46,26 +46,26 @@ const getMvVideoUrl = (mvId:number=+mvid.value, setReloadLoading=false) => {
     }
   });
 };
-const getSimiMvList = (mvId:number=+mvid.value) => {
+const getSimiMvList = (mvId: number = +mvid.value) => {
   getSimiMv(mvId).then(res => {
     simiMvList.value = res.data.mvs;
     !loadingMaps.reloadLoading && (loadingMaps.simiMvLoading = false);
   });
 };
-const getMvDetailInfo = (mvId:number=+mvid.value) => {
+const getMvDetailInfo = (mvId: number = +mvid.value) => {
   getMvDetail(+mvId).then(res => {
     mvDetail.value = res.data.data;
     !loadingMaps.reloadLoading && (loadingMaps.myDetailLoading = false);
     getSingerSongInfo(res.data.data.artistId);
   });
 };
-const getSingerSongInfo = (id:number) => {
+const getSingerSongInfo = (id: number) => {
   getSingerSong(id).then((res) => {
     authorInfo.value = res.data.artist;
     !loadingMaps.reloadLoading && (loadingMaps.authorInfoLoading = false);
   });
 };
-const getMvCommentInfo = (mvId:string=mvid.value.toString()) => {
+const getMvCommentInfo = (mvId: string = mvid.value.toString()) => {
   !loadingMaps.reloadLoading && (loadingMaps.commentLoading = true);
   let params = {
     id: mvId,
@@ -91,11 +91,11 @@ const init = () => {
 };
 
 init();
-const handleImgClick = async (id:number) => {
+const handleImgClick = async (id: number) => {
   videoPlayRef.value?.stop();
-  router.push(`/mv/${id}`);
+  await router.push(`/mv/${id}`);
 };
-watch(() => route.path, (val:string) => {
+watch(() => route.path, (val: string) => {
   if (route.path.includes('mv')) {
     reloadMvData();
   }
@@ -116,11 +116,11 @@ watch(pageParams, () => {
   backTopEle && backTopEle.click();
   getMvCommentInfo();
 });
-const updateCommentList = (value:any) => {
+const updateCommentList = (value: any) => {
   mvComment.value.total += 1;
   mvComment.value.comments.unshift(value);
 };
-const updateCommentLiked = (data:{liked:boolean, index:number}, isHot:boolean) => {
+const updateCommentLiked = (data: { liked: boolean, index: number }, isHot: boolean) => {
   let { index, liked } = data;
   if (isHot) {
     mvComment.value.hotComments[index].liked = liked;
@@ -183,24 +183,24 @@ onUnmounted(() => {
           </div>
           <n-spin :show="loadingMaps.reloadLoading">
             <video-player
-              v-show="loadingMaps.mvUrlLoading === false" ref="videoPlayRef" :url="mvUrl"
-              :poster="mvDetail.cover"
+              v-show="loadingMaps.mvUrlLoading === false" ref="videoPlayRef" :poster="mvDetail.cover"
+              :url="mvUrl"
             />
           </n-spin>
-           
+
           <div v-if="!loadingMaps.authorInfoLoading">
             <!-- 歌手信息 -->
             <div class="flex items-center mt-5">
               <n-avatar
-                round
                 :size="75"
                 :src="authorInfo.picUrl"
+                round
               />
               <div class="ml-4">
                 <p class=" text-lg">
                   {{ authorInfo.name }}
                 </p>
-                <n-ellipsis class="max-w-2xl text-xs opacity-60" :line-clamp="2">
+                <n-ellipsis :line-clamp="2" class="max-w-2xl text-xs opacity-60">
                   {{ authorInfo.briefDesc }}
                 </n-ellipsis>
               </div>
@@ -215,7 +215,7 @@ onUnmounted(() => {
                   发布：{{ mvDetail.publishTime }}
                 </span>
                 <span class="ml-6">
-                  播放：{{ formateNumber(mvDetail.playCount) }}
+                  播放：{{ formatNumber(mvDetail.playCount) }}
                 </span>
               </div>
             </div>
@@ -223,24 +223,24 @@ onUnmounted(() => {
           <div v-else>
             <!-- 歌手信息 -->
             <div class="flex items-center mt-5">
-              <n-skeleton width="70px" height="75px" circle />
+              <n-skeleton circle height="75px" width="70px" />
               <div class="flex flex-col ml-4">
                 <n-skeleton text width="80px" />
-                <n-skeleton text width="600px" class="mt-2" />
+                <n-skeleton class="mt-2" text width="600px" />
               </div>
             </div>
             <!-- mv详情 -->
             <div class="mt-8">
-              <n-skeleton width="450px" text />
+              <n-skeleton text width="450px" />
               <div class="flex mt-6 text-xs opacity-60">
-                <n-skeleton width="100px" text />
-                <n-skeleton width="100px" class="ml-6" text />
+                <n-skeleton text width="100px" />
+                <n-skeleton class="ml-6" text width="100px" />
               </div>
             </div>
           </div>
           <div v-show="loadingMaps.commentLoading">
             <div v-for="item in 15" :key="item" class="flex mt-5">
-              <n-skeleton circle width="50px" height="50px" />
+              <n-skeleton circle height="50px" width="50px" />
               <div class="flex-1 pb-5 ml-4">
                 <n-skeleton text />
                 <n-skeleton text />
@@ -258,8 +258,8 @@ onUnmounted(() => {
               <span class="text-sm opacity-60">({{ mvComment.total }})</span>
             </p>
             <n-input
-              v-model:value="commentContent" maxlength="140" :show-count="true"
-              class="mt-5 h-32" type="textarea"
+              v-model:value="commentContent" :show-count="true" class="mt-5 h-32"
+              maxlength="140" type="textarea"
             />
             <div class="flex justify-end mt-4">
               <n-button :loading="commentBtnLoading" type="primary" @click="handleCommentClick">
@@ -268,14 +268,14 @@ onUnmounted(() => {
             </div>
             <!-- 精彩评论 -->
             <comment-list
-              :resource-id="+mvid" title="精彩评论" :list="mvComment.hotComments || []"
+              :list="mvComment.hotComments || []" :resource-id="+mvid" title="精彩评论"
               @update-comment-list="updateCommentList"
               @update-comment-liked="(data:any) => updateCommentLiked(data,true)"
             />
             <!-- 最新评论 -->
             <comment-list
-              :resource-id="+mvid"
-              :comment-total-num="mvComment.total" title="最新评论" :list="mvComment.comments || []"
+              :comment-total-num="mvComment.total"
+              :list="mvComment.comments || []" :resource-id="+mvid" title="最新评论"
               @update-comment-list="updateCommentList"
               @update-comment-liked="(data:any) => updateCommentLiked(data,false)"
             />
@@ -283,11 +283,11 @@ onUnmounted(() => {
           <!-- 分页 -->
           <div v-if="pageParams.pageCount > 1" class="flex justify-end mt-6">
             <n-pagination
-              v-model:page="pageParams.page" 
-              v-model:page-size="pageParams.pageSize" 
-              :page-count="pageParams.pageCount" 
-              show-size-picker
+              v-model:page="pageParams.page"
+              v-model:page-size="pageParams.pageSize"
+              :page-count="pageParams.pageCount"
               :page-sizes="[10, 20, 30, 40,50]"
+              show-size-picker
             />
           </div>
         </div>
@@ -299,8 +299,8 @@ onUnmounted(() => {
         <div v-if="simiMvList.length">
           <div v-for="item in simiMvList" :key="item.id" class="group flex mt-4">
             <mv-list-img-item
-              :is-to-detail="false" :item="item" height="6vw"
-              class-name="w-48"
+              :is-to-detail="false" :item="item" class-name="w-48"
+              height="6vw"
               @handle-img-click="handleImgClick"
             />
             <div class="flex flex-col justify-center ml-4 w-48">
@@ -308,16 +308,16 @@ onUnmounted(() => {
                 {{ item.name }}
               </n-ellipsis>
               <n-ellipsis class="opacity-60">
-                buy {{ formateSongsAuthor(item.artists) }}
+                buy {{ formatSongsAuthor(item.artists) }}
               </n-ellipsis>
             </div>
           </div>
         </div>
         <div v-else>
           <div v-for="item in 5" :key="item" class="flex mt-4">
-            <n-skeleton width="204px" height="6vw" class="rounded-md" />
+            <n-skeleton class="rounded-md" height="6vw" width="204px" />
             <div class="flex flex-col justify-center ml-4 w-48">
-              <n-skeleton text :repeat="2" class="mt-2" />
+              <n-skeleton :repeat="2" class="mt-2" text />
             </div>
           </div>
         </div>
@@ -327,8 +327,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.title{
-  @apply text-lg font-bold;
+.title {
+    @apply text-lg font-bold;
 }
 
 </style>

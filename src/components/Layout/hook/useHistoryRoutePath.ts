@@ -1,5 +1,5 @@
-import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import {ref, watch} from 'vue';
+import {useRoute} from 'vue-router';
 
 export function userHistory() {
   const route = useRoute();
@@ -10,7 +10,7 @@ export function userHistory() {
     backPath.value = history.state.back;
     forwardPath.value = history.state.forward;
   });
-  
+
   return {
     backPath,
     forwardPath

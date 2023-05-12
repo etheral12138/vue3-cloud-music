@@ -1,7 +1,6 @@
-
-export function parseLyric(lrc:string): LineItem[] {
+export function parseLyric(lrc: string): LineItem[] {
   const lyrics = lrc.split('\n');
-  const lrcObj:LineItem[] = [];
+  const lrcObj: LineItem[] = [];
   for (let i = 0; i < lyrics.length; i++) {
     const lyric = decodeURIComponent(lyrics[i]);
     const timeReg = /\[\d*:\d*((\.|:)\d*)*\]/g;
@@ -20,7 +19,8 @@ export function parseLyric(lrc:string): LineItem[] {
   }
   return lrcObj;
 }
-export function parseRangeLyric(lyricList:LineItem[]) {
+
+export function parseRangeLyric(lyricList: LineItem[]) {
   const map = new Map<number, RangeLyricItem>();
   let currentIndex = 0;
   let nextIndex = 1;
@@ -53,11 +53,13 @@ export function parseRangeLyric(lyricList:LineItem[]) {
   }
   return map;
 }
-export interface LineItem{
-  time:number;
-  content:string;
-  translateContent?:string;
+
+export interface LineItem {
+    time: number;
+    content: string;
+    translateContent?: string;
 }
-export interface RangeLyricItem extends LineItem{
-  index:number;
+
+export interface RangeLyricItem extends LineItem {
+    index: number;
 }

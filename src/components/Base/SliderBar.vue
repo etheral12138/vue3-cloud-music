@@ -1,26 +1,27 @@
-<script setup lang="ts">
-import { useElementHover } from '@vueuse/core';
-import { useThemeVars } from 'naive-ui';
-import { onMounted, onUnmounted, ref } from 'vue';
+<script lang="ts" setup>
+import {useElementHover} from '@vueuse/core';
+import {useThemeVars} from 'naive-ui';
+import {onMounted, onUnmounted, ref} from 'vue';
+
 const props = withDefaults(defineProps<{
-  modelValue:number;  
-  loadValue?:number;
-  width?:number;
-  height?:number;
+    modelValue: number;
+    loadValue?: number;
+    width?: number;
+    height?: number;
 }>(), { width: 500, height: 4, loadValue: 0 });
 let isTargetClick = ref(false);
 let startWidth = props.width * (props.modelValue / 100);
-const mousePosition = { y: 0, x: 0 };// 鼠标坐标 
+const mousePosition = { y: 0, x: 0 };// 鼠标坐标
 const moveDiff = { x: 0, y: 0 };// 移动距离
 const themeVars = useThemeVars();
 const target = ref();
 const isHover = useElementHover(target);
 const emit = defineEmits(['update:modelValue', 'change', 'onDone']);
 
-const calcPercentage = (value:number) => {
+const calcPercentage = (value: number) => {
   return Math.round((value / props.width) * 100);
 };
-const handleSliderMouseDown = (e:MouseEvent) => {
+const handleSliderMouseDown = (e: MouseEvent) => {
   let target = e.target as HTMLElement;
   if (target.classList.contains('dot') && isTargetClick) return;
   if (isTargetClick.value) return;
@@ -32,13 +33,13 @@ const handleSliderMouseDown = (e:MouseEvent) => {
   emit('onDone');
 };
 // 在小圆点下按下鼠标
-const handleDotMouseDown = (e:MouseEvent) => {
+const handleDotMouseDown = (e: MouseEvent) => {
   isTargetClick.value = true;
   mousePosition.x = e.clientX;
   moveDiff.x = 0;
 };
-  // 移动鼠标
-const handleMouseMove = (e:MouseEvent) => {
+// 移动鼠标
+const handleMouseMove = (e: MouseEvent) => {
   if (!isTargetClick.value) return;
   moveDiff.x += e.clientX - mousePosition.x;
   if (moveDiff.x > 0) {
@@ -58,16 +59,16 @@ const handleMouseMove = (e:MouseEvent) => {
   }
   mousePosition.x = e.clientX;
 };
- 
+
 // 鼠标抬起
-const handleMouseUp = (e:MouseEvent) => {
+const handleMouseUp = (e: MouseEvent) => {
   if (!isTargetClick.value) return;
   isTargetClick.value = false;
   startWidth = getProgressWidth(props.modelValue);
   emit('change');
   emit('onDone');
 };
-const getProgressWidth = (percentage:number) => props.width * (percentage / 100);
+const getProgressWidth = (percentage: number) => props.width * (percentage / 100);
 onMounted(() => {
   window.addEventListener('mousemove', handleMouseMove);
   window.addEventListener('mouseup', handleMouseUp);
@@ -88,12 +89,19 @@ onUnmounted(() => {
       class="relative bg-gray-200 dark:bg-gray-200/50 rounded-md transition-transform"
     >
       <!-- 加载进度条 -->
-      <div class="absolute top-0 h-full bg-gray-300 dark:bg-gray-300/50 rounded-md transition-all" :style="{width:loadValue+'%'}" />
+      <div
+        :style="{width:loadValue+'%'}"
+        class="absolute top-0 h-full bg-gray-300 dark:bg-gray-300/50 rounded-md transition-all"
+      />
       <!-- 播放进度条 -->
-      <div class="absolute top-0 h-full rounded-md transition-transform" :style="{background:themeVars.primaryColor, width:modelValue+'%'}" />
+      <div
+        :style="{background:themeVars.primaryColor, width:modelValue+'%'}"
+        class="absolute top-0 h-full rounded-md transition-transform"
+      />
       <!-- 小圆点 -->
       <div
-        v-show="isHover || isTargetClick" class="dot" :style="{'background-color': themeVars.primaryColor,left:modelValue+'%'}"
+        v-show="isHover || isTargetClick" :style="{'background-color': themeVars.primaryColor,left:modelValue+'%'}"
+        class="dot"
         @mousedown="handleDotMouseDown"
       />
       <div />
@@ -102,13 +110,13 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.dot{
-  position:absolute;
-  width:8px;
-  height:8px;
-  border-radius: 50%;
-  top:-2px;
-  transform: scaleX(1.5);
-  cursor: pointer;
+.dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    top: -2px;
+    transform: scaleX(1.5);
+    cursor: pointer;
 }
 </style>

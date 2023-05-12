@@ -1,12 +1,12 @@
-import { isEven } from '@/utils';
-import { useThemeVars } from 'naive-ui';
-import { computed, type CSSProperties } from 'vue';
+import {isEven} from '@/utils';
+import {useThemeVars} from 'naive-ui';
+import {computed, type CSSProperties} from 'vue';
 
-export default function useThemeStyle(otherStyle?:CSSProperties) {
+export default function useThemeStyle(otherStyle?: CSSProperties) {
   const themeVars = useThemeVars();
   const tableStripedStyle = computed(() => {
-    return (index:number) => {
-      let value:CSSProperties = {
+    return (index: number) => {
+      let value: CSSProperties = {
         background: isEven(index)
           ? themeVars.value.tableColorStriped
           : themeVars.value.tableColor
@@ -29,16 +29,16 @@ export default function useThemeStyle(otherStyle?:CSSProperties) {
   const primaryColor = computed(() => {
     return themeVars.value.primaryColor;
   });
-  const stripedClass = computed(() => {
-    return (index:number) => {
-      let classes = '';
-      if (isEven(index)) {
-        classes = 'bg-white hover:bg-gray-100 dark:bg-black/50 dark:hover:bg-gray-200/10';
-      } else {
-        classes = 'bg-gray-50 hover:bg-gray-100 dark:bg-black dark:hover:bg-gray-200/10';
-      }
-      return classes;
-    };
-  });
-  return { tableStripedStyle, themeVars, tagColor, baseColor, primaryColor, stripedClass };
+  // const stripedClass = computed(() => {
+  //   return (index: number) => {
+  //     let classes = '';
+  //     if (isEven(index)) {
+  //       classes = 'hover:bg-green-500 hover:bg-opacity-20';
+  //     } else {
+  //       classes = 'hover:bg-green-500 hover:bg-opacity-20';
+  //     }
+  //     return classes;
+  //   };
+  // });
+  return { tableStripedStyle, themeVars, tagColor, baseColor, primaryColor };
 }

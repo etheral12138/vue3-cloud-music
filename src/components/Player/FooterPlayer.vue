@@ -1,25 +1,34 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import StopIcon from '@/components/Icon/StopIcon.vue';
 import OrderPlay from '@/components/Icon/OrderPlay.vue';
 import RandomIcon from '@/components/Icon/RandomIcon.vue';
 import SingleLoop from '@/components/Icon/SingleLoop.vue';
-import { formateSongsAuthor } from '@/utils';
-import { List } from '@vicons/ionicons5';
+import {formatSongsAuthor} from '@/utils';
+import {List} from '@vicons/ionicons5';
 import {
-  SkipPreviousSharp, SkipNextSharp,
-  PlayArrowSharp, VolumeUpRound,
-  KeyboardArrowDownOutlined,
-  VolumeOffRound, KeyboardArrowUpOutlined, AddBoxOutlined
+    AddBoxOutlined,
+    KeyboardArrowDownOutlined,
+    KeyboardArrowUpOutlined,
+    PlayArrowSharp,
+    SkipNextSharp,
+    SkipPreviousSharp,
+    VolumeOffRound,
+    VolumeUpRound
 } from '@vicons/material';
-import { useThemeVars } from 'naive-ui';
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
-import { useMainStore } from '@/stores/main';
+import {useThemeVars} from 'naive-ui';
+import {computed, nextTick, onMounted, onUnmounted, ref, watch} from 'vue';
+import {useMainStore} from '@/stores/main';
 import dayjs from 'dayjs';
-import type { PlayListExpose } from './PlayList.vue';
-import { useElementHover } from '@vueuse/core';
-import obverser from '@/utils/obverser';
-import type { HeartIconExpose } from '../common/HeartIcon.vue';
-import { useAudioLoadProgress } from './hook/useAudioLoadProgress';
+import type {PlayListExpose} from './PlayList.vue';
+import {useElementHover} from '@vueuse/core';
+import observer from '@/utils/observer';
+import type {HeartIconExpose} from '../common/HeartIcon.vue';
+import {useAudioLoadProgress} from './hook/useAudioLoadProgress';
+import HeartIcon from '@/components/common/HeartIcon.vue';
+import PlayList from '@/components/Player/PlayList.vue';
+import MusicDetail from '@/components/Player/MusicDetail.vue';
+import SubscribePlayListModal from '@/components/common/SubscribePlayListModal.vue';
+import SliderBar from '@/components/Base/SliderBar.vue';
 
 let slideValueChange = false;// 记录slider值是否手动发生了改变
 let triggerOriginalAudioTimeUpdate = true;
@@ -30,7 +39,7 @@ const mainStore = useMainStore();
 const triggerRef = ref();
 const isHover = useElementHover(triggerRef);
 const heardLikeRef = ref<HeartIconExpose>();
-const subscribeModalRef = ref<{show:() => void}>();
+const subscribeModalRef = ref<{ show: () => void }>();
 let isLoad = false;
 // audio元素
 const audioRef = ref<HTMLAudioElement>();
@@ -65,16 +74,16 @@ const activeStyle = computed(() => {
   }
   return { transform: transformStyle };
 });
-const loadCurrentPrevAndNext = async (val:any) => {
+const loadCurrentPrevAndNext = async (val: any) => {
   if (!val) return;
   // 加载上一首和下一首的歌曲url
-  let next = mainStore.playList[val.nextIndex];
-  let prev = mainStore.playList[val.prevIndex];
+  let next = mainStore.playList[val.nextIndex] as any;
+  let prev = mainStore.playList[val.prevIndex] as any;
   if (!next.url) {
-    mainStore.setMusicData({ data: mainStore.playList, id: next.id, index: val.nextIndex, showMessage: false });
+    await mainStore.setMusicData({ data: mainStore.playList, id: next.id, index: val.nextIndex, showMessage: false });
   }
   if (!prev.url) {
-    mainStore.setMusicData({ data: mainStore.playList, id: next.id, index: val.prevIndex, showMessage: false });
+    await mainStore.setMusicData({ data: mainStore.playList, id: next.id, index: val.prevIndex, showMessage: false });
   }
   localStorage.playList = JSON.stringify(mainStore.playList);
 };
@@ -119,7 +128,7 @@ const resetState = () => {
   currentPlayTime.value = '00:00';
   percentage.value = 0;
   progressValue.value = 0;
-  audioRef.value!.currentTime = 0;
+    audioRef.value!.currentTime = 0;
 };
 // 切换播放状态
 const togglePlayStatus = async () => {
@@ -139,22 +148,22 @@ const tryPlay = () => {
 const handleEnded = () => {
   // 如果为单曲循环模式,则重新播放
   if (mainStore.playMode === 'singleLoop') {
-    audioRef.value!.currentTime = 0;
-    audioRef.value?.play();
+        audioRef.value!.currentTime = 0;
+        audioRef.value?.play();
   } else {
     mainStore.toggleNext();
   }
-  obverser.emit('ended');
+  observer.emit('ended');
 };
 // 播放进度变化
-const handleTimeupdate = (event:Event) => {
+const handleTimeupdate = (event: Event) => {
   if (triggerOriginalAudioTimeUpdate) {
     const target = event.target as HTMLAudioElement;
     updatePlayTime(target.currentTime);
   }
 };
 
-const updatePlayTime = async (time:number, triggerPlay=false) => {
+const updatePlayTime = async (time: number, triggerPlay = false) => {
   // 如果当前滑动条正在改变,则不设置对应的值, 避免冲突
   if (!slideValueChange) {
     currentPlayTime.value = dayjs(time * 1000).format('mm:ss');
@@ -164,10 +173,10 @@ const updatePlayTime = async (time:number, triggerPlay=false) => {
     tryPlay();
     await nextTick();
     if (audioRef.value) {
-      audioRef.value!.currentTime = time;
+            audioRef.value!.currentTime = time;
     }
-  } 
-  obverser.emit('timeUpdate', Math.round(time));
+  }
+  observer.emit('timeUpdate', Math.round(time));
 };
 // 媒体的第一帧加载完成
 const handleLoadeddata = () => {
@@ -189,7 +198,11 @@ const handleError = async () => {
     window.$message.warning('歌曲资源过期,准备尝试重新获取');
     if (isLoad) return;
     isLoad = true;
-    const res = await mainStore.setMusicData({ data: mainStore.playList, id: mainStore.currentPlaySong.id, index: mainStore.currentPlayIndex });
+    const res = await mainStore.setMusicData({
+      data: mainStore.playList,
+      id: mainStore.currentPlaySong.id,
+      index: mainStore.currentPlayIndex
+    });
     localStorage.playList = JSON.stringify(mainStore.playList);
     isLoad = false;
     // 重新加载资源
@@ -207,11 +220,11 @@ const handleSliderDone = () => {
   triggerOriginalAudioTimeUpdate = false;
   let currentTime = (currentSong.value?.dt * percentage.value) / 100;
   currentPlayTime.value = dayjs(currentTime).format('mm:ss');
-  audioRef.value!.currentTime = currentTime / 1000;
-  slideValueChange = false;
-  obverser.emit(
-    'slideValueChange', Math.round(currentTime / 1000), true
-  );
+    audioRef.value!.currentTime = currentTime / 1000;
+    slideValueChange = false;
+    observer.emit(
+      'slideValueChange', Math.round(currentTime / 1000), true
+    );
 };
 const handleSliderChange = () => {
   slideValueChange = true;
@@ -219,10 +232,10 @@ const handleSliderChange = () => {
   currentPlayTime.value = dayjs(currentTime).format('mm:ss');
 };
 // 音量滑动选择器监听回调
-const handleVolumeChange = (value:number) => {
+const handleVolumeChange = (value: number) => {
   localStorage.volume = value;
   volume.value = value;
-  audioRef.value!.volume = volume.value / 100;
+    audioRef.value!.volume = volume.value / 100;
 };
 // 点击音量选择,切换静音
 const handleVolumeClick = () => {
@@ -233,7 +246,7 @@ const handleVolumeClick = () => {
     volume.value = 100;
     localStorage.volume = 100;
   }
-   audioRef.value!.volume = volume.value / 100;
+    audioRef.value!.volume = volume.value / 100;
 };
 // 点击切换播放模式
 const handlePlayModeClick = () => {
@@ -250,7 +263,7 @@ const handlePlayModeClick = () => {
   }
 };
 // 点击空格播放
-const handlePressSpace = (e:KeyboardEvent) => {
+const handlePressSpace = (e: KeyboardEvent) => {
   // e.preventDefault();
   if (e.code === 'Space' && mainStore.currentPlaySong) {
     togglePlayStatus();
@@ -260,7 +273,7 @@ const handlePressSpace = (e:KeyboardEvent) => {
 const handleArrowClick = () => {
   mainStore.toggleShowMusicDetail();
 };
-const likeSuccess = (like:boolean) => {
+const likeSuccess = (like: boolean) => {
   mainStore.updatePlayListLike(like);
 };
 const handleLikeHeartClick = () => {
@@ -268,10 +281,10 @@ const handleLikeHeartClick = () => {
 };
 onMounted(() => {
   document.body.addEventListener('keypress', handlePressSpace);
-  obverser.on('selectLyricPlay', (time) => {
+  observer.on('selectLyricPlay', (time) => {
     updatePlayTime(time, true);
   });
-  obverser.on('scrollComplete', () => {
+  observer.on('scrollComplete', () => {
     triggerOriginalAudioTimeUpdate = true;
   });
 });
@@ -280,20 +293,20 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div class="flex z-30 items-center p-2 footer-player">
+  <div class="flex relative z-30 items-center p-2 footer-player">
     <div v-if="isShow" class="overflow-hidden w-60 h-12">
       <div :style="activeStyle" class="open-detail-control-wrap">
         <div class="flex items-center w-40 h-full">
           <div ref="triggerRef" class="relative" @click="handleArrowClick">
             <n-image
-              class="w-12 h-12"
-              :src="currentSong?.al?.picUrl"
               :preview-disabled="true"
+              :src="currentSong?.al?.picUrl"
               :style="{filter:isHover ? 'blur(1px)' : 'none'}"
+              class="w-12 h-12"
             />
             <transition v-show="isHover" name="fade">
               <div class="absolute top-0 left-0 z-10 w-12  h-12 bg-black/60 flex-items-justify-center">
-                <n-icon :component="KeyboardArrowUpOutlined" size="35" color="white" />
+                <n-icon :component="KeyboardArrowUpOutlined" color="white" size="35" />
               </div>
             </transition>
           </div>
@@ -303,66 +316,73 @@ onUnmounted(() => {
                 {{ currentSong?.name }}
               </n-ellipsis>
               <heart-icon
-                :id="mainStore.currentPlaySong.id" class="ml-2" :like="mainStore.currentPlaySong.like"
+                :id="mainStore.currentPlaySong.id" :like="mainStore.currentPlaySong.like"
+                class="ml-2"
                 @like-success="likeSuccess"
-              /> 
+              />
             </p>
             <n-ellipsis>
-              <p>{{ formateSongsAuthor(currentSong?.ar || []) }}</p>
+              <p>{{ formatSongsAuthor(currentSong?.ar || []) }}</p>
             </n-ellipsis>
           </div>
         </div>
-        <div class="flex items-center h-12">
+        <div class="flex items-center ml-1 h-12">
           <n-icon
-            size="35" :component="KeyboardArrowDownOutlined" class="ml-4"
+            :component="KeyboardArrowDownOutlined" size="45"
             @click="mainStore.setShowMusicDetail(false)"
           />
-          <div class="ml-4">
+          <div class="ml-2">
             <div class="circleContainer" @click="handleLikeHeartClick">
               <heart-icon
                 :id="mainStore.currentPlaySong.id"
                 ref="heardLikeRef" :like="mainStore.currentPlaySong.like"
                 :size="25" :trigger-click="true" @like-success="likeSuccess"
-              /> 
+              />
             </div>
           </div>
-          <div class="ml-4 circleContainer" @click="subscribeModalRef?.show()">
+          <div class="ml-2 circleContainer" @click="subscribeModalRef?.show()">
             <n-icon :component="AddBoxOutlined" :size="20" />
           </div>
         </div>
       </div>
     </div>
     <div :style="{opacity:isShow ? '1' : '0.6'}" class="flex flex-col flex-1 items-center control">
-      <div v-if="!isShow" class="absolute z-50 w-full footer-player" />
-      <div style="width:300px" class="flex justify-between items-center">
+      <div v-if="!isShow" class="absolute bottom-0 z-50 w-full footer-player" />
+      <div class="flex justify-between items-center" style="width:300px">
         <n-icon
-          class="custom-icon" :size="22" :component="currentPlayModeIcon"
+          :component="currentPlayModeIcon" :size="22" class="custom-icon"
           @click="handlePlayModeClick"
         />
         <n-icon
-          class="prev custom-icon" :size="22" :component="SkipPreviousSharp"
+          :component="SkipPreviousSharp" :size="22" class="prev custom-icon"
           @click="handlePrevClick"
         />
-        <div class="flex justify-center items-center w-8 h-8  bg-neutral-200/60 hover:bg-neutral-200 dark:bg-slate-100/20 dark:hover:bg-slate-100/40 rounded-full" @click="togglePlayStatus">
-          <n-icon :size="mainStore.playing ? 14 : 20" :component="mainStore.playing ? StopIcon :PlayArrowSharp" />
+        <div
+          class="flex justify-center items-center w-8 h-8  bg-neutral-200/60 hover:bg-neutral-200 dark:bg-slate-100/20 dark:hover:bg-slate-100/40 rounded-full"
+          @click="togglePlayStatus"
+        >
+          <n-icon
+            :component="mainStore.playing ? StopIcon :PlayArrowSharp"
+            :size="mainStore.playing ? 14 : 20"
+          />
         </div>
         <n-icon
-          class="next custom-icon" :size="22" :component="SkipNextSharp"
+          :component="SkipNextSharp" :size="22" class="next custom-icon"
           @click="handleNextClick"
         />
       </div>
       <div class="flex items-center mt-1">
         <span v-if="isShow" class="mr-2 text-xs opacity-50">{{ currentPlayTime }}</span>
-        <div class="flex flex-1 items-center" :style="{width:progressWidth+'px'}">
+        <div :style="{width:progressWidth+'px'}" class="flex flex-1 items-center">
           <slider-bar
             v-model="percentage"
             :load-value="progressValue"
-            @on-done="handleSliderDone"
             @change="handleSliderChange"
+            @on-done="handleSliderDone"
           />
         </div>
         <span v-if="isShow" class="ml-2 text-xs opacity-50">
-          <n-time format="mm:ss" :time="currentSong?.dt" />
+          <n-time :time="currentSong?.dt" format="mm:ss" />
         </span>
       </div>
     </div>
@@ -373,12 +393,13 @@ onUnmounted(() => {
       >
         <template #trigger>
           <n-icon
-            :component="volume === 0 ? VolumeOffRound : VolumeUpRound" :size="25" class="mr-2 custom-icon"
+            :component="volume === 0 ? VolumeOffRound : VolumeUpRound" :size="25"
+            class="mr-2 custom-icon"
             @click="handleVolumeClick"
           />
         </template>
         <n-slider
-          :value="volume" vertical style="height:100px"
+          :value="volume" style="height:100px" vertical
           @update-value="handleVolumeChange"
         />
       </n-popover>
@@ -390,35 +411,42 @@ onUnmounted(() => {
     <audio
       ref="audioRef"
       :src="currentSong?.url"
-      preload="auto" @timeupdate="handleTimeupdate" @ended="handleEnded"
-      @playing="handlePlaying" @progress="updateBuffer" @loadeddata="handleLoadeddata"
-      @error="handleError" @waiting="handleWaiting" 
+      preload="auto" @ended="handleEnded" @error="handleError"
+      @loadeddata="handleLoadeddata" @playing="handlePlaying" @progress="updateBuffer"
+      @timeupdate="handleTimeupdate" @waiting="handleWaiting"
     />
     <play-list ref="playListRef" />
     <music-detail v-if="mainStore.currentPlaySong?.id" ref="musicDetailRef" />
-    <subscribe-play-list-modal v-if="mainStore.currentPlaySong?.id" ref="subscribeModalRef" :tracks="mainStore.currentPlaySong?.id" />
+    <subscribe-play-list-modal
+      v-if="mainStore.currentPlaySong?.id" ref="subscribeModalRef"
+      :tracks="mainStore.currentPlaySong?.id"
+    />
   </div>
 </template>
 <style scoped>
-.footer-player{
-  height: calc(100vh - 800px - 57px);
-  box-sizing: border-box;
+.footer-player {
+    height: calc(100vh - 858px);
+    box-sizing: border-box;
 }
-:deep(.custom-icon:hover){
-  color: v-bind(primaryColor);
+
+:deep(.custom-icon:hover) {
+    color: v-bind(primaryColor);
 }
-:deep(.n-icon){
-  cursor: pointer;
+
+:deep(.n-icon) {
+    cursor: pointer;
 }
-.open-detail-control-wrap{
-  transition: transform .6s ease;
+
+.open-detail-control-wrap {
+    transition: transform .6s ease;
 }
-.circleContainer{
-  @apply w-10 h-10 rounded-full border 
-  border-gray-200 
-  dark:border-gray-200/30 border-solid
-  hover:bg-gray-100
-  dark:hover:bg-gray-100/20
-   flex-items-justify-center;
+
+.circleContainer {
+    @apply w-10 h-10 rounded-full border
+    border-gray-200
+    dark:border-gray-200/30 border-solid
+    hover:bg-gray-100
+    dark:hover:bg-gray-100/20
+    flex-items-justify-center;
 }
 </style>

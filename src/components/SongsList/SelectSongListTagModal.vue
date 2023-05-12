@@ -1,15 +1,17 @@
-<script setup lang="ts">
-import { getTopPlayListTags } from '@/service';
-import { useThemeVars } from 'naive-ui';
-import { computed, ref, toRaw } from 'vue';
-export interface SelectSongListTagModalExpose{
-  show:() => void;
-  close:() => void;
-  selectTagList:any[]
+<script lang="ts" setup>
+import {getTopPlayListTags} from '@/service';
+import {useThemeVars} from 'naive-ui';
+import {computed, ref, toRaw} from 'vue';
+
+export interface SelectSongListTagModalExpose {
+    show: () => void;
+    close: () => void;
+    selectTagList: any[]
 }
+
 const props = withDefaults(defineProps<{
-  btnLoading?:boolean;
-  handleCompleteClick:(selectTagList:any[]) => void;
+    btnLoading: boolean;
+    handleCompleteClick: (selectTagList: any[]) => void;
 }>(), { btnLoading: false });
 
 defineExpose({
@@ -36,8 +38,8 @@ const fetchPlayListTags = () => {
 };
 fetchPlayListTags();
 
-const handleTagClick = (item:{checked:boolean, name:string}, index:number) => {
-  
+const handleTagClick = (item: { checked: boolean, name: string }, index: number) => {
+
   if (selectTagList.value.length === 3 && !item.checked) {
     window.$message.warning('最多可选三个标签');
     return;
@@ -61,12 +63,12 @@ const handleCompleteOnClick = () => {
   <!-- 标签选择弹窗 -->
   <n-modal v-model:show="showSelectTagModal" transform-origin="center">
     <n-card
+      :bordered="false"
+      aria-modal="true"
+      role="dialog"
+      size="medium"
       style="width: 600px"
       title="添加标签"
-      :bordered="false"
-      size="medium"
-      role="dialog"
-      aria-modal="true"
     >
       <span>
         <span class="opacity-60"> 选择合适的标签, 最多可选</span>
@@ -76,8 +78,8 @@ const handleCompleteOnClick = () => {
       <div class="flex flex-wrap mt-3">
         <n-space size="large">
           <n-tag
-            v-for="(item,index) in tagList" :key="item.id" round
-            checkable :checked="item.checked"
+            v-for="(item,index) in tagList" :key="item.id" :checked="item.checked"
+            checkable round
             @click="handleTagClick(item,index)"
           >
             {{ item.name }}

@@ -1,16 +1,18 @@
-<script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+<script lang="ts" setup>
+import {onMounted, onUnmounted, ref} from 'vue';
+
 export interface ListLoadingProps {
-  wrapHeight?: string;
-  strokeWidth?:number;
-  show?:boolean;
-  stroke?:string;
-  description?:string;
-  size?: 'small' | 'medium' | 'large';
-  rotate?:boolean;
-  loadMore?:(loadSuccess:() => void) => void;
-  noMore:boolean,
+    wrapHeight?: string;
+    strokeWidth?: number;
+    show?: boolean;
+    stroke?: string;
+    description?: string;
+    size?: 'small' | 'medium' | 'large';
+    rotate?: boolean;
+    loadMore?: (loadSuccess: () => void) => void;
+    noMore: boolean,
 }
+
 const props = withDefaults(defineProps<ListLoadingProps>(), {
   wrapHeight: '40px',
   show: true,
@@ -18,20 +20,21 @@ const props = withDefaults(defineProps<ListLoadingProps>(), {
   strokeWidth: undefined,
   stroke: undefined,
   description: '',
-  loadMore: () => {}
+  loadMore: () => {
+  }
 });
 const loadingTarget = ref<HTMLElement | null>(null);
-let loadStatus:'pending' | 'loading' | 'done' = 'pending';// 当前加载状态锁
+let loadStatus: 'pending' | 'loading' | 'done' = 'pending';// 当前加载状态锁
 let firstVisible = ref<boolean | undefined>(); // 首次显示的值
 
-let observerCallback = (entries:IntersectionObserverEntry[]) => {
+let observerCallback = (entries: IntersectionObserverEntry[]) => {
   // 没有更多数据加载 打断!
   if (props.noMore) {
     loadingTarget.value && observer.disconnect();
-    return; 
+    return;
   }
   let visible = entries[0].isIntersecting;
-  
+
   if (firstVisible.value === undefined) {
     firstVisible.value = visible;
   }
@@ -59,12 +62,12 @@ onUnmounted(() => {
 <template>
   <div
     v-if="!noMore" ref="loadingTarget"
-    class="wrapLoading"
     :style="{display: firstVisible ? 'none' :'flex',height:wrapHeight}"
+    class="wrapLoading"
   >
     <n-spin
-      :stroke-width="strokeWidth" :show="show" 
-      :stroke="stroke" :description="description" :size="size"
+      :description="description" :show="show"
+      :size="size" :stroke="stroke" :stroke-width="strokeWidth"
     />
   </div>
   <n-divider v-else dashed>
@@ -73,10 +76,10 @@ onUnmounted(() => {
 </template>
 <style scoped>
 .wrapLoading {
-  width: 100%;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

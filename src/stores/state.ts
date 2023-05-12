@@ -1,26 +1,28 @@
-import type { AnyObject } from './../../env.d';
-export interface StoreState{
-  theme: 'dark' | 'light',
-  backTopLeft: string;
-  isLogin: boolean;
-  likeSongs: number[];
-  playList: any[];
-  userProfile: AnyObject;
-  currentPlayIndex: number;
-  playMode: playMode,
-  playWaiting:boolean;
-  currentPlayListId: string,
-  playing:boolean,
-  mySubscribeSongList:any[],
-  playListIdList:string[],
-  searchHistory:string[];
-  showMusicDetail:boolean;
-  searchKeyword:string;
-  currentPlayLyric:string;
+import type {AnyObject} from '../../env';
+
+export interface StoreState {
+    // theme: 'dark' | 'light',
+    backTopLeft: string;
+    isLogin: boolean;
+    likeSongs: number[];
+    playList: any[];
+    userProfile: AnyObject;
+    currentPlayIndex: number;
+    playMode: playMode,
+    playWaiting: boolean;
+    currentPlayListId: string,
+    playing: boolean,
+    mySubscribeSongList: any[],
+    playListIdList: string[],
+    searchHistory: string[];
+    showMusicDetail: boolean;
+    searchKeyword: string;
+    currentPlayLyric: string;
 }
+
 export type playMode = 'order' | 'random' | 'singleLoop';
 const initState = (
-  key:string, defaultVal:any, parse=true
+  key: string, defaultVal: any, parse = true
 ) => {
   return localStorage[key]
     ? parse
@@ -28,10 +30,10 @@ const initState = (
       : localStorage[key]
     : defaultVal;
 };
-const state:StoreState = { 
-  theme: initState(
-    'theme', 'light', false
-  ),
+const state: StoreState = {
+  // theme: initState(
+  //   'theme', 'light', false
+  // ),
   backTopLeft: initState(
     'backTopLeft', '7vw', false
   ),

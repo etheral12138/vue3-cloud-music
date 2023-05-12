@@ -1,55 +1,57 @@
-<script setup lang="tsx">
-import { registerRouteHook } from '@/router';
-import { getLikeList, getUserPlaylist } from '@/service';
-import { useMainStore } from '@/stores/main';
-import { BackToTop, Music, User } from '@vicons/carbon';
-import { QueueMusicFilled } from '@vicons/material';
-import { List, SparklesOutline, VideocamOutline, StarOutline, Heart } from '@vicons/ionicons5';
-import { NIcon, useLoadingBar } from 'naive-ui';
-import { computed, onMounted, ref, watch, type CSSProperties, type VNodeChild, KeepAlive } from 'vue';
-import { RouterLink, useRoute, useRouter } from 'vue-router';
-import LoginModal, { type LoginModalExpose } from './LoginModal.vue';
-import obverser from '@/utils/obverser';
+<script lang="tsx" setup>
+import {registerRouteHook} from '@/router';
+import {getLikeList, getUserPlaylist} from '@/service';
+import {useMainStore} from '@/stores/main';
+import {BackToTop, Music, User} from '@vicons/carbon';
+import {QueueMusicFilled} from '@vicons/material';
+import {Heart, List, SparklesOutline, StarOutline, VideocamOutline} from '@vicons/ionicons5';
+import {NIcon, useLoadingBar} from 'naive-ui';
+import {computed, type CSSProperties, KeepAlive, onMounted, ref, type VNodeChild, watch} from 'vue';
+import {RouterLink, useRoute, useRouter} from 'vue-router';
+import LoginModal, {type LoginModalExpose} from './LoginModal.vue';
+import observer from '@/utils/observer';
 
 const mainStore = useMainStore();
 type MySongsList = { myCreatePlayList: any[], collectPlayList: any[] };
-interface childrenMenuOptionItem extends MenuOptionItem{
-   id:number;
+
+interface childrenMenuOptionItem extends MenuOptionItem {
+    id: number;
 }
+
 type MenuOptionItem = {
-  label: (() => VNodeChild) | string,
-  key: string,
-  icon?: () => VNodeChild,
-  children?:childrenMenuOptionItem[]
+    label: (() => VNodeChild) | string,
+    key: string,
+    icon?: () => VNodeChild,
+    children?: childrenMenuOptionItem[]
 }
 const noLoginOption = {
-  label: () => <div class="flex items-center" onClick={handleOpenLoginModalClick}> 
-    <p >未登录</p>
+  label: () => <div class="flex items-center" onClick={handleOpenLoginModalClick}>
+    <p>未登录</p>
   </div>,
   key: 'login',
-  icon: () => <NIcon class="mr-2" size={20} component={User} />
+  icon: () => <NIcon class="mr-2" size={20} component={User}/>
 };
 
 const menuOptions = [
   {
     label: () => <RouterLink to='/discovery'>发现音乐</RouterLink>,
     key: '/discovery',
-    icon: () => <NIcon component={SparklesOutline} />
+    icon: () => <NIcon component={SparklesOutline}/>
   },
   {
     label: () => <RouterLink to='/songList'>推荐歌单</RouterLink>,
     key: '/songList',
-    icon: () => <NIcon component={List} />
+    icon: () => <NIcon component={List}/>
   },
   {
     label: () => <RouterLink to='/latestMusic'>最新音乐</RouterLink>,
     key: '/latestMusic',
-    icon: () => <NIcon component={Music} />
+    icon: () => <NIcon component={Music}/>
   },
   {
     label: () => <RouterLink to='/latestMv'>最新MV</RouterLink>,
     key: '/latestMv',
-    icon: () => <NIcon component={VideocamOutline} />
+    icon: () => <NIcon component={VideocamOutline}/>
   }
 ];
 
@@ -58,7 +60,7 @@ const router = useRouter();
 const loadingBar = useLoadingBar();
 
 let collapsed = ref(false);
-let scrollContainer:HTMLElement|null;
+let scrollContainer: HTMLElement | null;
 let activeKey = ref<string | null>('');
 let hiddenLeftMenu = ref(false);
 const myMenuOptions = ref<MenuOptionItem[]>(menuOptions);
@@ -67,10 +69,10 @@ const mainStyle = computed<CSSProperties>(() => {
   return {
     height: route.meta.hidden
       ? '100%'
-      : '800px' 
+      : '800px'
   };
 });
-const changeMenuOption = (myCreatePlayList:any[]=[], collectPlayList:any[]=[]) => {
+const changeMenuOption = (myCreatePlayList: any[] = [], collectPlayList: any[] = []) => {
   if (!mainStore.isLogin) {
     myMenuOptions.value = [noLoginOption, ...menuOptions];
   } else {
@@ -78,8 +80,8 @@ const changeMenuOption = (myCreatePlayList:any[]=[], collectPlayList:any[]=[]) =
       {
         label: '我创建的歌单',
         key: 'create',
-        icon: () => <NIcon class="mr-2" size={20} component={User} />,
-        children: myCreatePlayList.map((item:any, index:number) => {
+        icon: () => <NIcon class="mr-2" size={20} component={User}/>,
+        children: myCreatePlayList.map((item: any, index: number) => {
           return {
             label: () => <span onClick={() => handlePlayListItemClick(item)}>{item.name}</span>,
             key: item.name,
@@ -93,8 +95,8 @@ const changeMenuOption = (myCreatePlayList:any[]=[], collectPlayList:any[]=[]) =
       {
         label: '收藏的歌单',
         key: 'collect',
-        icon: () => <NIcon component={StarOutline} />,
-        children: collectPlayList.map((item:any) => {
+        icon: () => <NIcon component={StarOutline}/>,
+        children: collectPlayList.map((item: any) => {
           return {
             label: () => <span onClick={() => handlePlayListItemClick(item)}>{item.name}</span>,
             key: item.name,
@@ -105,22 +107,18 @@ const changeMenuOption = (myCreatePlayList:any[]=[], collectPlayList:any[]=[]) =
       },
       ...menuOptions
     ];
-   
+
   }
 };
 const handleOpenLoginModalClick = () => {
   loginModalRef.value?.show();
 };
-const handlePlayListItemClick = (item:any) => {
+const handlePlayListItemClick = (item: any) => {
   router.push(`/songList/${item.id}`);
 };
 watch(() => route.path, (newVal) => {
   activeKey.value = newVal;
-  if (route.meta.hidden) {
-    hiddenLeftMenu.value = true;
-  } else {
-    hiddenLeftMenu.value = false;
-  }
+  hiddenLeftMenu.value = !!route.meta.hidden;
 });
 watch(() => mainStore.userProfile, (val) => {
   let userId = mainStore.userProfile?.profile?.userId;
@@ -136,7 +134,7 @@ if (!mainStore.isLogin) {
   changeMenuOption();
 }
 
-const fetchUserPlaylist = (userId:number) => {
+const fetchUserPlaylist = (userId: number) => {
   window.$message.loading('加载用户歌单中...');
   if (myMenuOptions.value[0].key === 'login') {
     myMenuOptions.value.shift();
@@ -147,7 +145,7 @@ const fetchUserPlaylist = (userId:number) => {
       let { collectPlayList, myCreatePlayList } = classifySongsList(userId, res.data.playlist);
       mainStore.setMySubscribeSongList(myCreatePlayList);
       changeMenuOption(myCreatePlayList, collectPlayList);
- 
+
     }
   })
     .finally(() => {
@@ -155,12 +153,12 @@ const fetchUserPlaylist = (userId:number) => {
     });
 };
 // 获取我喜欢的音乐
-const fetchMyLikeMusicList = (userId:number) => {
+const fetchMyLikeMusicList = (userId: number) => {
   getLikeList(userId).then(res => {
     mainStore.setLikeList(res.data.ids);
   });
 };
-const classifySongsList = (userId:number, playList:any[]) => {
+const classifySongsList = (userId: number, playList: any[]) => {
   return playList.reduce((
     prev, currentValue, index
   ) => {
@@ -185,13 +183,13 @@ registerRouteHook((to) => {
     loadingBar.start();
     return true;
   }
-  
+
 }, () => {
   loadingBar.finish();
 });
 //监听歌单收藏状态
 const watchUpdateCollectPlayList = () => {
-  obverser.on('updateCollectPlayList', (data:any) => {
+  observer.on('updateCollectPlayList', (data: any) => {
     let { subscribed } = data;
     // 收藏 添加歌单
     if (subscribed) {
@@ -204,7 +202,7 @@ const watchUpdateCollectPlayList = () => {
       });
     } else { //取消收藏. 删除歌单
       let id = data.id;
-      let index = myMenuOptions.value[1].children?.findIndex((item:any) => item.id === +id);
+      let index = myMenuOptions.value[1].children?.findIndex((item: any) => item.id === +id);
       if (index) {
         myMenuOptions.value[1].children?.splice(index, 1);
       }
@@ -212,7 +210,7 @@ const watchUpdateCollectPlayList = () => {
   });
 };
 const watchUpdateMyCreatePlayList = () => {
-  obverser.on('updateMyCreatePlayList', (data:any) => {
+  observer.on('updateMyCreatePlayList', (data: any) => {
     myMenuOptions.value[0].children?.splice(
       1, 0, {
         label: () => <span onClick={() => handlePlayListItemClick(data)}>{data.name}</span>,
@@ -235,12 +233,12 @@ onMounted(() => {
   >
     <n-layout-sider
       v-show="!hiddenLeftMenu"
+      :collapsed="collapsed"
+      :collapsed-width="64"
+      :style="mainStyle"
+      :width="192"
       bordered
       collapse-mode="width"
-      :collapsed-width="64"
-      :width="192"
-      :style="mainStyle"
-      :collapsed="collapsed"
       show-trigger
       @collapse="collapsed = true"
       @expand="collapsed = false"
@@ -248,24 +246,24 @@ onMounted(() => {
       <n-menu
         v-model:value="activeKey"
         :collapsed="collapsed"
-        :collapsed-width="64"
         :collapsed-icon-size="22"
-        :options="myMenuOptions"
+        :collapsed-width="64"
         :default-expand-all="true"
+        :options="myMenuOptions"
       />
     </n-layout-sider>
     <login-modal ref="loginModalRef" />
-    <n-back-top :right="mainStore.backTopLeft" :bottom="220" :visibility-height="800">
+    <n-back-top :bottom="220" :right="mainStore.backTopLeft" :visibility-height="800">
       <n-icon :component="BackToTop" />
     </n-back-top>
     <n-layout :style="mainStyle">
       <router-view v-slot="{ Component }">
         <transition
-          name="fade-transform"
           mode="out-in"
+          name="fade-transform"
         >
           <keep-alive exclude="MvDetail">
-            <div :key="route.name">  
+            <div :key="route.name">
               <component :is="Component" />
             </div>
           </keep-alive>
@@ -277,10 +275,11 @@ onMounted(() => {
 <style lang="less" scoped>
 .n-layout-sider {
   transition: color 0.3s var(--n-bezier), border-color 0.3s var(--n-bezier),
-    min-width 0.3s var(--n-bezier), max-width 0.3s var(--n-bezier) ,width 0.3s var(--n-bezier),
-    transform 0.3s var(--n-bezier), background-color 0.3s var(--n-bezier);
+  min-width 0.3s var(--n-bezier), max-width 0.3s var(--n-bezier), width 0.3s var(--n-bezier),
+  transform 0.3s var(--n-bezier), background-color 0.3s var(--n-bezier);
 }
-:deep(.n-submenu-children > .n-menu-item > .n-menu-item-content){
-  padding-left: 40px !important; 
+
+:deep(.n-submenu-children > .n-menu-item > .n-menu-item-content) {
+  padding-left: 40px !important;
 }
 </style>

@@ -1,18 +1,18 @@
-<script setup lang="ts">
-import type { SelectSongListTagModalExpose } from '@/components/SongsList/SelectSongListTagModal.vue';
-import { updatePlayListCover, updatePlayListInfo } from '@/service';
-import { getImgSize } from '@/utils';
-import type { FormInst, FormRules } from 'naive-ui';
-import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+<script lang="ts" setup>
+import type {SelectSongListTagModalExpose} from '@/components/SongsList/SelectSongListTagModal.vue';
+import {updatePlayListCover, updatePlayListInfo} from '@/service';
+import {getImgSize} from '@/utils';
+import type {FormInst, FormRules} from 'naive-ui';
+import {ref} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
 const query = route.query as {
-  tags:string;
-  songListName:string;
-  desc:string;
-  coverUrl:string;
+    tags: string;
+    songListName: string;
+    desc: string;
+    coverUrl: string;
 };
 const desc = ref(query.desc || '');
 const selectSongListTagRef = ref<SelectSongListTagModalExpose>();
@@ -25,14 +25,14 @@ const selectTags = ref(query.tags
   ? query.tags.split(',')
   : [] || []);
 
-const rules:FormRules = {
+const rules: FormRules = {
   songListName: {
     required: true,
     message: '表单名不能为空',
     trigger: ['input', 'blur']
   }
 };
-const handleCompleteClick = (tags:any[]) => {
+const handleCompleteClick = (tags: any[]) => {
   if (tags.length === 0) {
     return window.$message.warning('请选择标签');
   }
@@ -55,13 +55,13 @@ const handleSaveClick = () => {
           saveBtnLoading.value = false;
         }
       });
-    } 
+    }
   });
 };
 const handleChangCoverClick = () => {
   fileRef.value?.click();
 };
-const handleFileChange = async (event:Event) => {
+const handleFileChange = async (event: Event) => {
   let target = event.target as HTMLInputElement;
   if (target.files) {
     let file = target.files[0];
@@ -86,14 +86,14 @@ const handleFileChange = async (event:Event) => {
     <div class="flex">
       <n-form
         ref="formRef"
-        :rules="rules"
         :model="modelRef"
-        label-placement="left"
-        label-width="auto"
-        require-mark-placement="right-hanging"
+        :rules="rules"
         :style="{
           width: '640px'
         }"
+        label-placement="left"
+        label-width="auto"
+        require-mark-placement="right-hanging"
       >
         <n-form-item label="歌单名：" path="songListName">
           <n-input v-model:value="modelRef.songListName" placeholder="请输入歌单名" />
@@ -113,12 +113,12 @@ const handleFileChange = async (event:Event) => {
         </n-form-item>
         <n-form-item label="简介：">
           <n-input
-            v-model:value="desc" maxlength="1000" type="textarea"
-            :show-count="true"
+            v-model:value="desc" :show-count="true" maxlength="1000"
             placeholder="请输入歌单简介"
+            type="textarea"
           />
         </n-form-item>
-        <n-form-item label="提交：" class="submitFormItem">
+        <n-form-item class="submitFormItem" label="提交：">
           <n-space>
             <n-button
               :loading="saveBtnLoading" round size="medium"
@@ -134,9 +134,9 @@ const handleFileChange = async (event:Event) => {
       </n-form>
       <div class="flex flex-col items-center ml-40">
         <n-image
-          width="200"
-          class="rounded-md"
           :src="coverUrl"
+          class="rounded-md"
+          width="200"
         />
         <n-button class="mt-8" @click="handleChangCoverClick">
           修改封面
@@ -152,11 +152,11 @@ const handleFileChange = async (event:Event) => {
   <!-- 标签选择弹窗 -->
   <select-song-list-tag-modal
     ref="selectSongListTagRef"
-    :handle-complete-click="handleCompleteClick" 
+    :handle-complete-click="handleCompleteClick"
   />
 </template>
 <style scoped>
-:deep(.submitFormItem>.n-form-item-label){
-  opacity: 0;
+:deep(.submitFormItem>.n-form-item-label) {
+    opacity: 0;
 }
 </style>

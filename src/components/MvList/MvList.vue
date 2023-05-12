@@ -1,8 +1,9 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import MvListImgItem from './MvListImgItem.vue';
+
 defineProps<{
-  list?: any[]
-  cols?: number;
+    list?: any[]
+    cols?: number;
 }>();
 </script>
 
@@ -18,7 +19,7 @@ defineProps<{
         v-for="item in list"
         :key="item.id"
         class="group"
-      > 
+      >
         <mv-list-img-item :item="item" />
         <div>
           <p class="mt-1 text-base">
@@ -31,17 +32,17 @@ defineProps<{
       </n-grid-item>
     </n-grid>
   </div>
-  <div v-else> 
+  <div v-else>
     <n-empty description="暂无数据" />
   </div>
 </template>
 
 <style scoped>
 .light-green {
-  height: 150px;
-  background-color: rgba(0, 128, 0, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    height: 150px;
+    background-color: rgba(0, 128, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

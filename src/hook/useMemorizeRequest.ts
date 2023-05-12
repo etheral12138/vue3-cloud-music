@@ -1,8 +1,9 @@
-import { computed, onUnmounted, reactive, ref } from 'vue';
-import type { AxiosResponse } from 'axios';
-import { cloneDeep } from 'lodash';
+import {computed, onUnmounted, ref} from 'vue';
+import type {AxiosResponse} from 'axios';
+import {cloneDeep} from 'lodash';
+
 export const useMemorizeRequest = (
-  requestFn:(params:any) => Promise<AxiosResponse<any, any>>, requestKey:string, cacheTime = 180000
+  requestFn: (params: any) => Promise<AxiosResponse<any, any>>, requestKey: string, cacheTime = 180000
 ) => {
   const cacheResponseMap = new Map();
   const requestLoadingMaps = ref({ [requestKey]: true });
@@ -11,12 +12,12 @@ export const useMemorizeRequest = (
   const requestLoading = computed(() => {
     return requestLoadingMaps.value[requestKey];
   });
-  const getKey = (params?:any) => {
+  const getKey = (params?: any) => {
     const cloneParams = cloneDeep(params || 'key');
     const key = requestKey + JSON.stringify(cloneParams);
     return key;
   };
-  const wrapRequest = (params?:any) => {
+  const wrapRequest = (params?: any) => {
     const key = getKey(params);
     const request = () => {
       const requestData = requestFn(params);
@@ -25,19 +26,19 @@ export const useMemorizeRequest = (
       cacheTimeMap.set(key, Date.now());
       return requestData;
     };
-    
+
     if (!cacheResponseMap.has(key)) {
       return request();
     } else {
       // 如果缓存时间超过了设置的时间 则重新请求
       if (Date.now() - cacheTimeMap.get(key) > cacheTime) {
         return request();
-      } 
+      }
       return cacheResponseMap.get(key);
     }
   };
-  // 删除指定缓存
-  const removeCache = (params?:any) => {
+    // 删除指定缓存
+  const removeCache = (params?: any) => {
     const key = getKey(params);
     if (cacheResponseMap.has(key)) {
       cacheResponseMap.delete(key);
@@ -49,7 +50,7 @@ export const useMemorizeRequest = (
   onUnmounted(() => {
     cacheResponseMap.clear();
   });
-  
+
   return {
     wrapRequest,
     loadSuccess,

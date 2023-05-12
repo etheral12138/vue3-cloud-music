@@ -1,19 +1,20 @@
-<script setup lang="ts">
-import { getDefaultSearchKeyword, getHotSearchList, getSuggestSearchList, getAlbumDetail } from '@/service';
-import { useMainStore } from '@/stores/main';
-import { Search, List } from '@vicons/ionicons5';
-import { Delete, Music } from '@vicons/carbon';
-import { ArrowBackIosSharp, ArrowForwardIosRound } from '@vicons/material';
-import { useAsyncState, useElementHover } from '@vueuse/core';
-import { throttle } from 'lodash';
-import { isEmptyObject } from '@/utils';
-import { useThemeVars } from 'naive-ui';
-import { computed, nextTick, onMounted, onUnmounted, ref, watch, type CSSProperties } from 'vue';
-import { useRouter } from 'vue-router';
-import { userHistory } from '../hook/useHistoryRoutePath';
-import { mapSongs } from '@/utils/arr-map';
-import { nanoid } from 'nanoid';
-import { markSearchKeyword } from '@/utils/markSearhKeyword';
+<script lang="ts" setup>
+import {getAlbumDetail, getDefaultSearchKeyword, getHotSearchList, getSuggestSearchList} from '@/service';
+import {useMainStore} from '@/stores/main';
+import {List, Search} from '@vicons/ionicons5';
+import {Delete, Music} from '@vicons/carbon';
+import {ArrowBackIosSharp, ArrowForwardIosRound} from '@vicons/material';
+import {useAsyncState, useElementHover} from '@vueuse/core';
+import {throttle} from 'lodash';
+import {isEmptyObject} from '@/utils';
+import {useThemeVars} from 'naive-ui';
+import {computed, type CSSProperties, nextTick, onMounted, onUnmounted, ref, watch} from 'vue';
+import {useRouter} from 'vue-router';
+import {userHistory} from '../hook/useHistoryRoutePath';
+import {mapSongs} from '@/utils/arr-map';
+import {nanoid} from 'nanoid';
+import {markSearchKeyword} from '@/utils/markSearhKeyword';
+import BaseEmpty from '@/components/Base/BaseEmpty.vue';
 
 const backIconRef = ref();
 const forwardIconRef = ref();
@@ -31,10 +32,13 @@ const forwardHover = useElementHover(forwardIconRef);
 const { backPath, forwardPath } = userHistory();
 const router = useRouter();
 const { state: defaultSearchKeyWord } = useAsyncState(getDefaultSearchKeyword().then(res => res.data.data), {});
-const { state: hotSearch, isLoading: hotSearchLoading } = useAsyncState(getHotSearchList().then(res => res.data.data), {});
+const {
+  state: hotSearch,
+  isLoading: hotSearchLoading
+} = useAsyncState(getHotSearchList().then(res => res.data.data), {});
 const containerStyle = computed(() => {
   let hasLen = mainStore.searchKeyword.length > 0;
-  let style:CSSProperties = {
+  let style: CSSProperties = {
     background: themeVars.value.modalColor, zIndex: 1000, width: hasLen
       ? '420px '
       : '384px'
@@ -76,7 +80,7 @@ const historyListStyle = computed<CSSProperties>(() => {
       ? parseInt(defaultHeight.value) >= 62
         ? '62px'
         : '100%'
-      :'100%', overflow: 'hidden' 
+      : '100%', overflow: 'hidden'
   };
 });
 const handleArrowClick = (type: 'back' | 'forward') => {
@@ -113,7 +117,7 @@ watch([backHover, forwardHover], (value: boolean[]) => {
     forwardIconEle.style.color = '';
   }
 });
-const toSearchResult = (val?:string) => {
+const toSearchResult = (val?: string) => {
   if (!mainStore.searchKeyword && defaultSearchKeyWord.value?.realkeyword && !val) {
     mainStore.searchKeyword = defaultSearchKeyWord.value.realkeyword;
   }
@@ -127,44 +131,44 @@ const toSearchResult = (val?:string) => {
     path: '/searchResult',
     query: { keyword: mainStore.searchKeyword }
   });
-  
+
 };
-const getSearchSuggest = (val:string, oldVal:string) => {
+const getSearchSuggest = (val: string, oldVal: string) => {
   if (val === oldVal) return;
   suggestResult.value = {};
   execute(0, val);
 };
-const handleKeyDown = (e:KeyboardEvent) => {
+const handleKeyDown = (e: KeyboardEvent) => {
   if (showPopover.value && e.code === 'Enter') {
     toSearchResult();
   }
 };
-const handleBodyClick = (ev:MouseEvent) => {
+const handleBodyClick = (ev: MouseEvent) => {
   if (!ev.composedPath().includes(inputRef.value) && !ev.composedPath().includes(searchWrapContainerRef.value)) {
     showPopover.value = false;
     spread.value = false;
   }
 };
-const handleSearchSongClick = async(song:any) => {
+const handleSearchSongClick = async (song: any) => {
   if (!song.al.picUrl) {
     const detail = await getAlbumDetail(song.al.id);
     song.al.picUrl = detail.data.album.picUrl;
   }
   song.like = mainStore.hasLikeSong(song.id);
   if (mainStore.playList.length) {
-    mainStore.insertPlay(song);
+    await mainStore.insertPlay(song);
   } else {
-    mainStore.initPlayList(
+    await mainStore.initPlayList(
       [song], 0, nanoid()
     );
   }
   showPopover.value = false;
 };
-const handleClearClick = (e:MouseEvent, index:number) => {
+const handleClearClick = (e: MouseEvent, index: number) => {
   e.stopPropagation();
   mainStore.removeSearchHistory(index);
 };
-const handleSearchPlayListClick = (id:string) => {
+const handleSearchPlayListClick = (id: string) => {
   router.push(`/songList/${id}`);
   showPopover.value = false;
 };
@@ -201,21 +205,21 @@ onUnmounted(() => {
   <div class="relative w-50">
     <div ref="inputRef" class="wrapInput">
       <n-input
-        ref="target" v-model:value="mainStore.searchKeyword" size="small"
-        class="ml-5 headerSearchInput" round :placeholder="defaultSearchKeyWord.showKeyword"
-        clearable @focus="showPopover = true"
+        ref="target" v-model:value="mainStore.searchKeyword" :placeholder="defaultSearchKeyWord.showKeyword"
+        class="ml-5 headerSearchInput" clearable round
+        size="small" @focus="showPopover = true"
       >
         <template #prefix>
-          <n-icon class="cursor-pointer" :component="Search" @click="() => toSearchResult()" />
+          <n-icon :component="Search" class="cursor-pointer" @click="() => toSearchResult()" />
         </template>
       </n-input>
     </div>
     <transition name="fade-in-scale-up">
-      <div 
-        v-show="showPopover" 
+      <div
+        v-show="showPopover"
         ref="searchWrapContainerRef"
-        class="absolute top-10 rounded-sm shadow-lg dark:shadow-black/60 origin-top-left searchWrapContainer"
         :style="containerStyle"
+        class="absolute top-10 rounded-sm shadow-lg dark:shadow-black/60 origin-top-left searchWrapContainer"
       >
         <n-scrollbar style="max-height:500px">
           <!-- 搜索历史 -->
@@ -223,24 +227,27 @@ onUnmounted(() => {
             <div class="flex justify-between items-center opacity-70">
               <div>
                 <span class="pr-2">搜索历史</span>
-                <n-popconfirm :on-positive-click="() => mainStore.clearSearchHistory()" positive-text="确定">
+                <n-popconfirm
+                  :on-positive-click="() => mainStore.clearSearchHistory()"
+                  positive-text="确定"
+                >
                   <template #trigger>
-                    <n-icon class="cursor-pointer" :component="Delete" />
+                    <n-icon :component="Delete" class="cursor-pointer" />
                   </template>
                   确定删除历史记录?
                 </n-popconfirm>
               </div>
               <n-button v-if="parseInt(defaultHeight) > 62" text @click="handleCheckAllClick">
-                {{ spread ? '收起' :'查看全部' }}
+                {{ spread ? '收起' : '查看全部' }}
               </n-button>
             </div>
-            <div ref="historyListRef" class="mt-2 transition-height" :style="historyListStyle">
+            <div ref="historyListRef" :style="historyListStyle" class="mt-2 transition-height">
               <n-space>
                 <n-tag
                   v-for="(item,index) in mainStore.searchHistory"
                   :key="item"
-                  closable size="small"
-                  round
+                  closable round
+                  size="small"
                   @click="toSearchResult(item)"
                   @close="(e:MouseEvent) => handleClearClick(e,index)"
                 >
@@ -249,26 +256,29 @@ onUnmounted(() => {
               </n-space>
             </div>
           </div>
-          <!-- 热搜榜 -->
+          <!--           热搜榜 -->
           <div v-show="!mainStore.searchKeyword.length">
             <p class="pl-4 mt-4 opacity-70">
               热搜榜
             </p>
             <n-spin :show="hotSearchLoading">
               <div v-show="hotSearchLoading" class="h-60" />
-              <div 
-                v-for="(item,index) in hotSearch" 
-                :key="item.searchWord" class="flex items-center p-5 hover:bg-gray-100 dark:hover:bg-gray-100/20 cursor-pointer"
+              <div
+                v-for="(item,index) in hotSearch"
+                :key="item.searchWord"
+                class="flex items-center p-5 hover:bg-green-500 hover:bg-opacity-20 cursor-pointer"
                 @click="toSearchResult(item.searchWord)"
               >
                 <span
-                  class="text-base"
                   :style="{color:index >= 0 && index <= 2 ? themeVars.primaryColor : themeVars.textColor1}"
+                  class="text-base"
                 >
-                  {{ index+1 }}
+                  {{ index + 1 }}
                 </span>
                 <div class="ml-4">
-                  <span :style="{fontWeight:index >= 0 && index <= 2 ?'bold' :'initial'}"> {{ item.searchWord }}</span>
+                  <span :style="{fontWeight:index >= 0 && index <= 2 ?'bold' :'initial'}"> {{
+                    item.searchWord
+                  }}</span>
                   <span class="pl-2 text-sm opacity-40">{{ item.score }}</span>
                 </div>
               </div>
@@ -276,15 +286,18 @@ onUnmounted(() => {
           </div>
           <!-- 搜索建议 -->
           <div v-show="mainStore.searchKeyword.length > 0" class="py-4">
-            <n-spin :show="suggestLoading" size="small" description="搜索中...">
+            <n-spin :show="suggestLoading" description="搜索中..." size="small">
               <div v-show="suggestLoading" class="h-80" />
               <div>
-                <p v-show="!suggestLoading && suggestResult.songs" class="flex items-center pl-4 text-base opacity-50">
+                <p
+                  v-show="!suggestLoading && suggestResult.songs"
+                  class="flex items-center pl-4 text-base opacity-50"
+                >
                   <n-icon :component="Music" />
                   <span class="ml-2">单曲</span>
                 </p>
                 <div
-                  v-for="item in suggestResult.songs" 
+                  v-for="item in suggestResult.songs"
                   :key="item.id"
                   class="py-2 pl-10 cursor-pointer base-hover-bg"
                   @click="handleSearchSongClick(item)"
@@ -296,18 +309,24 @@ onUnmounted(() => {
                   <span> - </span>
                   <span v-html="item.formatAuthorRichText" />
                 </div>
-                <p v-show="!suggestLoading && suggestResult.playlists?.length > 0" class="flex items-center pl-4 text-base opacity-50">
+                <p
+                  v-show="!suggestLoading && suggestResult.playlists?.length > 0"
+                  class="flex items-center pl-4 text-base opacity-50"
+                >
                   <n-icon :component="List" />
                   <span class="ml-2">歌单</span>
                 </p>
                 <div
-                  v-for="item in suggestResult.playlists" 
+                  v-for="item in suggestResult.playlists"
                   :key="item.id"
                   class="py-2 pl-10 cursor-pointer base-hover-bg"
                   @click="handleSearchPlayListClick(item.id)"
                   v-html="item.nameRichText"
                 />
-                <base-empty v-show="mainStore.searchKeyword.length > 0 && isEmptyObject(suggestResult) && !suggestLoading" description="没有搜索建议" />
+                <base-empty
+                  v-show="mainStore.searchKeyword.length > 0 && isEmptyObject(suggestResult) && !suggestLoading"
+                  description="没有搜索建议"
+                />
               </div>
             </n-spin>
           </div>

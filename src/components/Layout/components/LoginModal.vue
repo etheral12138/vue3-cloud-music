@@ -1,16 +1,16 @@
 <template>
   <n-modal v-model:show="showModal" :mask-closable="false" transform-origin="center">
     <n-card
-      style="width: 350px;height: 420px;"
       :bordered="false"
-      size="small"
-      preset="dialog"
       aria-modal="true"
+      preset="dialog"
+      size="small"
+      style="width: 350px;height: 420px;"
     >
       <template #header>
         <div class="flex justify-end ">
           <n-icon
-            class="cursor-pointer" size="25" :component="CloseOutline"
+            :component="CloseOutline" class="cursor-pointer" size="25"
             @click="showModal = false"
           />
         </div>
@@ -24,20 +24,23 @@
           <div class="relative mt-5">
             <img
               v-show="!isLoadingQrCodeImg"
-              width="200" height="200"
-              :src="qrCodeImg"
+              :src="qrCodeImg" height="200"
+              width="200"
             >
             <!-- 图片加载时占位符 -->
             <div v-show="isLoadingQrCodeImg" style="width:200px;height:200px" />
-             
+
             <!-- 二维码过期蒙层 -->
-            <div v-if="status === 800" class="flex absolute inset-0 justify-center items-center bg-black/90">
+            <div
+              v-if="status === 800"
+              class="flex absolute inset-0 justify-center items-center bg-black/90"
+            >
               <div class="text-white">
                 <p>
                   二维码已失效
                 </p>
                 <n-button
-                  size="small" type="primary" class="mt-4"
+                  class="mt-4" size="small" type="primary"
                   @click="handleRefreshClick"
                 >
                   点击刷新
@@ -55,28 +58,30 @@
       <!-- 扫码待确认登录 -->
       <div v-if="status === 802" class="mt-20">
         <n-result
-          size="small" status="success" title="扫码成功"
-          description="请在手机上确认登录"
+          description="请在手机上确认登录" size="small" status="success"
+          title="扫码成功"
         />
       </div>
     </n-card>
   </n-modal>
 </template>
 
-<script setup lang="ts">
-import { onUnmounted, ref, watch } from 'vue';
-import { CloseOutline } from '@vicons/ionicons5';
-import { getQrCode, getQrCodeImg, getQrCodeStatus } from '@/service';
-import { useMainStore } from '@/stores/main';
-export interface LoginModalExpose{
-  show:() => void;
-  close:() => void;
+<script lang="ts" setup>
+import {onUnmounted, ref, watch} from 'vue';
+import {CloseOutline} from '@vicons/ionicons5';
+import {getQrCode, getQrCodeImg, getQrCodeStatus} from '@/service';
+import {useMainStore} from '@/stores/main';
+
+export interface LoginModalExpose {
+    show: () => void;
+    close: () => void;
 }
+
 type qrCodeStatus = 800 | 801 | 802 | 803;
 let qrCodeKey = '';
 let timer: number | undefined;
 const showModal = ref(false);
-const status = ref<qrCodeStatus|''>();
+const status = ref<qrCodeStatus | ''>();
 let qrCodeImg = ref('');
 const isLoadingQrCodeImg = ref(true);
 const mainStore = useMainStore();

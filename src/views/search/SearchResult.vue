@@ -1,17 +1,17 @@
-<script setup lang="ts">
-import { search } from '@/service';
-import { PlayCircleOutlined } from '@vicons/antd';
-import { useMainStore } from '@/stores/main';
-import { useAsyncState } from '@vueuse/core';
-import { formateNumber } from '@/utils';
-import { watch, reactive, ref, type CSSProperties, nextTick } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+<script lang="ts" setup>
+import {search} from '@/service';
+import {PlayCircleOutlined} from '@vicons/antd';
+import {useMainStore} from '@/stores/main';
+import {useAsyncState} from '@vueuse/core';
+import {formatNumber} from '@/utils';
+import {type CSSProperties, reactive, ref, watch} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
 import useThemeStyle from '@/hook/useThemeStyle';
-import { useNanoid } from '@/hook/useNanoid';
-import { markSearchKeyword } from '@/utils/markSearhKeyword';
+import {useNanoid} from '@/hook/useNanoid';
+import {markSearchKeyword} from '@/utils/markSearhKeyword';
 
 let immediateCall = false;
-let backTopEle:HTMLElement;
+let backTopEle: HTMLElement;
 const playListPageParams = reactive({
   pageCount: 0,
   page: 1,
@@ -27,7 +27,7 @@ const router = useRouter();
 const route = useRoute();
 const mainStore = useMainStore();
 const { set, currentId } = useNanoid();
-const { themeVars, stripedClass, primaryColor } = useThemeStyle();
+const { themeVars, primaryColor } = useThemeStyle();
 const { state: songsSearchResult, isLoading: songListIsLoading, execute: getSearchSongList } = useAsyncState(
   (val) => search(val).then(async res => {
     let result = res.data.result;
@@ -51,21 +51,21 @@ const { state: playListSearchResult, isLoading: playListIsLoading, execute: getS
   }), {}, { resetOnExecute: true, immediate: false }
 );
 
-const activeTabStyle:(index:number) => CSSProperties = (index:number) => {
+const activeTabStyle: (index: number) => CSSProperties = (index: number) => {
   if (index === currentTabIndex.value) {
     return {
       color: themeVars.value.primaryColor,
       borderBottom: `2px solid ${themeVars.value.primaryColor}`
     };
-  } 
+  }
   return {};
 };
-const handleUpdateMusicListLike = (like:boolean, index:number) => {
+const handleUpdateMusicListLike = (like: boolean, index: number) => {
   songsSearchResult.value.songs[index].like = like;
 };
 watch(
   [
-    () => route.query, () => playListPageParams.page, () => playListPageParams.pageSize, 
+    () => route.query, () => playListPageParams.page, () => playListPageParams.pageSize,
     () => songListPageParams.page, () => songListPageParams.pageSize, currentTabIndex
   ], () => {
     let songParams = {
@@ -95,7 +95,7 @@ watch(
     if (!immediateCall) {
       immediateCall = true;
     }
-    
+
   },
   { immediate: true }
 );
@@ -112,7 +112,7 @@ watch([playListPageParams, songListPageParams], () => {
     </h2>
     <div class="flex px-8">
       <div
-        :style="activeTabStyle(0)" 
+        :style="activeTabStyle(0)"
         class="px-4  pb-2 opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
         @click="currentTabIndex = 0"
       >
@@ -120,7 +120,7 @@ watch([playListPageParams, songListPageParams], () => {
       </div>
       <div
         :style="activeTabStyle(1)"
-        class="px-4 pb-2 ml-4 hover:opacity-100 transition-opacity cursor-pointer" 
+        class="px-4 pb-2 ml-4 hover:opacity-100 transition-opacity cursor-pointer"
         @click="currentTabIndex = 1"
       >
         歌单
@@ -129,25 +129,28 @@ watch([playListPageParams, songListPageParams], () => {
     <transition name="fade">
       <div v-show="currentTabIndex === 0" class="m-8 mt-4">
         <div class="flex item-center">
-          <play-all-button v-show="songsSearchResult?.songs?.length" :song-list="songsSearchResult?.songs" :song-list-id="currentId" />
+          <play-all-button
+            v-show="songsSearchResult?.songs?.length" :song-list="songsSearchResult?.songs"
+            :song-list-id="currentId"
+          />
           <p v-if="songsSearchResult.songCount" class="my-2 ml-4 opacity-50">
             共找到{{ songsSearchResult.songCount }}首单曲
           </p>
         </div>
         <div class="h-4" />
         <music-list
-          :song-list="songsSearchResult.songs" 
-          :loading="songListIsLoading" :play-list-id="currentId" 
+          :loading="songListIsLoading"
+          :play-list-id="currentId" :song-list="songsSearchResult.songs"
           @update-music-list-like="handleUpdateMusicListLike"
         />
         <!-- 分页 -->
         <div v-if="songListPageParams.pageCount > 1" class="flex justify-center my-6">
           <n-pagination
-            v-model:page="songListPageParams.page" 
-            v-model:page-size="songListPageParams.pageSize" 
-            :page-count="songListPageParams.pageCount" 
-            show-size-picker
+            v-model:page="songListPageParams.page"
+            v-model:page-size="songListPageParams.pageSize"
+            :page-count="songListPageParams.pageCount"
             :page-sizes="[10, 20, 30, 40,50]"
+            show-size-picker
           />
         </div>
       </div>
@@ -161,13 +164,13 @@ watch([playListPageParams, songListPageParams], () => {
           </p>
           <div
             v-for="(item,index) in playListSearchResult.playlists"
-            :key="item.id" :class="'flex items-center py-4 px-8 cursor-pointer ' + stripedClass(index)" 
+            :key="item.id" class="flex items-center py-4 px-8 hover:bg-green-500 hover:bg-opacity-20 cursor-pointer "
             @click="router.push(`/songList/${item.id}`)"
           >
             <load-img
-              loading-height="64px"
-              class-name="w-16 h-16 rounded-md"
               :src="item.coverImgUrl"
+              class-name="w-16 h-16 rounded-md"
+              loading-height="64px"
             />
             <n-ellipsis :tooltip="false" class="pl-2" style="width:400px">
               <p v-html="item.nameRichText" />
@@ -176,22 +179,22 @@ watch([playListPageParams, songListPageParams], () => {
               {{ item.trackCount }}首
             </p>
             <p class="w-80">
-              <span class="opacity-50">by </span> 
+              <span class="opacity-50">by </span>
               <span class="pl-2" v-html="item.creator.nicknameRichText" />
             </p>
             <p class="flex items-center w-80 opacity-50">
               <n-icon :component="PlayCircleOutlined" />
-              <span class="pl-2"> {{ formateNumber(item.playCount) }}</span>
+              <span class="pl-2"> {{ formatNumber(item.playCount) }}</span>
             </p>
           </div>
           <!-- 分页 -->
           <div v-if="playListPageParams.pageCount > 1" class="flex justify-center my-6">
             <n-pagination
-              v-model:page="playListPageParams.page" 
-              v-model:page-size="playListPageParams.pageSize" 
-              :page-count="playListPageParams.pageCount" 
-              show-size-picker
+              v-model:page="playListPageParams.page"
+              v-model:page-size="playListPageParams.pageSize"
+              :page-count="playListPageParams.pageCount"
               :page-sizes="[10, 20, 30, 40,50]"
+              show-size-picker
             />
           </div>
         </n-spin>
@@ -201,10 +204,11 @@ watch([playListPageParams, songListPageParams], () => {
 </template>
 
 <style scoped>
-:deep(.n-tabs .n-tab-pane){
-  padding:0;
+:deep(.n-tabs .n-tab-pane) {
+    padding: 0;
 }
-:deep(.n-tabs-tab-wrapper){
-  padding:0 20px;
+
+:deep(.n-tabs-tab-wrapper) {
+    padding: 0 20px;
 }
 </style>

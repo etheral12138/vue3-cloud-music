@@ -1,16 +1,16 @@
-import { throttle } from '@/utils';
-import { nextTick, onMounted, onUnmounted, onUpdated, type Ref } from 'vue';
+import {throttle} from '@/utils';
+import {nextTick, onMounted, onUnmounted, onUpdated, type Ref} from 'vue';
 
-export function useMemoryScrollTop(ref:Ref<HTMLElement> | string) {
-  let targetEle : HTMLElement | null | Window = null;
+export function useMemoryScrollTop(ref: Ref<HTMLElement> | string) {
+  let targetEle: HTMLElement | null | Window = null;
   let setScrollTopLock = false;
   // 设置滚动位置
-  const setScrollPosition = (key:string) => {
+  const setScrollPosition = (key: string) => {
     setScrollTopLock = true;
     const scrollTop = sessionStorage.getItem(key);
-    
+
     if (scrollTop) {
-      const options:ScrollToOptions = {
+      const options: ScrollToOptions = {
         behavior: 'smooth',
         top: +scrollTop
       };
@@ -20,15 +20,15 @@ export function useMemoryScrollTop(ref:Ref<HTMLElement> | string) {
         setScrollTopLock = false;
       } else {
         nextTick(() => {
-          targetEle!.scrollTo(options);
-          setScrollTopLock = false;
+                    targetEle!.scrollTo(options);
+                    setScrollTopLock = false;
         });
       }
     }
   };
   const handleListenScroll = () => {
     if (setScrollTopLock) return;
-    
+
     let scrollTop;
     // 是否为window
     if (targetEle instanceof Window) {
@@ -36,12 +36,12 @@ export function useMemoryScrollTop(ref:Ref<HTMLElement> | string) {
     } else {
       scrollTop = targetEle!.scrollTop;
     }
-    
+
     sessionStorage.setItem('scrollTop', scrollTop!.toString());
 
   };
   const throttleFn = throttle(handleListenScroll, 500);
-  
+
   onMounted(() => {
     if (!ref) {
       targetEle = window;
@@ -63,9 +63,9 @@ export function useMemoryScrollTop(ref:Ref<HTMLElement> | string) {
     setScrollPosition('scrollTop');
   });
   onUnmounted(() => {
-    targetEle!.removeEventListener('scroll', throttleFn);
-    sessionStorage.setItem('scrollTop', '0');
-    targetEle!.scrollTo({ top: 0 });
+        targetEle!.removeEventListener('scroll', throttleFn);
+        sessionStorage.setItem('scrollTop', '0');
+        targetEle!.scrollTo({ top: 0 });
   });
 
   onUpdated(() => {

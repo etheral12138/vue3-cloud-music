@@ -1,33 +1,39 @@
-<script setup lang="ts">
-import { ref, type Ref, watch, reactive, nextTick, type CSSProperties } from 'vue';
+<script lang='ts' setup>
+import {type CSSProperties, nextTick, reactive, type Ref, ref, watch} from 'vue';
 import analyze from 'rgbaster';
-import { BackToTop, Edit } from '@vicons/carbon';
-import { formateSongsAuthor, getArrLast } from '@/utils';
-import { KeyboardArrowDownOutlined } from '@vicons/material';
+import {BackToTop, Edit} from '@vicons/carbon';
+import {formatSongsAuthor, getArrLast} from '@/utils';
+import {KeyboardArrowDownOutlined} from '@vicons/material';
 import color from 'color';
-import { useMainStore } from '@/stores/main';
-import useThemeStyle from '@/hook/useThemeStyle';
-import { useRouter } from 'vue-router';
-import type { AnyObject } from 'env';
-import { getMusicComment } from '@/service/songs';
-import { getSimilarPlaylist, getSimilarSong } from '@/service/playlist';
-import { useAsyncState } from '@vueuse/core';
-import { mapSongs } from '@/utils/arr-map';
-import { useBlurLineGradient } from './hook/useBlurLineGradient';
+import {useMainStore} from '@/stores/main';
+// import useThemeStyle from '@/hook/useThemeStyle';
+import {useRouter} from 'vue-router';
+import type {AnyObject} from 'env';
+import {getMusicComment} from '@/service/songs';
+import {getSimilarPlaylist, getSimilarSong} from '@/service/playlist';
+import {useAsyncState} from '@vueuse/core';
+import {mapSongs} from '@/utils/arr-map';
+import {useBlurLineGradient} from './hook/useBlurLineGradient';
+import RotateCd from '@/components/Player/RotateCd.vue';
+import MusicLyric from '@/components/Player/MusicLyric.vue';
+import CommentList from '@/components/CommentList/CommentList.vue';
+import RepliedCommentModal from '@/components/CommentList/RepliedCommentModal.vue';
+import {theme} from '@/main';
 
 export interface MusicDetailExpose {
-  show: () => void;
-  close: () => void;
-  toggle: () => void;
-  active: Ref<boolean>;
+    show: () => void;
+    close: () => void;
+    toggle: () => void;
+    active: Ref<boolean>;
 }
-let backTopEle:HTMLElement;
+
+let backTopEle: HTMLElement;
 
 const mainStore = useMainStore();
 const router = useRouter();
-const { tagColor } = useThemeStyle();
+// const { tagColor } = useThemeStyle();
 const { updateFooterMaskColor, resetBackground } = useBlurLineGradient();
-const commentModalRef= ref();
+const commentModalRef = ref();
 const commentLoading = ref(true);
 const scrollContainerRef = ref<HTMLElement>(null as unknown as HTMLElement);
 const musicComment = ref<AnyObject>({});
@@ -59,7 +65,7 @@ const pageParams = reactive({
 });
 const target = () => scrollContainerRef.value;
 
-const fillBackground = async (updateMask=true) => {
+const fillBackground = async (updateMask = true) => {
   await nextTick();
   let ctx = myCanvas.value!.getContext('2d') as CanvasRenderingContext2D;
   let width = (window.innerWidth * 0.85);
@@ -80,33 +86,33 @@ const fillBackground = async (updateMask=true) => {
   } else {
     primary = mainStore.currentPlaySong.primaryColor;
   }
- 
+
   let bgColor = color(baseColor).mix(color(primary), 0.2)
     .hex();
-  myCanvas.value!.width = width;
-  myCanvas.value!.height = height;
-  let gradient = ctx!.createLinearGradient(
-    width / 2, 0, width / 2, height
-  );
-  gradient.addColorStop(0, bgColor);
-  gradient.addColorStop(1, baseColor);
-  ctx.fillStyle = gradient;
-  ctx.fillRect(
-    0, 0, width, height
-  );
-  if (updateMask) {
-    updateFooterMaskColor(ctx);
-  }
+    myCanvas.value!.width = width;
+    myCanvas.value!.height = height;
+    let gradient = ctx!.createLinearGradient(
+      width / 2, 0, width / 2, height
+    );
+    gradient.addColorStop(0, bgColor);
+    gradient.addColorStop(1, baseColor);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(
+      0, 0, width, height
+    );
+    if (updateMask) {
+      await updateFooterMaskColor(ctx);
+    }
 };
 // 获取歌单评论
-const fetchMusicComment = (id:string) => {
-  let params:{
-    id:string;limit:number;offset:number;before?:string;
-  } = {
-    id,
-    limit: pageParams.pageSize,
-    offset: ((pageParams.page) - 1) * pageParams.pageSize
-  };
+const fetchMusicComment = (id: string) => {
+  let params: {
+        id: string; limit: number; offset: number; before?: string;
+    } = {
+      id,
+      limit: pageParams.pageSize,
+      offset: ((pageParams.page) - 1) * pageParams.pageSize
+    };
   if (musicComment.value?.total > 5000) {
     params.before = musicComment.value.comments[getArrLast(musicComment.value.comments)];
   }
@@ -118,12 +124,12 @@ const fetchMusicComment = (id:string) => {
     commentLoading.value = false;
   });
 };
-const handleSimiPlayListItem = (id:string) => {
+const handleSimiPlayListItem = (id: string) => {
   router.push(`/songList/${id}`);
   mainStore.setShowMusicDetail(false);
 };
 
-const handleScroll = (e:Event) => {
+const handleScroll = (e: Event) => {
   let target = e.target as HTMLElement;
   if (target.scrollTop >= 120) {
     showTopLyric.value = true;
@@ -133,11 +139,11 @@ const handleScroll = (e:Event) => {
   updateFooterMaskColor(myCanvas.value!.getContext('2d')!);
 };
 
-const updateCommentList = (value:any) => {
+const updateCommentList = (value: any) => {
   musicComment.value.total += 1;
   musicComment.value.comments.unshift(value);
 };
-const updateCommentLiked = (data:{liked:boolean, index:number}, isHot:boolean) => {
+const updateCommentLiked = (data: { liked: boolean, index: number }, isHot: boolean) => {
   let { index, liked } = data;
   if (isHot) {
     musicComment.value.hotComments[index].liked = liked;
@@ -151,19 +157,19 @@ const updateCommentLiked = (data:{liked:boolean, index:number}, isHot:boolean) =
       : musicComment.value.comments[index].likedCount - 1;
   }
 };
-const handleUpdateShow = (value:boolean) => {
+const handleUpdateShow = (value: boolean) => {
   showBackTop.value = value;
 };
-const handleContextMenu = (ev:MouseEvent) => {
+const handleContextMenu = (ev: MouseEvent) => {
   ev.preventDefault();
   return false;
 };
-const handleMvTagClick = () => {
-  if (mainStore.playing) {
-    mainStore.changePlaying(false);
-  }
-  router.push(`/mv/${mainStore.currentPlaySong.mv}`);
-};
+// const handleMvTagClick = () => {
+//   if (mainStore.playing) {
+//     mainStore.changePlaying(false);
+//   }
+//   router.push(`/mv/${mainStore.currentPlaySong?.mv}`);
+// };
 const handleTransitionAfterEnter = () => {
   updateFooterMaskColor(myCanvas.value!.getContext('2d')!);
 };
@@ -171,7 +177,7 @@ const setTagPositionStyle = async () => {
   await nextTick();
   isShowTag.value = false;
   let left = titleRef.value!.offsetLeft + titleRef.value!.offsetWidth + 20;
-  tagPositionStyle.value = { left: left+'px', top: '-15px' };
+  tagPositionStyle.value = { left: left + 'px', top: '-15px' };
   isShowTag.value = true;
 };
 watch(() => mainStore.theme, () => {
@@ -183,7 +189,7 @@ watch(() => mainStore.showMusicDetail, async (val) => {
     showBackTop.value = false;
   }
   if (!isShowTag.value) {
-    setTagPositionStyle();
+    await setTagPositionStyle();
   }
 });
 watch(
@@ -220,16 +226,17 @@ watch(pageParams, () => {
   <transition name="bottom-slide-transform" @after-enter="handleTransitionAfterEnter">
     <div
       v-show="mainStore.showMusicDetail"
-      class="fixed inset-x-0 m-auto music-detail"
-    > 
+      :class="{night:theme!==null}"
+      class="absolute inset-x-0  music-detail"
+    >
       <div class="box-border flex items-center p-4" style="height:77px;">
         <n-icon
-          size="35" :component="KeyboardArrowDownOutlined" class="ml-4"
+          :component="KeyboardArrowDownOutlined" class="ml-4" size="35"
           @click="mainStore.setShowMusicDetail(false)"
         />
-        <div class="flex items-center ml-20">
-          <layout-header-search />
-        </div>
+        <!--        <div class="flex items-center ml-20">-->
+        <!--          <layout-header-search />-->
+        <!--        </div>-->
         <transition v-show="showTopLyric" name="slide">
           <div class="ml-10 text-center" style="width:550px">
             <p>
@@ -241,22 +248,25 @@ watch(pageParams, () => {
           </div>
         </transition>
       </div>
-      <div ref="scrollContainerRef" class="flex px-10 pt-5 detail-content" @scroll="handleScroll">
+      <div
+        ref="scrollContainerRef" class="flex  justify-center px-4 pt-5 w-screen detail-content "
+        @scroll="handleScroll"
+      >
         <rotate-cd />
         <div class="ml-10">
           <div style="width:550px">
             <div class="relative">
               <div class="text-3xl text-center">
                 <span ref="titleRef"> {{ mainStore.currentPlaySong.name }}</span>
-                <div class="absolute" :style="tagPositionStyle">
-                  <n-tag
-                    v-if="mainStore.currentPlaySong.mv !== 0"
-                    size="small" :color="tagColor"
-                    @click="handleMvTagClick"
-                  >
-                    MV
-                  </n-tag>
-                </div>
+                <!--                <div :style='tagPositionStyle' class='absolute'>-->
+                <!--                  <n-tag-->
+                <!--                    v-show='mainStore.currentPlaySong?.mv !== 0'-->
+                <!--                    :color='tagColor' size='small'-->
+                <!--                    @click='handleMvTagClick'-->
+                <!--                  >-->
+                <!--                    MV-->
+                <!--                  </n-tag>-->
+                <!--                </div>-->
               </div>
             </div>
             <p v-if="mainStore.currentPlaySong.alia" class="mt-2 text-sm text-center opacity-50">
@@ -265,48 +275,54 @@ watch(pageParams, () => {
             <p class="mt-2 text-sm text-center opacity-50">
               {{ mainStore.currentPlaySong.al.name }}
               <span>-</span>
-              {{ formateSongsAuthor(mainStore.currentPlaySong.ar || []) }}
+              {{ formatSongsAuthor(mainStore.currentPlaySong.ar || []) }}
             </p>
           </div>
           <div class="flex">
             <div>
               <music-lyric />
               <!-- 评论-->
-              <div style="width:550px;height:300px;" class="mt-5">
+              <div class="mt-5" style="width:550px;height:300px;">
                 <n-spin :show="commentLoading" description="加载中">
                   <div v-show="commentLoading" class="h-80" />
                   <comment-list
-                    :type="0"
                     :comment-total-num="musicComment.total"
-                    :resource-id="mainStore.currentPlaySong.id" title="精彩评论" :list="musicComment.hotComments || []"
+                    :list="musicComment.hotComments || []"
+                    :resource-id="mainStore.currentPlaySong.id" :type="0" title="精彩评论"
                     @update-comment-list="updateCommentList"
                     @update-comment-liked="(data:any) => updateCommentLiked(data,true)"
                   />
                   <!-- 最新评论 -->
                   <comment-list
-                    :resource-id="mainStore.currentPlaySong.id"
-                    :type="0"
-                    :comment-total-num="musicComment.total" title="最新评论" :list="musicComment.comments || []"
+                    :comment-total-num="musicComment.total"
+                    :list="musicComment.comments || []"
+                    :resource-id="mainStore.currentPlaySong.id" :type="0" title="最新评论"
                     @update-comment-list="updateCommentList"
                     @update-comment-liked="(data:any) => updateCommentLiked(data,false)"
                   />
                 </n-spin>
-                <p v-if="!musicComment.comments?.length && !commentLoading" class="text-center opacity-50">
+                <p
+                  v-if="!musicComment.comments?.length && !commentLoading"
+                  class="text-center opacity-50"
+                >
                   还没有评论, 快来抢沙发~
                 </p>
-                <div v-if="pageParams.pageCount > 1 && musicComment.comments" class="flex justify-end mt-6">
+                <div
+                  v-if="pageParams.pageCount > 1 && musicComment.comments"
+                  class="flex justify-end mt-6"
+                >
                   <n-pagination
-                    v-model:page="pageParams.page" 
-                    v-model:page-size="pageParams.pageSize" 
-                    :page-count="pageParams.pageCount" 
-                    show-size-picker
+                    v-model:page="pageParams.page"
+                    v-model:page-size="pageParams.pageSize"
+                    :page-count="pageParams.pageCount"
                     :page-sizes="[10, 20, 30, 40,50]"
+                    show-size-picker
                   />
                 </div>
                 <div class="h-20" />
               </div>
             </div>
-            <n-scrollbar style="max-height: 350px;padding-right:20px;" class="pt-10 ml-20">
+            <n-scrollbar class="pt-10 ml-20" style="max-height: 350px;padding-right:20px;">
               <h3 v-if="similarPlaylist.length" class="m-0 text-left">
                 包含这首歌的歌单
               </h3>
@@ -322,16 +338,18 @@ watch(pageParams, () => {
                   @click="handleSimiPlayListItem(item.id)"
                 >
                   <n-image
-                    width="45" height="45" 
-                    class="rounded-md"
-                    :src="item.coverImgUrl"
+                    :src="item.coverImgUrl" class="rounded-md"
+                    height="45"
+                    width="45"
                   />
                   <div class="ml-4">
                     <p class="w-60 text-sm text-left truncate">
                       {{ item.name }}
                     </p>
                     <p class="mt-2 w-60 text-sm text-left truncate">
-                      <span class="opacity-50">by</span> <span class="opacity-80">  {{ item.creator.nickname }}</span>
+                      <span class="opacity-50">by</span> <span
+                        class="opacity-80"
+                      >  {{ item.creator.nickname }}</span>
                     </p>
                   </div>
                 </div>
@@ -353,16 +371,16 @@ watch(pageParams, () => {
                   @click="mainStore.insertPlay(item)"
                 >
                   <n-image
-                    width="45" height="45" 
-                    class="rounded-md"
-                    :src="item.album.picUrl"
+                    :src="item.album.picUrl" class="rounded-md"
+                    height="45"
+                    width="45"
                   />
                   <div class="ml-4">
                     <p class="w-60 text-sm text-left truncate">
                       {{ item.name }}
                     </p>
                     <p class="mt-2 w-60 text-sm text-left truncate opacity-50">
-                      {{ formateSongsAuthor(item.artists) }}
+                      {{ formatSongsAuthor(item.artists) }}
                     </p>
                   </div>
                 </div>
@@ -379,26 +397,26 @@ watch(pageParams, () => {
       @contextmenu="handleContextMenu"
     />
   </transition>
- 
+
   <n-back-top
-    style="z-index: 9999;"
-    :show="showBackTop"
+    :bottom="120"
+    :listen-to="target"
     :on-update:show="handleUpdateShow"
-    :listen-to="target" :bottom="90" :right="400"
+    :right="400" :show="showBackTop" style="z-index: 9999;"
   >
     <n-icon :component="BackToTop" />
   </n-back-top>
   <!-- 发表评论-->
   <replied-comment-modal
-    ref="commentModalRef" comment-placeholder="发表评论" :title="'歌曲：'+ mainStore.currentPlaySong.name"
-    :update-comment-list="updateCommentList" :t="1" :type="0"
-    :resource-id="mainStore.currentPlaySong.id"
+    ref="commentModalRef" :resource-id="mainStore.currentPlaySong.id" :t="1"
+    :title="'歌曲：'+ mainStore.currentPlaySong.name" :type="0" :update-comment-list="updateCommentList"
+    comment-placeholder="发表评论"
   />
   <transition name="slide">
     <n-button
       v-show="!showBackTop && mainStore.showMusicDetail"
-      class="fixed" style="z-index:9999;bottom: 90px;right:400px"
-      round type="primary"
+      class="absolute" round
+      style="z-index:9999;bottom: 100px;right:400px" type="primary"
       @click="commentModalRef?.show()"
     >
       <n-icon :component="Edit" />
@@ -409,9 +427,9 @@ watch(pageParams, () => {
   <transition name="slide">
     <n-button
       v-show="showBackTop && mainStore.showMusicDetail"
+      class="absolute w-44"
+      round style="z-index:9999;bottom: 100px;right:0;left:0;margin:auto"
       type="primary"
-      class="fixed w-44" style="z-index:9999;bottom: 90px;right:0;left:0;margin:auto"
-      round
       @click="commentModalRef?.show()"
     >
       <n-icon :component="Edit" />
@@ -422,47 +440,61 @@ watch(pageParams, () => {
 
 <style scoped>
 .music-detail {
-  bottom: 73px;
-  width: 85vw;
-  height: calc(100vh - 73px);
-  z-index: 1000;
-  overflow: hidden;
+    bottom: 100px;
+    width: 100vw;
+    height: calc(100vh - 100px);
+    z-index: 1000;
+    overflow: hidden;
+    transition: transform 0.5s;
+    margin: 0
 }
-.detail-content{
-  height: calc(100vh - 73px - 77px);
-  box-sizing: border-box;
-  overflow-y: scroll;
+
+.night {
+    background-color: rgb(16, 16, 20);
 }
-.background{
-  position: fixed;
-  width: 85vw;
-  height: calc(100vh - 73px);
-  bottom: 73px;
-  left:0;
-  right:0;
-  margin:auto;
-  z-index: 999;
+
+.detail-content {
+    height: calc(100vh - 100px);
+    box-sizing: border-box;
+    overflow-y: scroll;
 }
-:deep(.n-back-top-placeholder){
-  z-index:8888 !important;
+
+.background {
+    position: absolute;
+    width: 100vw;
+    height: calc(100vh - 100px);
+    bottom: 100px;
+    left: 0;
+    right: 0;
+    z-index: 999;
 }
+
+:deep(.n-back-top-placeholder) {
+    z-index: 8888 !important;
+}
+
 /* 从底部弹出或隐藏过渡 */
 .bottom-slide-transform-leave-active {
-  transition: height .2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: height .2s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .bottom-slide-transform-enter-active {
-  transition: height .6s cubic-bezier(0.4, 0, 0.2, 1);;
+    transition: height .6s cubic-bezier(0.4, 0, 0.2, 1);;
 }
+
 .bottom-slide-transform-enter-from {
-  height: 0;
+    height: 0;
 }
+
 .bottom-slide-transform-enter-to {
-  height: calc(100vh - 73px);
+    height: calc(100vh - 73px);
 }
+
 .bottom-slide-transform-leave-to {
-  height: 0;
+    height: 0;
 }
-:deep(.n-divider:not(.n-divider--vertical)){
-  margin: 10px 0;
+
+:deep(.n-divider:not(.n-divider--vertical)) {
+    margin: 10px 0;
 }
 </style>

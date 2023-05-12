@@ -1,17 +1,18 @@
-<script setup lang="ts">
-import { ref } from 'vue';
+<script lang="ts" setup>
+import {ref} from 'vue';
 
 export interface MvListItemProps {
-  name: string;
-  list: string[];
-  modelValue?:string;
+    name: string;
+    list: string[];
+    modelValue?: string;
 }
+
 const props = defineProps<MvListItemProps>();
 const emit = defineEmits(['update:modelValue']);
 let activeIndex = ref(0);
 let categoryValue = ref(props.list[0]);
 
-const handleClick = (item:string, index:number) => {
+const handleClick = (item: string, index: number) => {
   activeIndex.value = index;
   categoryValue.value = item;
   emit('update:modelValue', item);
@@ -26,13 +27,13 @@ const handleClick = (item:string, index:number) => {
         <div
           v-for="(item, index) in list"
           :key="index"
-          style="flex: 0.1666;"
           class="flex relative justify-center  items-center text-center cursor-pointer"
+          style="flex: 0.1666;"
           @click="handleClick(item, index)"
         >
           <n-tag
-            round checkable
-            :checked="index === activeIndex" 
+            :checked="index === activeIndex" checkable
+            round
           >
             {{ item }}
           </n-tag>
@@ -44,11 +45,11 @@ const handleClick = (item:string, index:number) => {
 </template>
 
 <style scoped>
-.after-border::after{
-  content: '';
-  position: absolute;
-  right: 0;
-  transition: opacity .3s;
-  @apply w-px h-3 bg-gray-400/30;
+.after-border::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    transition: opacity .3s;
+    @apply w-px h-3 bg-gray-400/30;
 }
 </style>

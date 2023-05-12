@@ -1,6 +1,6 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 withDefaults(defineProps<{
-  count?:number;
+    count?: number;
 }>(), { count: 0 });
 </script>
 
@@ -16,14 +16,14 @@ withDefaults(defineProps<{
       :key="index"
     >
       <n-skeleton
+        :sharp="false"
         height="10vw"
         width="100%"
-        :sharp="false"
       />
       <n-skeleton
-        text
         :repeat="2"
         :sharp="false"
+        text
       />
     </n-grid-item>
   </n-grid>

@@ -1,19 +1,20 @@
-<script setup lang="ts">
-import { likeMusic } from '@/service';
-import { useMainStore } from '@/stores/main';
-import { HeartOutline, Heart } from '@vicons/ionicons5';
-import { useThemeVars } from 'naive-ui';
-import { NIcon } from 'naive-ui';
-export interface HeartIconExpose{
-  triggerLike:() => any;
+<script lang="ts" setup>
+import {likeMusic} from '@/service';
+import {useMainStore} from '@/stores/main';
+import {Heart, HeartOutline} from '@vicons/ionicons5';
+import {NIcon, useThemeVars} from 'naive-ui';
+
+export interface HeartIconExpose {
+    triggerLike: () => any;
 }
+
 const themeVars = useThemeVars();
 const props = withDefaults(defineProps<{
-  like:boolean;
-  id:number;
-  size?:number;
-  triggerClick?:boolean;
-  likeSuccess?:((like:boolean) => void) | null;
+    like: boolean;
+    id: number;
+    size?: number;
+    triggerClick?: boolean;
+    likeSuccess?: ((like: boolean) => void) | null;
 }>(), { size: 20, triggerClick: false, likeSuccess: null });
 const mainStore = useMainStore();
 const emit = defineEmits(['likeSuccess']);
@@ -21,9 +22,7 @@ const triggerLike = () => {
   if (!mainStore.isLogin) {
     return window.$message.error('请先登录');
   }
-  let like = props.like
-    ? false
-    : true;
+  let like = !props.like;
   return likeMusic(props.id, like).then(res => {
     if (res.data.code !== 200) {
       return window.$message.error('喜欢音乐失败!');
@@ -51,12 +50,12 @@ defineExpose({ triggerLike });
 
 <template>
   <n-icon
-    :size="size"
     :color="like ? themeVars.primaryColor : themeVars.textColor2"
+    :size="size"
     class="cursor-pointer"
     @click="handleClick"
   >
-    <Transition name="scale" mode="out-in">
+    <Transition mode="out-in" name="scale">
       <Heart v-if="like" />
       <HeartOutline v-else />
     </Transition>

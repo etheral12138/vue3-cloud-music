@@ -1,13 +1,14 @@
-<script setup lang="ts">
-import { formateNumber } from '@/utils/index';
-import { Play } from '@vicons/carbon';
-import { useRouter } from 'vue-router';
+<script lang="ts" setup>
+import {formatNumber} from '@/utils/index';
+import {Play} from '@vicons/carbon';
+import {useRouter} from 'vue-router';
+
 const props = withDefaults(defineProps<{
-  item:any;
-  height?:string;
-  isToDetail?:boolean;
-  borderRadius?:string;
-  className?:string;
+    item: any;
+    height?: string;
+    isToDetail?: boolean;
+    borderRadius?: string;
+    className?: string;
 }>(), {
   height: '9vw',
   isToDetail: true,
@@ -16,7 +17,7 @@ const props = withDefaults(defineProps<{
 });
 const emit = defineEmits(['handle-img-click']);
 const router = useRouter();
-const toDetail = (id:number) => {
+const toDetail = (id: number) => {
   if (props.isToDetail) {
     router.push(`/mv/${id}`);
   }
@@ -25,11 +26,11 @@ const toDetail = (id:number) => {
 const styleBorderRadius = { borderRadius: props.borderRadius };
 </script>
 <template>
-  <div :style="styleBorderRadius" class="overflow-hidden relative flex-1"> 
+  <div :style="styleBorderRadius" class="overflow-hidden relative flex-1">
     <load-img
+      :class-name="className"
       :loading-height="height"
       :src="item.picUrl || item.cover"
-      :class-name="className"
       @click="toDetail(item.id)"
     />
     <div
@@ -37,7 +38,7 @@ const styleBorderRadius = { borderRadius: props.borderRadius };
       class="box-border flex absolute top-0 right-0 justify-end items-center p-1 w-full text-white rounded-t-md card-mask"
     >
       <n-icon :component="Play" />
-      <span class="pl-1">{{ formateNumber(item.playCount) }}</span>
+      <span class="pl-1">{{ formatNumber(item.playCount) }}</span>
     </div>
     <play-icon
       class="cursor-pointer position-center"
@@ -48,17 +49,17 @@ const styleBorderRadius = { borderRadius: props.borderRadius };
     </p>
     <div :style="styleBorderRadius" class="absolute bottom-0 w-full text-right bg-linear-mask">
       <n-time
-        class="mr-2 text-white"
         :time="item.duration"
+        class="mr-2 text-white"
         format="mm:ss"
       />
     </div>
   </div>
 </template>
 <style scoped>
-.tips{
-  @apply overflow-hidden absolute top-0 w-full h-0 
-  group-hover:h-8 leading-8 text-center text-white
-bg-black/50 transition-height
+.tips {
+    @apply overflow-hidden absolute top-0 w-full h-0
+    group-hover:h-8 leading-8 text-center text-white
+    bg-black/50 transition-height
 }
 </style>

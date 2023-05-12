@@ -1,8 +1,8 @@
 import axios from 'axios';
 // create axios instance
 const instance = axios.create({
-  baseURL: 'https://www.lghb.top/',
-  method: 'get',
+  baseURL: import.meta.env.VITE_API_BASEURL,
+  // method: 'get',
   withCredentials: true
 });
 
