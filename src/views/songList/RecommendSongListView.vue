@@ -136,17 +136,17 @@ const loadMore = (successCallback: any) => {
                     :style="{ backgroundImage: `url(${currentSongList.list[0]?.coverImgUrl})` }"
                     class="flex absolute w-full h-44 blur-lg"
             />
-            <div class='box-border flex absolute  p-4 w-full h-44 bg-black/30'>
+            <div class="box-border flex absolute  p-4 w-full h-44 bg-black/30">
                 <load-img
-                        :src='currentSongList.list[0]?.coverImgUrl'
-                        class-name='w-36 h-36 rounded-md'
-                        loading-height='144px '
+                        :src="currentSongList.list[0]?.coverImgUrl"
+                        class-name="w-36 h-36 rounded-md"
+                        loading-height="144px "
                 />
-                <div class='flex-1 ml-4'>
-                    <n-tag type='success'>
+                <div class="flex-1 ml-4">
+                    <n-tag type="success">
                         {{ selectValue }}
                     </n-tag>
-                    <p class='py-2 text-white'>
+                    <p class="py-2 text-white">
                         {{ currentSongList.list[0]?.name }}
                     </p>
                     <n-ellipsis :line-clamp="5" :tooltip="false" class="text-xs text-white opacity-80">
@@ -159,22 +159,21 @@ const loadMore = (successCallback: any) => {
             <div v-if="songsTagsIsLoading" class="flex justify-between mt-4">
                 <n-skeleton :sharp="false" height="28px"/>
             </div>
-            <div v-else class='relative'>
+            <div v-else class="relative z-0">
                 <n-tabs
-                        ref='tabsInstRef' v-model:value='selectValue' class='min-w-3xl myTabs'
-                        tab-style='z-index:0'
+                        ref="tabsInstRef" v-model:value="selectValue" class="min-w-3xl myTabs"
                 >
                     <n-tab-pane
-                            v-for='(tab) in songsTags' :key='tab.name' :name='tab.name'
-                            display-directive='show:lazy'
+                            v-for="(tab) in songsTags" :key="tab.name" :name="tab.name"
+                            display-directive="show:lazy"
                     >
-                        <SongListSkeleton v-if='currentSongList.loading'/>
-                        <div v-else class='mt-4'>
-                            <SongList :songs='currentSongList.list'/>
+                        <SongListSkeleton v-if="currentSongList.loading"/>
+                        <div v-else class="mt-4">
+                            <SongList :songs="currentSongList.list"/>
                             <ListLoading
-                                    v-if='currentSongList.list.length > 15'
+                                    v-if="currentSongList.list.length > 15"
                                     :load-more="loadMore"
-                                    :no-more='currentSongList.noMore'
+                                    :no-more="currentSongList.noMore"
                             />
                         </div>
                     </n-tab-pane>

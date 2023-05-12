@@ -9,6 +9,8 @@ import {useDbClickPlay} from '@/hook/useDbClickPlay';
 import {nanoid} from 'nanoid';
 import {mapSongs} from '@/utils/arr-map';
 import {useMainStore} from '@/stores/main';
+import SongListSkeleton from "@/components/SongsList/SongListSkeleton.vue";
+import SongList from "@/components/SongsList/SongList.vue";
 
 const hoverRef = ref();
 const currentIndex = ref(0);
